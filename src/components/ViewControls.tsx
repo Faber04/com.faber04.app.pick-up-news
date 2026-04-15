@@ -3,18 +3,11 @@ import { ViewMode } from '../types';
 interface ViewControlsProps {
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
-  newsCount: number;
 }
 
-export const ViewControls = ({ viewMode, onViewModeChange, newsCount }: ViewControlsProps) => {
+export const ViewControls = ({ viewMode, onViewModeChange }: ViewControlsProps) => {
   return (
-    <div className="flex justify-between items-center mb-6">
-      <div className="flex items-center gap-4">
-        <h2 className="text-xl font-semibold text-gray-800">
-          News ({newsCount})
-        </h2>
-      </div>
-
+    <div className="flex justify-end mb-6">
       <div className="flex bg-gray-100 rounded-lg p-1">
         <button
           onClick={() => onViewModeChange('chronological')}
@@ -24,7 +17,7 @@ export const ViewControls = ({ viewMode, onViewModeChange, newsCount }: ViewCont
               : 'text-gray-600 hover:text-gray-800'
           }`}
         >
-          📅 Cronologico
+          Cronologico
         </button>
         <button
           onClick={() => onViewModeChange('by-feed')}
@@ -34,7 +27,7 @@ export const ViewControls = ({ viewMode, onViewModeChange, newsCount }: ViewCont
               : 'text-gray-600 hover:text-gray-800'
           }`}
         >
-          📰 Per Sito
+          Per Sito
         </button>
       </div>
     </div>

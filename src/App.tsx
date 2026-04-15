@@ -96,7 +96,6 @@ function App() {
               <ViewControls
                 viewMode={viewMode}
                 onViewModeChange={setViewMode}
-                newsCount={filteredNews.length}
               />
               <NewsList
                 news={filteredNews}
