@@ -50,12 +50,15 @@ npm run dev
 
 L'applicazione sarà disponibile su `http://localhost:5173/`
 
-### 4. Build per la Produzione
+### 3. Build per la Produzione
 ```bash
 npm run build
 ```
 
 I file ottimizzati saranno nella cartella `dist/`
+
+### 4. Deployment Online
+L'applicazione sarà disponibile su: `https://faber04.com/app/pick-up-news/`
 
 ## 📖 Come Usare PickUpNews
 
