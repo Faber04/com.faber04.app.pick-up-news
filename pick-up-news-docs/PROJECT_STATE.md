@@ -26,13 +26,24 @@
 - Integrate RSS parsing. ✅ COMPLETED
 - Deploy application to production server. ✅ COMPLETED
 
-## Next Steps
-- Test application with real RSS feeds in production environment.
-- Add search and filtering functionality.
-- Improve error handling and user feedback.
-- Add loading animations and better UX.
-- Monitor application performance and user experience.
-- Plan for future updates and maintenance.
+## Next Steps (Roadmap)
+
+### v1.0.0 (NEXT)
+1. Remove 1st level CORS proxy (`api.allorigins.win`) from RSS fetching chain
+   - Simplify fallback chain to: corsproxy.io → rss2json.com
+   - Update documentation accordingly
+
+### v1.0.1
+1. Implement dark mode / light mode toggle in settings or header
+2. Icon alignment & branding consistency across app
+   - Header icons alignment
+   - README icon consistency
+   - Coerenza branding PN
+
+### v1.1.0
+1. Restyling based on app logo color palette
+   - Derive color scheme from PickUpNews logo
+   - Apply consistently across UI components
 
 ## Completed Features
 - Project scaffolding.
