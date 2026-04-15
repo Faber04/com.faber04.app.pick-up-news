@@ -2,6 +2,8 @@
 
 **Un'applicazione web per leggere feed RSS in un'unica interfaccia elegante e intuitiva.**
 
+🌐 **Demo live**: [www.faber04.com/app/pick-up-news](https://www.faber04.com/app/pick-up-news/)
+
 PickUpNews ti permette di aggregare e leggere facilmente tutti i tuoi feed RSS preferiti. Aggiungi manualmente i tuoi feed RSS, visualizza le news in ordine cronologico o raggruppate per sito, e leggi gli articoli completi con un semplice click.
 
 ## ✨ Caratteristiche Principali
