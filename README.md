@@ -76,19 +76,30 @@ L'applicazione sarà disponibile su: `https://www.faber04.com/app/pick-up-news/`
 
 ## 📖 Come Usare PickUpNews
 
+### Navigazione
+L'app ha due sezioni accessibili dall'header:
+- **🏠 Home** — la lista delle news dei tuoi feed
+- **📡 Feeds** — gestione dei feed RSS (aggiunta e rimozione)
+
 ### Aggiungere un Feed RSS
-1. Clicca sul pulsante **"+ Aggiungi Feed RSS"**
-2. Inserisci il nome del feed (es. "Corriere della Sera")
-3. Inserisci l'URL del feed RSS
-4. Clicca **"Aggiungi Feed"**
+1. Vai nella sezione **Feeds** (header in alto a destra)
+2. Clicca su **"+ Aggiungi Feed RSS"**
+3. Inserisci il nome del feed (es. "The Guardian")
+4. Inserisci l'URL del feed RSS (es. `https://www.theguardian.com/uk/rss`)
+5. Clicca **"Aggiungi Feed"** — le news compariranno automaticamente in Home
 
 ### Visualizzare le News
-- **Cronologico**: Vedi tutte le news ordinate per data
-- **Per Sito**: Raggruppa le news per testata/fonte
+Dalla sezione **Home** puoi scegliere due modalità di visualizzazione:
+- **Cronologico**: tutte le news di tutti i feed ordinate dalla più recente
+- **Per Sito**: news raggruppate per testata/fonte
 
 ### Leggere gli Articoli
-- Clicca su qualsiasi notizia per aprire il modal con il contenuto completo
-- Usa il pulsante "Leggi l'articolo completo" per andare al sito originale
+- Clicca su qualsiasi notizia per aprire il dettaglio completo
+- Usa il pulsante **"Leggi l'articolo completo"** per aprire il sito originale
+
+### Rimuovere un Feed
+1. Vai nella sezione **Feeds**
+2. Clicca sull'icona 🗑️ accanto al feed da rimuovere
 
 ## 📁 Struttura del Progetto
 

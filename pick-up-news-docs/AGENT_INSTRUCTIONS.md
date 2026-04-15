@@ -8,6 +8,7 @@ At the end of each development session, the AI must perform the following steps:
 1. Build the project (`npm run build`) and test the modified, introduced, or corrected functionalities.
 2. Perform edge-to-edge UI testing in the browser to ensure all functionalities work correctly.
 3. If there are any technological changes (libraries, frameworks, tools, etc.), update the README.md and AGENT_INSTRUCTIONS.md accordingly.
+4. If any feature is added, modified, or removed, update the README.md (sections: Caratteristiche Principali, Come Usare PickUpNews) to reflect the current state of the app.
 4. Commit changes to GitHub repository `com.faber04.app.pick-up-news`.
 5. Publish the built application online via FTP.
 
