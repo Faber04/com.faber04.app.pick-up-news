@@ -12,6 +12,38 @@ This file logs all development sessions for the PickUpNews project.
 
 ---
 
+## Session: README Documentation Update
+- Date: 15 April 2026
+- Start Time: 11:45
+- End Time: 12:00
+- Duration: 15 minutes
+
+## Changes Made
+- Completely rewrote README.md with comprehensive documentation
+- Added detailed app description and key features
+- Included complete technology stack with versions
+- Created step-by-step installation and usage guides
+- Added project structure overview
+- Included available npm scripts
+- Added contribution guidelines and license information
+- Signed with "Sviluppato da @Faber04"
+
+## Testing
+- Verified build still works after documentation changes
+- Committed and pushed changes to GitHub
+
+## Issues Encountered
+- None
+
+## Next Session Objectives
+- Test application with real RSS feeds
+- Add search and filtering functionality
+- Improve error handling and user feedback
+- Add loading animations and better UX
+- Set up FTP deployment configuration
+
+---
+
 ## Session: Initial Implementation
 - Date: 15 April 2026
 - Start Time: 10:00
