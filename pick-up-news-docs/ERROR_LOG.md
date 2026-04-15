@@ -11,6 +11,15 @@ This file documents all errors encountered during development, their solutions, 
 
 ---
 
+## Error: Blank page after FTP deploy — empty JS bundle on server
+- Date: 15 April 2026
+- Error Description: App shows blank white page in production with no console errors. The JS bundle `index-*.js` served by the FTP server had 0 bytes despite the local `dist/assets/` file being correct (161 KB).
+- Cause: `lftp mirror -R` timed out mid-transfer during the first deploy attempt, leaving an empty/truncated JS file on the server. The FTP timeout was too short for large files on a slow connection.
+- Solution: Re-ran build (`npm run build`), then re-uploaded all files using `lftp put` with `set net:timeout 60` and `set net:max-retries 3`. Also cleaned the remote folder before uploading to remove stale assets.
+- Prevention: Always verify the remote file size after FTP deploy with `curl -s <url> | wc -c`. Use `lftp put` instead of `mirror` for individual large files to avoid silent partial uploads.
+
+---
+
 ## Error: TypeError: this.removeAllListeners is not a function (FINAL RESOLUTION)
 - Date: 15 April 2026
 - Error Description: Application crashed with TypeError when trying to parse RSS feeds. Error occurred in compiled JavaScript at assets-index-*.js files
