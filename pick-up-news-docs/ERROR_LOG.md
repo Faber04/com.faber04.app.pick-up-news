@@ -29,7 +29,14 @@ This file documents all errors encountered during development, their solutions, 
 
 ---
 
-## Error: HTML Tags Not Rendered in News Descriptions
+## Error: Network Connection Lost on RSS Proxy Fetch
+- Date: 15 April 2026
+- Error Description: "[Error] Failed to load resource: The network connection was lost. (get, line 0)" — browser could not reach the allorigins.win CORS proxy, causing feed loading to silently fail
+- Cause: api.allorigins.win is an external free proxy that can be intermittently unreliable, slow, or temporarily unreachable. No timeout was set, so requests could hang indefinitely before the browser dropped them.
+- Solution: Added `fetchWithTimeout()` (10s AbortController timeout) to all outbound fetch calls; added `corsproxy.io` as a second proxy in the fallback chain (allorigins → corsproxy.io → rss2json)
+- Prevention: Always wrap external proxy calls with a timeout. Use a multi-proxy fallback chain so a single unreliable service does not break the entire feature.
+
+---
 - Date: 15 April 2026
 - Error Description: News descriptions displayed raw HTML tags instead of formatted text in both news list and detail modal
 - Cause: RSS feeds contain HTML content but app was rendering descriptions as plain text
