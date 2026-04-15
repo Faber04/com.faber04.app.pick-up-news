@@ -39,7 +39,7 @@ I feed RSS vengono letti direttamente dal browser usando una catena di proxy/fal
 
 Ogni chiamata è protetta da un timeout di **10 secondi** tramite `AbortController`: se un proxy non risponde entro il limite, si passa automaticamente al successivo. Gli item vengono sempre ordinati per data decrescente (più recenti prima) con normalizzazione cross-browser del formato data.
 
-## �️ Roadmap
+##  Roadmap
 
 ### v1.0.0
 - ❌ Rimuovere 1° livello gestione CORS (`api.allorigins.win`)
@@ -57,7 +57,7 @@ Ogni chiamata è protetta da un timeout di **10 secondi** tramite `AbortControll
   - Palette colori derivata dal logo PickUpNews
   - Applicazione coerente nell'intera UI
 
-## �📋 Prerequisiti
+## Prerequisiti
 
 - **Node.js**: Versione 18.0.0 o superiore
 - **npm**: Versione 8.0.0 o superiore (viene con Node.js)
