@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { NewsItem, ViewMode } from '../types';
 
 interface NewsListProps {
@@ -44,18 +45,62 @@ export const NewsList = ({ news, viewMode, loading, onNewsClick }: NewsListProps
           ))}
         </div>
       ) : (
-        Object.entries(groupedNews!).map(([feedTitle, feedNews]) => (
-          <div key={feedTitle}>
-            <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b border-gray-200 pb-2">
-              {feedTitle}
-            </h3>
-            <div className="space-y-3">
-              {feedNews.map((item, index) => (
-                <NewsCard key={`${item.feedId}-${index}`} newsItem={item} onClick={onNewsClick} />
-              ))}
-            </div>
-          </div>
-        ))
+        <div className="space-y-3">
+          {Object.entries(groupedNews!).map(([feedTitle, feedNews]) => (
+            <FeedAccordion
+              key={feedTitle}
+              feedTitle={feedTitle}
+              feedNews={feedNews}
+              onNewsClick={onNewsClick}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+interface FeedAccordionProps {
+  feedTitle: string;
+  feedNews: NewsItem[];
+  onNewsClick: (newsItem: NewsItem) => void;
+}
+
+const FeedAccordion = ({ feedTitle, feedNews, onNewsClick }: FeedAccordionProps) => {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+      {/* Accordion Header */}
+      <button
+        onClick={() => setIsOpen(prev => !prev)}
+        className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors text-left"
+      >
+        <div className="flex items-center gap-2">
+          <span className="font-semibold text-gray-800">{feedTitle}</span>
+          <span className="text-xs bg-blue-100 text-blue-700 font-medium px-2 py-0.5 rounded-full">
+            {feedNews.length}
+          </span>
+        </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {/* Accordion Body */}
+      {isOpen && (
+        <div className="divide-y divide-gray-100">
+          {feedNews.map((item, index) => (
+            <NewsCard key={`${item.feedId}-${index}`} newsItem={item} onClick={onNewsClick} showFeedTitle={false} />
+          ))}
+        </div>
       )}
     </div>
   );
@@ -64,9 +109,10 @@ export const NewsList = ({ news, viewMode, loading, onNewsClick }: NewsListProps
 interface NewsCardProps {
   newsItem: NewsItem;
   onClick: (newsItem: NewsItem) => void;
+  showFeedTitle?: boolean;
 }
 
-const NewsCard = ({ newsItem, onClick }: NewsCardProps) => {
+const NewsCard = ({ newsItem, onClick, showFeedTitle = true }: NewsCardProps) => {
   const formatDate = (dateString?: string) => {
     if (!dateString) return '';
     try {
@@ -102,10 +148,12 @@ const NewsCard = ({ newsItem, onClick }: NewsCardProps) => {
       />
 
       <div className="flex justify-between items-center">
-        <span className="text-xs text-blue-600 font-medium">
-          {newsItem.feedTitle}
-        </span>
-        <span className="text-xs text-gray-400">
+        {showFeedTitle && (
+          <span className="text-xs text-blue-600 font-medium">
+            {newsItem.feedTitle}
+          </span>
+        )}
+        <span className="text-xs text-gray-400 ml-auto">
           →
         </span>
       </div>
