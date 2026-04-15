@@ -48,8 +48,8 @@ Ogni chiamata è protetta da un timeout di **10 secondi** tramite `AbortControll
 
 ### 1. Clona il Repository
 ```bash
-git clone https://github.com/Faber04/com.faber04.pick-up-news.git
-cd com.faber04.pick-up-news
+git clone https://github.com/Faber04/com.faber04.app.pick-up-news.git
+cd com.faber04.app.pick-up-news
 ```
 
 ### 2. Installa le Dipendenze
@@ -104,7 +104,7 @@ Dalla sezione **Home** puoi scegliere due modalità di visualizzazione:
 ## 📁 Struttura del Progetto
 
 ```
-com.faber04.pick-up-news/
+com.faber04.app.pick-up-news/
 ├── public/                 # File statici
 ├── src/
 │   ├── components/         # Componenti React riutilizzabili
