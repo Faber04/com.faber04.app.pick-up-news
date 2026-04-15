@@ -6,8 +6,10 @@ PickUpNews is a React webapp built with Vite and TypeScript for reading RSS feed
 ## Workflow per Session
 At the end of each development session, the AI must perform the following steps:
 1. Build the project (`npm run build`) and test the modified, introduced, or corrected functionalities.
-2. Commit changes to GitHub repository `com.faber04.app.pick-up-news`.
-3. Publish the built application online via FTP.
+2. Perform edge-to-edge UI testing in the browser to ensure all functionalities work correctly.
+3. If there are any technological changes (libraries, frameworks, tools, etc.), update the README.md and AGENT_INSTRUCTIONS.md accordingly.
+4. Commit changes to GitHub repository `com.faber04.app.pick-up-news`.
+5. Publish the built application online via FTP.
 
 ## Coding Standards
 - Use TypeScript for all components and logic.
@@ -29,7 +31,7 @@ At the end of each development session, the AI must perform the following steps:
 - React
 - Vite
 - TypeScript
-- RSS parser library (e.g., rss-parser)
+- Custom RSS parser using rss2json.com API for CORS handling
 - Any additional libraries as needed for UI, routing, etc.
 
 ## Session Management

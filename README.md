@@ -20,7 +20,7 @@ PickUpNews ti permette di aggregare e leggere facilmente tutti i tuoi feed RSS p
 - **Frontend Framework**: React 18 con TypeScript
 - **Build Tool**: Vite 4 (sviluppo rapido e build ottimizzato)
 - **Styling**: Tailwind CSS 3 (utility-first CSS framework)
-- **RSS Parsing**: rss-parser (parsing affidabile di feed RSS/Atom)
+- **RSS Parsing**: Parser personalizzato con API rss2json.com (per gestire CORS e compatibilità browser)
 - **Routing**: React Router DOM (per future espansioni)
 - **State Management**: React Hooks + localStorage
 - **Type Checking**: TypeScript 5 (type safety completa)
