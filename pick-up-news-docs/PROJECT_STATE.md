@@ -28,12 +28,12 @@
 
 ## Next Steps (Roadmap)
 
-### v1.0.0 (NEXT)
-1. Remove 1st level CORS proxy (`api.allorigins.win`) from RSS fetching chain
-   - Simplify fallback chain to: corsproxy.io → rss2json.com
-   - Update documentation accordingly
+### v1.0.0 ✅ COMPLETED
+1. ✅ Removed 1st level CORS proxy (`api.allorigins.win`) from RSS fetching chain
+   - Simplified fallback chain to: corsproxy.io → rss2json.com
+   - Updated documentation accordingly
 
-### v1.1.0
+### v1.1.0 (NEXT)
 1. Icon alignment & branding consistency across app
    - Header icons alignment
    - README icon consistency

@@ -29,20 +29,17 @@ PickUpNews ti permette di aggregare e leggere facilmente tutti i tuoi feed RSS p
 
 ## 🌐 Architettura RSS e gestione CORS
 
-I feed RSS vengono letti direttamente dal browser usando una catena di proxy/fallback a 3 livelli per massimizzare la disponibilità:
+I feed RSS vengono letti direttamente dal browser usando una catena di proxy/fallback a 2 livelli per massimizzare la disponibilità:
 
 | Livello | Servizio | Metodo | Limite item |
 |---------|----------|--------|-------------|
-| 1° (primario) | [api.allorigins.win](https://api.allorigins.win) | Restituisce XML raw → parse con `DOMParser` | Tutti gli item del feed |
-| 2° (fallback) | [corsproxy.io](https://corsproxy.io) | Restituisce XML raw → parse con `DOMParser` | Tutti gli item del feed |
-| 3° (fallback finale) | [rss2json.com](https://rss2json.com) | Restituisce JSON pre-parsato | Max 10 item (tier gratuito) |
+| 1° (primario) | [corsproxy.io](https://corsproxy.io) | Restituisce XML raw → parse con `DOMParser` | Tutti gli item del feed |
+| 2° (fallback finale) | [rss2json.com](https://rss2json.com) | Restituisce JSON pre-parsato | Max 10 item (tier gratuito) |
 
 Ogni chiamata è protetta da un timeout di **10 secondi** tramite `AbortController`: se un proxy non risponde entro il limite, si passa automaticamente al successivo. Gli item vengono sempre ordinati per data decrescente (più recenti prima) con normalizzazione cross-browser del formato data.
 
-##  Roadmap
-
-### v1.0.0
-- ❌ Rimuovere 1° livello gestione CORS (`api.allorigins.win`)
+### v1.0.0 ✅
+- ✅ Rimosso 1° livello gestione CORS (`api.allorigins.win`)
   - Riduce dipendenze esterne e semplifica la catena di fallback
   - Catena: corsproxy.io → rss2json.com
 

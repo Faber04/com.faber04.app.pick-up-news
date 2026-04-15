@@ -2,7 +2,6 @@ import { RSSFeed, RSSItem, NewsItem } from '../types';
 
 export class RSSService {
   private static readonly RSS2JSON_API = 'https://api.rss2json.com/v1/api.json';
-  private static readonly ALLORIGINS_API = 'https://api.allorigins.win/get';
   private static readonly CORSPROXY_API = 'https://corsproxy.io/?url=';
   private static readonly FETCH_TIMEOUT_MS = 10000;
 
@@ -89,16 +88,6 @@ export class RSSService {
     return items;
   }
 
-  // Fetch via allorigins (returns full XML, no item limit)
-  static async fetchViaAllOrigins(url: string): Promise<RSSItem[]> {
-    const apiUrl = `${this.ALLORIGINS_API}?url=${encodeURIComponent(url)}&charset=UTF-8`;
-    const response = await this.fetchWithTimeout(apiUrl);
-    if (!response.ok) throw new Error(`allorigins HTTP error: ${response.status}`);
-    const data = await response.json();
-    if (!data.contents) throw new Error('Empty response from allorigins');
-    return this.parseXML(data.contents);
-  }
-
   // Fetch via corsproxy.io (raw XML response)
   static async fetchViaCorsproxy(url: string): Promise<RSSItem[]> {
     const apiUrl = `${this.CORSPROXY_API}${encodeURIComponent(url)}`;
@@ -120,21 +109,16 @@ export class RSSService {
   }
 
   static async fetchFeed(url: string): Promise<RSSItem[]> {
-    // Try allorigins → corsproxy → rss2json
+    // Try corsproxy → rss2json
     try {
-      return await this.fetchViaAllOrigins(url);
+      return await this.fetchViaCorsproxy(url);
     } catch (e1) {
-      console.warn('allorigins failed, trying corsproxy:', e1);
+      console.warn('corsproxy failed, falling back to rss2json:', e1);
       try {
-        return await this.fetchViaCorsproxy(url);
-      } catch (e2) {
-        console.warn('corsproxy failed, falling back to rss2json:', e2);
-        try {
-          return await this.fetchViaRss2json(url);
-        } catch (error) {
-          console.error('All proxies failed for feed:', url, error);
-          throw new Error(`Failed to fetch RSS feed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-        }
+        return await this.fetchViaRss2json(url);
+      } catch (error) {
+        console.error('All proxies failed for feed:', url, error);
+        throw new Error(`Failed to fetch RSS feed: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
     }
   }
