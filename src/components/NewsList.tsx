@@ -96,9 +96,10 @@ const NewsCard = ({ newsItem, onClick }: NewsCardProps) => {
         </span>
       </div>
 
-      <p className="text-sm text-gray-600 mb-2 line-clamp-2">
-        {newsItem.truncatedDescription}
-      </p>
+      <div
+        className="text-sm text-gray-600 mb-2 line-clamp-2"
+        dangerouslySetInnerHTML={{ __html: newsItem.truncatedDescription }}
+      />
 
       <div className="flex justify-between items-center">
         <span className="text-xs text-blue-600 font-medium">

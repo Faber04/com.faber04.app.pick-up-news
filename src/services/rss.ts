@@ -71,9 +71,60 @@ export class RSSService {
     });
   }
 
-  static truncateDescription(text: string, maxLength: number): string {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength).trim() + '...';
+  static truncateDescription(htmlText: string, maxLength: number): string {
+    // Remove HTML tags to get plain text
+    const plainText = htmlText.replace(/<[^>]*>/g, '');
+    if (plainText.length <= maxLength) return htmlText;
+
+    // Truncate plain text
+    const truncated = plainText.substring(0, maxLength).trim();
+
+    // Find the corresponding position in HTML text
+    let htmlPos = 0;
+    let textPos = 0;
+    const result = [];
+
+    while (htmlPos < htmlText.length && textPos < truncated.length) {
+      if (htmlText[htmlPos] === '<') {
+        // Copy the entire tag
+        const tagEnd = htmlText.indexOf('>', htmlPos);
+        if (tagEnd === -1) break;
+        result.push(htmlText.substring(htmlPos, tagEnd + 1));
+        htmlPos = tagEnd + 1;
+      } else {
+        result.push(htmlText[htmlPos]);
+        htmlPos++;
+        textPos++;
+      }
+    }
+
+    // Close any unclosed tags (simple approach)
+    const openTags = [];
+    const tagRegex = /<\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*>/g;
+    let match;
+
+    while ((match = tagRegex.exec(result.join(''))) !== null) {
+      const tag = match[0];
+      const tagName = match[1];
+
+      if (tag.startsWith('</')) {
+        // Closing tag
+        if (openTags.length > 0 && openTags[openTags.length - 1] === tagName) {
+          openTags.pop();
+        }
+      } else if (!tag.endsWith('/>') && !['br', 'img', 'input', 'meta', 'link'].includes(tagName.toLowerCase())) {
+        // Opening tag (not self-closing)
+        openTags.push(tagName);
+      }
+    }
+
+    // Add closing tags for any remaining open tags
+    while (openTags.length > 0) {
+      const tagName = openTags.pop();
+      result.push(`</${tagName}>`);
+    }
+
+    return result.join('') + '...';
   }
 
   static validateFeedUrl(url: string): boolean {

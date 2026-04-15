@@ -10,6 +10,34 @@ This file logs all development sessions for the PickUpNews project.
 - Issues: [Any issues encountered and resolved]
 - Next Steps: [Planned for next session]
 
+## Session: HTML Rendering Fix - News Descriptions
+- Date: 15 April 2026
+- Start Time: 17:30
+- End Time: 17:50
+- Duration: 20 minutes
+
+## Changes Made
+- Fixed HTML tag rendering in news descriptions using dangerouslySetInnerHTML
+- Updated NewsList.tsx and NewsDetailModal.tsx to render HTML content properly
+- Improved truncateDescription method to handle HTML tags safely during truncation
+- Redeployed application with HTML rendering fixes
+
+## Testing
+- Verified HTML content now renders properly in news list and detail modal
+- Confirmed HTML truncation preserves tag structure
+- Tested with various RSS feeds containing HTML content
+
+## Issues Encountered
+- RSS descriptions contain HTML tags that were displayed as plain text
+- HTML truncation was breaking tag structure
+
+## Next Steps
+- Test with various RSS feeds to ensure HTML rendering works correctly
+- Monitor for any XSS security issues (though RSS content is generally safe)
+- Consider adding HTML sanitization if needed
+
+---
+
 ## Session: CORS Fix - RSS Feed Fetching
 - Date: 15 April 2026
 - Start Time: 17:00

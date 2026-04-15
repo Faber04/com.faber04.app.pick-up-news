@@ -28,3 +28,12 @@ This file documents all errors encountered during development, their solutions, 
 - Prevention: Always use CORS-compatible services or proxies for external API calls in browser applications
 
 ---
+
+## Error: HTML Tags Not Rendered in News Descriptions
+- Date: 15 April 2026
+- Error Description: News descriptions displayed raw HTML tags instead of formatted text in both news list and detail modal
+- Cause: RSS feeds contain HTML content but app was rendering descriptions as plain text
+- Solution: Implemented dangerouslySetInnerHTML for description rendering and improved HTML truncation logic to handle tags safely
+- Prevention: Always check content type when displaying user-generated content and use appropriate rendering methods
+
+---

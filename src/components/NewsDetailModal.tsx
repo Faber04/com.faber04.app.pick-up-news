@@ -67,13 +67,15 @@ export const NewsDetailModal = ({ newsItem, isOpen, onClose }: NewsDetailModalPr
               dangerouslySetInnerHTML={{ __html: newsItem.content }}
             />
           ) : newsItem.contentSnippet ? (
-            <p className="text-gray-700 leading-relaxed">
-              {newsItem.contentSnippet}
-            </p>
+            <div
+              className="prose prose-sm max-w-none text-gray-700 leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: newsItem.contentSnippet }}
+            />
           ) : newsItem.summary ? (
-            <p className="text-gray-700 leading-relaxed">
-              {newsItem.summary}
-            </p>
+            <div
+              className="prose prose-sm max-w-none text-gray-700 leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: newsItem.summary }}
+            />
           ) : (
             <p className="text-gray-500 italic">Nessun contenuto disponibile</p>
           )}

@@ -15,6 +15,7 @@
 - Application successfully deployed to production at https://www.faber04.com/app/pick-up-news/ ✅ COMPLETED
 - Critical bug (removeAllListeners error) resolved with custom browser-compatible RSS parser ✅ COMPLETED
 - CORS issues resolved with rss2json.com proxy service ✅ COMPLETED
+- HTML rendering in news descriptions fixed ✅ COMPLETED
 
 ## Objectives
 - Implement RSS feed management (add, remove feeds). ✅ COMPLETED
