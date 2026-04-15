@@ -38,6 +38,8 @@ I feed RSS vengono letti direttamente dal browser usando una catena di proxy/fal
 
 Ogni chiamata è protetta da un timeout di **10 secondi** tramite `AbortController`: se un proxy non risponde entro il limite, si passa automaticamente al successivo. Gli item vengono sempre ordinati per data decrescente (più recenti prima) con normalizzazione cross-browser del formato data.
 
+## 🗓️ Roadmap
+
 ### v1.0.0 ✅
 - ✅ Rimosso 1° livello gestione CORS (`api.allorigins.win`)
   - Riduce dipendenze esterne e semplifica la catena di fallback
@@ -58,6 +60,15 @@ Ogni chiamata è protetta da un timeout di **10 secondi** tramite `AbortControll
 - 🌈 Restyling basato su scala colori logo
   - Palette colori derivata dal logo PickUpNews
   - Applicazione coerente nell'intera UI
+
+### v1.2.1
+- 📋 Ordinamento feed nella sezione Feeds
+  - Possibilità di riordinare i feed per drag & drop o pulsanti freccia
+  - Salvataggio automatico dell'ordine in localStorage
+- ✏️ Modifica feed RSS
+  - Modalità edit per nome e URL di ogni feed
+  - Validazione URL in tempo reale
+  - Salvataggio delle modifiche con conferma
 
 ## Prerequisiti
 
