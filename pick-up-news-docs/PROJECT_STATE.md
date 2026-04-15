@@ -34,14 +34,14 @@
    - Update documentation accordingly
 
 ### v1.0.1
-1. Implement dark mode / light mode toggle in settings or header
-2. Icon alignment & branding consistency across app
+1. Icon alignment & branding consistency across app
    - Header icons alignment
    - README icon consistency
    - Coerenza branding PN
 
 ### v1.1.0
-1. Restyling based on app logo color palette
+1. Implement dark mode / light mode toggle in settings or header
+2. Restyling based on app logo color palette
    - Derive color scheme from PickUpNews logo
    - Apply consistently across UI components
 
