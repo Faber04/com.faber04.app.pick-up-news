@@ -43,7 +43,14 @@ Ogni chiamata è protetta da un timeout di **10 secondi** tramite `AbortControll
   - Riduce dipendenze esterne e semplifica la catena di fallback
   - Catena: corsproxy.io → rss2json.com
 
-### v1.1.0
+### v1.1.1 ✅
+- ✅ URL parsing senza protocollo (es. `example.com` → `https://example.com`)
+- ✅ UI improvements nella sezione Feeds
+  - Rimozione titolo "Feed RSS (n)"
+  - Allineamento pulsanti "+Aggiungi" e "Aggiorna"
+- ✅ Robustezza XML parsing e rilevamento errori HTML
+
+### v1.2.0
 - 🎯 Icon alignment & branding consistency
   - Allineamento icone in header e README
   - Coerenza visiva con branding PN
@@ -51,12 +58,6 @@ Ogni chiamata è protetta da un timeout di **10 secondi** tramite `AbortControll
 - 🌈 Restyling basato su scala colori logo
   - Palette colori derivata dal logo PickUpNews
   - Applicazione coerente nell'intera UI
-
-### v1.1.1
-- ⚙️ URL parsing senza protocollo (es. `example.com` → `https://example.com`)
-- 🎨 UI improvements nella sezione Feeds
-  - Rimozione titolo "Feed RSS (n)"
-  - Allineamento pulsanti "+Aggiungi" e "Aggiorna"
 
 ## Prerequisiti
 

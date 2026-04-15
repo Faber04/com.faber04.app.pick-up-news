@@ -26,6 +26,12 @@
 - Integrate RSS parsing. ✅ COMPLETED
 - Deploy application to production server. ✅ COMPLETED
 
+## Release History
+
+**v1.0.0** (Commit 70542e5) — Removed api.allorigins.win proxy, simplified CORS chain
+**v1.1.1** (Commit 938358d) — URL parsing, UI alignment, XML robustness
+**v1.2.0** (PLANNED) — Icon alignment, dark mode, color palette restyling
+
 ## Next Steps (Roadmap)
 
 ### v1.0.0 ✅ COMPLETED
@@ -33,7 +39,19 @@
    - Simplified fallback chain to: corsproxy.io → rss2json.com
    - Updated documentation accordingly
 
-### v1.1.0 (NEXT)
+### v1.1.1 ✅ COMPLETED
+1. ✅ URL parsing without protocol (e.g., `example.com` → `https://example.com`)
+   - Modified validateFeedUrl to accept and normalize URLs
+   - Add protocol automatically if missing
+2. ✅ UI improvements in Feeds section
+   - Removed "Feed RSS (n)" title
+   - Aligned "+Add Feed RSS" and "Refresh" buttons
+3. ✅ Improved XML parsing robustness
+   - Better handling of malformed XML
+   - HTML error detection (404 fallback to rss2json)
+   - BOM removal and whitespace normalization
+
+### v1.2.0 (NEXT)
 1. Icon alignment & branding consistency across app
    - Header icons alignment
    - README icon consistency
@@ -42,14 +60,6 @@
 3. Restyling based on app logo color palette
    - Derive color scheme from PickUpNews logo
    - Apply consistently across UI components
-
-### v1.1.1
-1. URL parsing without protocol (e.g., `example.com` → `https://example.com`)
-   - Modify validateFeedUrl to accept and normalize URLs
-   - Add protocol automatically if missing
-2. UI improvements in Feeds section
-   - Remove "Feed RSS (n)" title
-   - Align "+Add Feed RSS" and "Refresh" buttons
 
 ## Completed Features
 - Project scaffolding.
