@@ -225,10 +225,18 @@ export class RSSService {
 
   static validateFeedUrl(url: string): boolean {
     try {
-      new URL(url);
+      const normalizedUrl = this.normalizeUrl(url);
+      new URL(normalizedUrl);
       return true;
     } catch {
       return false;
     }
   }
-}
+
+  static normalizeUrl(url: string): string {
+    // If URL doesn't start with http:// or https://, add https://
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      return 'https://' + url;
+    }
+    return url;
+  }}

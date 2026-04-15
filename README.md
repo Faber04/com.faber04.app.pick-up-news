@@ -52,6 +52,12 @@ Ogni chiamata è protetta da un timeout di **10 secondi** tramite `AbortControll
   - Palette colori derivata dal logo PickUpNews
   - Applicazione coerente nell'intera UI
 
+### v1.1.1
+- ⚙️ URL parsing senza protocollo (es. `example.com` → `https://example.com`)
+- 🎨 UI improvements nella sezione Feeds
+  - Rimozione titolo "Feed RSS (n)"
+  - Allineamento pulsanti "+Aggiungi" e "Aggiorna"
+
 ## Prerequisiti
 
 - **Node.js**: Versione 18.0.0 o superiore

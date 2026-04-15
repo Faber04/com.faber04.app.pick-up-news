@@ -53,9 +53,11 @@ export const useAppState = () => {
       return;
     }
 
+    const normalizedUrl = RSSService.normalizeUrl(url);
+
     const newFeed: RSSFeed = {
       id: Date.now().toString(),
-      url,
+      url: normalizedUrl,
       title,
       lastFetched: new Date()
     };

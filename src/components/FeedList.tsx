@@ -19,8 +19,7 @@ export const FeedList = ({ feeds, onRemoveFeed, onRefresh, loading }: FeedListPr
 
   return (
     <div className="mb-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-800">Feed RSS ({feeds.length})</h2>
+      <div className="flex justify-end mb-4">
         <button
           onClick={onRefresh}
           disabled={loading}

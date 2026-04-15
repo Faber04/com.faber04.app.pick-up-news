@@ -43,6 +43,14 @@
    - Derive color scheme from PickUpNews logo
    - Apply consistently across UI components
 
+### v1.1.1
+1. URL parsing without protocol (e.g., `example.com` → `https://example.com`)
+   - Modify validateFeedUrl to accept and normalize URLs
+   - Add protocol automatically if missing
+2. UI improvements in Feeds section
+   - Remove "Feed RSS (n)" title
+   - Align "+Add Feed RSS" and "Refresh" buttons
+
 ## Completed Features
 - Project scaffolding.
 - Documentation structure.
