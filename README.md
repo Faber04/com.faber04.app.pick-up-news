@@ -1,74 +1,74 @@
 # <img src="public/vite.svg" width="36" height="36" align="absmiddle" /> PickUpNews
 
-**Un'applicazione web per leggere feed RSS in un'unica interfaccia elegante e intuitiva.**
+**A web application to read RSS feeds in a single elegant and intuitive interface.**
 
-🌐 **Demo live**: [www.faber04.com/app/pick-up-news](https://www.faber04.com/app/pick-up-news/)
+🌐 **Live Demo**: [www.faber04.com/app/pick-up-news](https://www.faber04.com/app/pick-up-news/)
 
-PickUpNews ti permette di aggregare e leggere facilmente tutti i tuoi feed RSS preferiti. Aggiungi manualmente i tuoi feed RSS, visualizza le news in ordine cronologico o raggruppate per sito, e leggi gli articoli completi con un semplice click.
+PickUpNews allows you to easily aggregate and read all your favorite RSS feeds. Manually add your RSS feeds, view news in chronological order or grouped by site, and read full articles with a simple click.
 
-## ✨ Caratteristiche Principali
+## ✨ Key Features
 
-- **📡 Gestione Feed RSS**: Aggiungi e rimuovi facilmente feed RSS manualmente
-- **📅 Visualizzazione Cronologica**: Vedi tutte le news ordinate per data (più recenti prima)
-- **🏷️ Visualizzazione per Sito**: Raggruppa le news per fonte/testata
-- **📱 Design Responsivo**: Perfetto su desktop, tablet e mobile
-- **💾 Persistenza Locale**: I tuoi feed vengono salvati automaticamente nel browser
-- **🔍 Anteprima Intelligente**: Descrizioni troncate a 120 caratteri per una lettura veloce
-- **📖 Lettura Completa**: Modal con articolo completo e link originale
-- **⚡ Performance**: Caricamento veloce grazie a Vite e ottimizzazioni React
+- **📡 RSS Feed Management**: Easily add and remove RSS feeds manually
+- **📅 Chronological View**: See all news sorted by date (most recent first)
+- **🏷️ Site View**: Group news by source/site
+- **📱 Responsive Design**: Perfect on desktop, tablet, and mobile
+- **💾 Local Persistence**: Your feeds are automatically saved in the browser
+- **🔍 Smart Preview**: Descriptions truncated to 120 characters for quick reading
+- **📖 Full Reading**: Modal with full article and original link
+- **⚡ Performance**: Fast loading thanks to Vite and React optimizations
 
-## 🛠️ Tecnologie Utilizzate
+## 🛠️ Technologies Used
 
-- **Frontend Framework**: React 18 con TypeScript
-- **Build Tool**: Vite 4 (sviluppo rapido e build ottimizzato)
+- **Frontend Framework**: React 18 with TypeScript
+- **Build Tool**: Vite 4 (fast development and optimized build)
 - **Styling**: Tailwind CSS 3 (utility-first CSS framework)
-- **RSS Parsing**: Parser XML personalizzato via `DOMParser` nativo del browser (supporta RSS 2.0 e Atom)
-- **Routing**: React Router DOM (per future espansioni)
+- **RSS Parsing**: Custom XML parser via the browser's native `DOMParser` (supports RSS 2.0 and Atom)
+- **Routing**: React Router DOM (for future expansions)
 - **State Management**: React Hooks + localStorage
-- **Type Checking**: TypeScript 5 (type safety completa)
+- **Type Checking**: TypeScript 5 (full type safety)
 
-## 🌐 Architettura RSS e gestione CORS
+## 🌐 RSS Architecture and CORS Management
 
-I feed RSS vengono letti direttamente dal browser usando una catena di proxy/fallback a 2 livelli per massimizzare la disponibilità:
+RSS feeds are read directly from the browser using a 2-level proxy/fallback chain to maximize availability:
 
-| Livello | Servizio | Metodo | Limite item |
-|---------|----------|--------|-------------|
-| 1° (primario) | [corsproxy.io](https://corsproxy.io) | Restituisce XML raw → parse con `DOMParser` | Tutti gli item del feed |
-| 2° (fallback finale) | [rss2json.com](https://rss2json.com) | Restituisce JSON pre-parsato | Max 10 item (tier gratuito) |
+| Level | Service | Method | Item Limit |
+|-------|---------|--------|------------|
+| 1st (primary) | [corsproxy.io](https://corsproxy.io) | Returns raw XML → parsed with `DOMParser` | All feed items |
+| 2nd (final fallback) | [rss2json.com](https://rss2json.com) | Returns pre-parsed JSON | Max 10 items (free tier) |
 
-Ogni chiamata è protetta da un timeout di **10 secondi** tramite `AbortController`: se un proxy non risponde entro il limite, si passa automaticamente al successivo. Gli item vengono sempre ordinati per data decrescente (più recenti prima) con normalizzazione cross-browser del formato data.
+Each call is protected by a **10-second timeout** using `AbortController`: if a proxy does not respond within the limit, it automatically switches to the next one. Items are always sorted by descending date (most recent first) with cross-browser normalization of the date format.
 
 ## 🗓️ Roadmap
 
 ### v1.0.0 ✅
-- ✅ Rimosso 1° livello gestione CORS (`api.allorigins.win`)
-  - Riduce dipendenze esterne e semplifica la catena di fallback
-  - Catena: corsproxy.io → rss2json.com
+- ✅ Removed 1st level CORS management (`api.allorigins.win`)
+  - Reduces external dependencies and simplifies the fallback chain
+  - Chain: corsproxy.io → rss2json.com
 
 ### v1.1.1 ✅
-- ✅ URL parsing senza protocollo (es. `example.com` → `https://example.com`)
-- ✅ UI improvements nella sezione Feeds
-  - Rimozione titolo "Feed RSS (n)"
-  - Allineamento pulsanti "+Aggiungi" e "Aggiorna"
-- ✅ Robustezza XML parsing e rilevamento errori HTML
+- ✅ URL parsing without protocol (e.g., `example.com` → `https://example.com`)
+- ✅ UI improvements in the Feeds section
+  - Removed "Feed RSS (n)" title
+  - Aligned "+Add" and "Refresh" buttons
+- ✅ Robust XML parsing and HTML error detection
 
 ### v1.2.0
-- 🎯 Icon alignment & branding consistency
-  - Allineamento icone in header e README
-  - Coerenza visiva con branding PN
-- 🎨 Layout dark mode / light mode
-- 🌈 Restyling basato su scala colori logo
-  - Palette colori derivata dal logo PickUpNews
-  - Applicazione coerente nell'intera UI
+- 🎯 Icon alignment and branding consistency
+  - Icon alignment in header and README
+  - Visual consistency with PN branding
+- 🎨 Dark mode / light mode layout
+- 🌈 Restyling based on logo color scale
+  - Color palette derived from the PickUpNews logo
+  - Consistent application throughout the UI
 
 ### v1.2.1
-- 📋 Ordinamento feed nella sezione Feeds
-  - Possibilità di riordinare i feed per drag & drop o pulsanti freccia
-  - Salvataggio automatico dell'ordine in localStorage
-- ✏️ Modifica feed RSS
-  - Modalità edit per nome e URL di ogni feed
-  - Validazione URL in tempo reale
-  - Salvataggio delle modifiche con conferma
+- 📋 Feed sorting in the Feeds section
+  - Ability to reorder feeds via drag & drop or arrow buttons
+  - Automatic order saving in localStorage
+- ✏️ Edit RSS feeds
+  - Edit mode for each feed's name and URL
+  - Real-time URL validation
+  - Save changes with confirmation
 
 ### v1.3.0
 - 🔍 Auto-detect JSON feeds from websites
@@ -76,88 +76,88 @@ Ogni chiamata è protetta da un timeout di **10 secondi** tramite `AbortControll
   - ✏️ Manual feed URL input if auto-detection fails
   - 📋 Support for multiple feed format detection
 
-## Prerequisiti
+## Prerequisites
 
-- **Node.js**: Versione 18.0.0 o superiore
-- **npm**: Versione 8.0.0 o superiore (viene con Node.js)
+- **Node.js**: Version 18.0.0 or higher
+- **npm**: Version 8.0.0 or higher (comes with Node.js)
 
-## 🚀 Installazione e Avvio
+## 🚀 Installation and Startup
 
-### 1. Clona il Repository
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/Faber04/com.faber04.app.pick-up-news.git
 cd com.faber04.app.pick-up-news
 ```
 
-### 2. Installa le Dipendenze
+### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-### 3. Avvia il Server di Sviluppo
+### 3. Start the Development Server
 ```bash
 npm run dev
 ```
 
-L'applicazione sarà disponibile su `http://localhost:5173/`
+The application will be available at `http://localhost:5173/`
 
-### 3. Build per la Produzione
+### 3. Build for Production
 ```bash
 npm run build
 ```
 
-I file ottimizzati saranno nella cartella `dist/`
+Optimized files will be in the `dist/` folder
 
-### 4. Deployment Online
-L'applicazione sarà disponibile su: `https://www.faber04.com/app/pick-up-news/`
+### 4. Online Deployment
+The application will be available at: `https://www.faber04.com/app/pick-up-news/`
 
-## 📖 Come Usare PickUpNews
+## 📖 How to Use PickUpNews
 
-### Navigazione
-L'app ha due sezioni accessibili dall'header:
-- **🏠 Home** — la lista delle news dei tuoi feed
-- **📡 Feeds** — gestione dei feed RSS (aggiunta e rimozione)
+### Navigation
+The app has two sections accessible from the header:
+- **🏠 Home** — the list of news from your feeds
+- **📡 Feeds** — RSS feed management (add and remove)
 
-### Aggiungere un Feed RSS
-1. Vai nella sezione **Feeds** (header in alto a destra)
-2. Clicca su **"+ Aggiungi Feed RSS"**
-3. Inserisci il nome del feed (es. "The Guardian")
-4. Inserisci l'URL del feed RSS (es. `https://www.theguardian.com/uk/rss`)
-5. Clicca **"Aggiungi Feed"** — le news compariranno automaticamente in Home
+### Adding an RSS Feed
+1. Go to the **Feeds** section (header at the top right)
+2. Click on **"+ Add RSS Feed"**
+3. Enter the feed name (e.g., "The Guardian")
+4. Enter the RSS feed URL (e.g., `https://www.theguardian.com/uk/rss`)
+5. Click **"Add Feed"** — the news will automatically appear in Home
 
-### Visualizzare le News
-Dalla sezione **Home** puoi scegliere due modalità di visualizzazione:
-- **Cronologico**: tutte le news di tutti i feed ordinate dalla più recente
-- **Per Sito**: news raggruppate per testata/fonte
+### Viewing News
+From the **Home** section, you can choose two viewing modes:
+- **Chronological**: all news from all feeds sorted by the most recent
+- **By Site**: news grouped by source/site
 
-### Leggere gli Articoli
-- Clicca su qualsiasi notizia per aprire il dettaglio completo
-- Usa il pulsante **"Leggi l'articolo completo"** per aprire il sito originale
+### Reading Articles
+- Click on any news item to open the full detail
+- Use the **"Read full article"** button to open the original site
 
-### Rimuovere un Feed
-1. Vai nella sezione **Feeds**
-2. Clicca sull'icona 🗑️ accanto al feed da rimuovere
+### Removing a Feed
+1. Go to the **Feeds** section
+2. Click on the 🗑️ icon next to the feed to remove
 
-## 📁 Struttura del Progetto
+## 📁 Project Structure
 
 ```
 com.faber04.app.pick-up-news/
-├── public/                 # File statici
+├── public/                 # Static files
 ├── src/
-│   ├── components/         # Componenti React riutilizzabili
-│   │   ├── AddFeedForm.tsx # Form per aggiungere feed
-│   │   ├── FeedList.tsx    # Lista dei feed configurati
-│   │   ├── NewsList.tsx    # Lista delle news
-│   │   ├── ViewControls.tsx # Controlli vista (cronologico/per sito)
-│   │   └── NewsDetailModal.tsx # Modal dettaglio notizia
+│   ├── components/         # Reusable React components
+│   │   ├── AddFeedForm.tsx # Form to add feeds
+│   │   ├── FeedList.tsx    # List of configured feeds
+│   │   ├── NewsList.tsx    # List of news
+│   │   ├── ViewControls.tsx # View controls (chronological/by site)
+│   │   └── NewsDetailModal.tsx # News detail modal
 │   ├── hooks/              # Custom React hooks
-│   │   └── useAppState.ts  # Hook gestione stato app
-│   ├── services/           # Servizi e API
-│   │   └── rss.ts          # Servizio parsing RSS
-│   ├── types/              # Definizioni TypeScript
-│   │   └── index.ts        # Tipi per RSS e stato app
-│   └── utils/              # Utilità helper
-├── pick-up-news-docs/      # Documentazione progetto
+│   │   └── useAppState.ts  # App state management hook
+│   ├── services/           # Services and APIs
+│   │   └── rss.ts          # RSS parsing service
+│   ├── types/              # TypeScript definitions
+│   │   └── index.ts        # Types for RSS and app state
+│   └── utils/              # Helper utilities
+├── pick-up-news-docs/      # Project documentation
 │   ├── AGENT_INSTRUCTIONS.md
 │   ├── DEVELOPMENT_LOG.md
 │   ├── ERROR_LOG.md
@@ -166,21 +166,21 @@ com.faber04.app.pick-up-news/
 └── README.md
 ```
 
-## 🔧 Script Disponibili
+## 🔧 Available Scripts
 
-- `npm run dev` - Avvia server di sviluppo
-- `npm run build` - Build per produzione
-- `npm run preview` - Anteprima build produzione
-- `npm run lint` - Esegue ESLint per controllo codice
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint for code checks
 
-## 🤝 Contributi
+## 🤝 Contributions
 
-Questo progetto è sviluppato da @Faber04. Sentiti libero di aprire issue per segnalare bug o suggerire miglioramenti!
+This project is developed by @Faber04. Feel free to open issues to report bugs or suggest improvements!
 
-## 📄 Licenza
+## 📄 License
 
-Questo progetto è distribuito sotto licenza MIT.
+This project is distributed under the MIT license.
 
 ---
 
-**Sviluppato da @Faber04**
+**Developed by @Faber04**
