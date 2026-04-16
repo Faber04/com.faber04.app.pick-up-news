@@ -52,14 +52,14 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - Aligned "+Add" and "Refresh" buttons
 - ✅ Robust XML parsing and HTML error detection
 
-### v1.2.0
-- 🎯 Icon alignment and branding consistency
-  - Icon alignment in header and README
-  - Visual consistency with PN branding
-- 🎨 Dark mode / light mode layout
-- 🌈 Restyling based on logo color scale
-  - Color palette derived from the PickUpNews logo
-  - Consistent application throughout the UI
+### v1.2.0 ✅
+- ✅ Icon alignment and branding consistency
+  - ✅ Icon alignment in header and README
+  - ✅ Visual consistency with PN branding
+- ✅ Dark mode / light mode layout
+- ✅ Restyling based on logo color scale
+  - ✅ Color palette derived from the PickUpNews logo
+  - ✅ Consistent application throughout the UI
 
 ### v1.2.1
 - 📋 Feed sorting in the Feeds section
