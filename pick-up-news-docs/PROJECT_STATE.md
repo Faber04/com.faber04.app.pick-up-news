@@ -56,6 +56,7 @@
    - Header icons alignment
    - README icon consistency
    - Coerenza branding PN
+   - Convert the favicon into an Apple WebApp icon 
 2. Implement dark mode / light mode toggle in settings or header
 3. Restyling based on app logo color palette
    - Derive color scheme from PickUpNews logo
