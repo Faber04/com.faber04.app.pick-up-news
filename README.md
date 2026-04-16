@@ -77,14 +77,14 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - 📋 Support for multiple feed format detection
 
 ### v1.4.0
-- ⚙️ Creazione pagina impostazioni
-- 🙌 Credits nella pagina impostazioni
-  - App creata da Faber04 con link al profilo GitHub
-  - Numero versione
-  - Copyright e anno
-- 📱 Aggiustamento layout mobile
-  - Nella modale dell'articolo selezionato le info (testata, data) vanno a capo
-  - Formato data compatto: `DD/MM/YY (HH:MM)`
+- ⚙️ Settings page creation
+- 🙌 Credits in the settings page
+  - App created by Faber04 with link to the GitHub profile
+  - Version number
+  - Copyright and year
+- 📱 Mobile layout adjustment
+  - In the selected article modal, metadata (source, date) wraps onto multiple lines
+  - Compact date format: `DD/MM/YY (HH:MM)`
 
 ## Prerequisites
 

@@ -56,7 +56,7 @@
 1. ✅ Icon alignment & branding consistency across app
    - Header icon updated and aligned
    - README icon consistency completed
-   - Coerenza branding PN completed
+   - PN branding consistency completed
    - Favicon converted into Apple WebApp icon asset
 2. ✅ Implemented dark mode / light mode toggle in header
 3. ✅ Restyling based on app logo color palette
@@ -79,14 +79,14 @@
   - Support for multiple feed format detection
 
 ### v1.4.0 (PLANNED)
-1. Creazione pagina impostazioni
-2. Credits nella pagina impostazioni
-   - App creata da Faber04 con link al profilo GitHub
-   - Numero versione
-   - Copyright e anno
-3. Aggiustamento layout mobile
-   - Nella modale dell'articolo selezionato le info (testata, data) vanno a capo
-   - Sostituire il formato data con `DD/MM/YY (HH:MM)`
+1. Settings page creation
+2. Credits in the settings page
+   - App created by Faber04 with link to the GitHub profile
+   - Version number
+   - Copyright and year
+3. Mobile layout adjustment
+   - In the selected article modal, metadata (source, date) wraps onto multiple lines
+   - Replace the date format with `DD/MM/YY (HH:MM)`
 
 ## Completed Features
 - Project scaffolding.
