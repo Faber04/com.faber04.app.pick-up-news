@@ -61,6 +61,21 @@
    - Derive color scheme from PickUpNews logo
    - Apply consistently across UI components
 
+### v1.2.1 (PLANNED)
+1. Feed sorting capability in Feeds section
+   - Drag & drop or arrow buttons for reordering feeds
+   - Automatic order persistence in localStorage
+2. Feed editing capability
+   - Edit mode for feed name and URL
+   - Real-time URL validation
+   - Save changes with confirmation
+
+### v1.3.0 JSON Feed Auto-Detection (PLANNED)
+1.  Auto-detect JSON feeds from websites
+  - Fallback to RSS/Atom if JSON unavailable
+  - Manual feed URL input if auto-detection fails
+  - Support for multiple feed format detection
+
 ## Completed Features
 - Project scaffolding.
 - Documentation structure.
