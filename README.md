@@ -1,4 +1,4 @@
-# <img src="public/vite.svg" width="36" height="36" align="absmiddle" /> PickUpNews
+# <img src="public/pickupnews-mark.svg" width="36" height="36" align="absmiddle" /> PickUpNews
 
 **A web application to read RSS feeds in a single elegant and intuitive interface.**
 

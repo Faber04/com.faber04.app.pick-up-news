@@ -16,6 +16,8 @@ function App() {
     state,
     viewMode,
     setViewMode,
+    themeMode,
+    toggleTheme,
     addFeed,
     removeFeed,
     refreshNews,
@@ -47,17 +49,22 @@ function App() {
   const filteredNews = getFilteredNews();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header currentPage={currentPage} onNavigate={setCurrentPage} />
+    <div className="app-shell">
+      <Header
+        currentPage={currentPage}
+        onNavigate={setCurrentPage}
+        themeMode={themeMode}
+        onToggleTheme={toggleTheme}
+      />
 
       {/* Error Message */}
       {state.error && (
-        <div className="max-w-6xl mx-auto px-4 pt-4">
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded flex justify-between items-center">
-            <span>{state.error}</span>
+        <div className="app-container pt-4">
+          <div className="surface rounded-lg px-4 py-3 flex justify-between items-center text-secondary">
+            <span className="text-[var(--danger)]">{state.error}</span>
             <button
               onClick={clearError}
-              className="text-red-700 hover:text-red-900 font-bold"
+              className="text-[var(--danger)] hover:opacity-80 font-bold"
             >
               ✕
             </button>
@@ -74,19 +81,19 @@ function App() {
           onRefresh={refreshNews}
         />
       ) : (
-        <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="app-container py-8 stagger-in">
           {state.feeds.length === 0 ? (
-            <div className="text-center py-16 text-gray-500">
+            <div className="text-center py-16 text-muted surface rounded-2xl">
               <img
-                src={`${import.meta.env.BASE_URL}vite.svg`}
+                src={`${import.meta.env.BASE_URL}pickupnews-mark.svg`}
                 alt="PN"
-                className="w-16 h-16 mx-auto mb-4 opacity-40"
+                className="w-16 h-16 mx-auto mb-4 opacity-80"
               />
-              <p className="text-lg font-medium mb-2">Nessun feed RSS aggiunto</p>
+              <p className="text-lg font-semibold mb-2 text-primary">Nessun feed RSS aggiunto</p>
               <p className="text-sm mb-4">Vai nella sezione Feeds per aggiungere le tue fonti preferite.</p>
               <button
                 onClick={() => setCurrentPage('feeds')}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                className="btn-brand px-6 py-2 rounded-lg font-medium transition"
               >
                 📡 Gestisci Feed
               </button>

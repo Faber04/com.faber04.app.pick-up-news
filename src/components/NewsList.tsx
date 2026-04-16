@@ -12,15 +12,15 @@ export const NewsList = ({ news, viewMode, loading, onNewsClick }: NewsListProps
   if (loading) {
     return (
       <div className="text-center py-8">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-        <p className="mt-2 text-gray-600">Caricamento news...</p>
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[color:var(--brand)]"></div>
+        <p className="mt-2 text-secondary">Caricamento news...</p>
       </div>
     );
   }
 
   if (news.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500">
+      <div className="text-center py-8 text-muted surface rounded-xl">
         <p>Nessuna news disponibile.</p>
         <p className="text-sm mt-2">Aggiungi dei feed RSS e aggiorna per vedere le news.</p>
       </div>
@@ -70,21 +70,21 @@ const FeedAccordion = ({ feedTitle, feedNews, onNewsClick }: FeedAccordionProps)
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+    <div className="surface rounded-lg overflow-hidden">
       {/* Accordion Header */}
       <button
         onClick={() => setIsOpen(prev => !prev)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors text-left"
+        className="w-full flex items-center justify-between px-4 py-3 surface-muted hover:brightness-95 transition-colors text-left"
       >
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-gray-800">{feedTitle}</span>
-          <span className="text-xs bg-blue-100 text-blue-700 font-medium px-2 py-0.5 rounded-full">
+          <span className="font-semibold text-primary">{feedTitle}</span>
+          <span className="text-xs badge-brand font-medium px-2 py-0.5 rounded-full">
             {feedNews.length}
           </span>
         </div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-muted transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -96,7 +96,7 @@ const FeedAccordion = ({ feedTitle, feedNews, onNewsClick }: FeedAccordionProps)
 
       {/* Accordion Body */}
       {isOpen && (
-        <div className="divide-y divide-gray-100">
+        <div className="divide-y divide-[color:var(--border)]">
           {feedNews.map((item, index) => (
             <NewsCard key={`${item.feedId}-${index}`} newsItem={item} onClick={onNewsClick} showFeedTitle={false} />
           ))}
@@ -130,30 +130,30 @@ const NewsCard = ({ newsItem, onClick, showFeedTitle = true }: NewsCardProps) =>
 
   return (
     <div
-      className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+      className="news-card p-4 cursor-pointer"
       onClick={() => onClick(newsItem)}
     >
       <div className="flex justify-between items-start mb-2">
-        <h4 className="font-medium text-gray-800 line-clamp-2 flex-1 mr-4">
+        <h4 className="font-medium text-primary line-clamp-2 flex-1 mr-4">
           {newsItem.title}
         </h4>
-        <span className="text-xs text-gray-500 whitespace-nowrap">
+        <span className="text-xs text-muted whitespace-nowrap">
           {formatDate(newsItem.isoDate || newsItem.pubDate)}
         </span>
       </div>
 
       <div
-        className="text-sm text-gray-600 mb-2 line-clamp-2"
+        className="text-sm text-secondary mb-2 line-clamp-2"
         dangerouslySetInnerHTML={{ __html: newsItem.truncatedDescription }}
       />
 
       <div className="flex justify-between items-center">
         {showFeedTitle && (
-          <span className="text-xs text-blue-600 font-medium">
+          <span className="text-xs text-[color:var(--brand)] font-medium">
             {newsItem.feedTitle}
           </span>
         )}
-        <span className="text-xs text-gray-400 ml-auto">
+        <span className="text-xs text-muted ml-auto">
           →
         </span>
       </div>

@@ -35,22 +35,22 @@ export const NewsDetailModal = ({ newsItem, isOpen, onClose }: NewsDetailModalPr
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-xl">
-        <div className="flex justify-between items-center p-6 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-800 line-clamp-2">
+      <div className="surface-strong rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-xl border border-[color:var(--border)]">
+        <div className="flex justify-between items-center p-6 border-b border-[color:var(--border)]">
+          <h2 className="text-2xl font-bold text-primary line-clamp-2">
             {newsItem.title}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-2xl leading-none"
+            className="text-muted hover:text-primary text-2xl leading-none"
           >
             ✕
           </button>
         </div>
 
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
-          <div className="flex items-center gap-4 mb-4 text-sm text-gray-600">
-            <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+          <div className="flex items-center gap-4 mb-4 text-sm text-secondary">
+            <span className="badge-brand px-2 py-1 rounded-full">
               {newsItem.feedTitle}
             </span>
             <span>
@@ -68,25 +68,25 @@ export const NewsDetailModal = ({ newsItem, isOpen, onClose }: NewsDetailModalPr
             />
           ) : newsItem.contentSnippet ? (
             <div
-              className="prose prose-sm max-w-none text-gray-700 leading-relaxed"
+              className="prose prose-sm max-w-none text-secondary leading-relaxed"
               dangerouslySetInnerHTML={{ __html: newsItem.contentSnippet }}
             />
           ) : newsItem.summary ? (
             <div
-              className="prose prose-sm max-w-none text-gray-700 leading-relaxed"
+              className="prose prose-sm max-w-none text-secondary leading-relaxed"
               dangerouslySetInnerHTML={{ __html: newsItem.summary }}
             />
           ) : (
-            <p className="text-gray-500 italic">Nessun contenuto disponibile</p>
+            <p className="text-muted italic">Nessun contenuto disponibile</p>
           )}
 
           {newsItem.link && (
-            <div className="mt-6 pt-4 border-t border-gray-200">
+            <div className="mt-6 pt-4 border-t border-[color:var(--border)]">
               <a
                 href={newsItem.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                className="inline-flex items-center gap-2 btn-brand px-4 py-2 rounded-lg font-medium transition"
               >
                 Leggi l'articolo completo →
               </a>

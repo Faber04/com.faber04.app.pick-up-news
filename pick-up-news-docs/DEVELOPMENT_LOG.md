@@ -2,6 +2,32 @@
 
 This file logs all development sessions for the PickUpNews project.
 
+## Session: v1.2.0 Branding + Dark Mode + Palette Restyle
+- Date: 16 April 2026
+- Start Time: 10:10
+- End Time: 10:45
+- Duration: 35 minutes
+
+## Changes Made
+- Introduced new PickUpNews icon assets (`pickupnews-mark.svg` and Apple touch icon)
+- Replaced legacy Vite icon references in app header, empty states, and README
+- Added dark mode / light mode toggle in header (desktop + mobile)
+- Implemented persistent theme state using localStorage and `data-theme` on `documentElement`
+- Added a complete brand-driven visual system in `index.css` with CSS variables, surfaces, buttons, and motion
+- Restyled key UI components (Header, FeedsPage, AddFeedForm, FeedList, ViewControls, NewsList, NewsDetailModal)
+
+## Testing
+- Ran production build successfully (`npm run build`)
+- Verified TypeScript compilation and Vite bundling without errors
+
+## Issues Encountered
+- None
+
+## Next Steps
+- Proceed with v1.2.1 feed sorting and feed editing features
+
+---
+
 ## Session Format
 - Date: [Date]
 - Duration: [Time spent]

@@ -30,7 +30,7 @@
 
 **v1.0.0** (Commit 70542e5) — Removed api.allorigins.win proxy, simplified CORS chain
 **v1.1.1** (Commit 938358d) — URL parsing, UI alignment, XML robustness
-**v1.2.0** (PLANNED) — Icon alignment, dark mode, color palette restyling
+**v1.2.0** (Commit UNRELEASED) — Icon alignment, dark mode, color palette restyling
 
 ## Next Steps (Roadmap)
 
@@ -51,18 +51,18 @@
    - HTML error detection (404 fallback to rss2json)
    - BOM removal and whitespace normalization
 
-### v1.2.0 (NEXT)
-1. Icon alignment & branding consistency across app
-   - Header icons alignment
-   - README icon consistency
-   - Coerenza branding PN
-   - Convert the favicon into an Apple WebApp icon 
-2. Implement dark mode / light mode toggle in settings or header
-3. Restyling based on app logo color palette
-   - Derive color scheme from PickUpNews logo
-   - Apply consistently across UI components
+### v1.2.0 ✅ COMPLETED
+1. ✅ Icon alignment & branding consistency across app
+   - Header icon updated and aligned
+   - README icon consistency completed
+   - Coerenza branding PN completed
+   - Favicon converted into Apple WebApp icon asset
+2. ✅ Implemented dark mode / light mode toggle in header
+3. ✅ Restyling based on app logo color palette
+   - Color scheme derived from PickUpNews mark
+   - Applied consistently across UI components
 
-### v1.2.1 (PLANNED)
+### v1.2.1 (NEXT)
 1. Feed sorting capability in Feeds section
    - Drag & drop or arrow buttons for reordering feeds
    - Automatic order persistence in localStorage

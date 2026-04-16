@@ -4,8 +4,11 @@ import { RSSService } from '../services';
 
 const STORAGE_KEYS = {
   FEEDS: 'pickUpNews_feeds',
-  VIEW_MODE: 'pickUpNews_viewMode'
+  VIEW_MODE: 'pickUpNews_viewMode',
+  THEME: 'pickUpNews_theme'
 };
+
+export type ThemeMode = 'light' | 'dark';
 
 export const useAppState = () => {
   const [state, setState] = useState<AppState>({
@@ -16,12 +19,14 @@ export const useAppState = () => {
   });
 
   const [viewMode, setViewMode] = useState<ViewMode>('chronological');
+  const [themeMode, setThemeMode] = useState<ThemeMode>('light');
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({});
 
   // Load data from localStorage on mount
   useEffect(() => {
     const savedFeeds = localStorage.getItem(STORAGE_KEYS.FEEDS);
     const savedViewMode = localStorage.getItem(STORAGE_KEYS.VIEW_MODE);
+    const savedThemeMode = localStorage.getItem(STORAGE_KEYS.THEME) as ThemeMode | null;
 
     if (savedFeeds) {
       try {
@@ -35,6 +40,14 @@ export const useAppState = () => {
     if (savedViewMode) {
       setViewMode(savedViewMode as ViewMode);
     }
+
+    if (savedThemeMode === 'light' || savedThemeMode === 'dark') {
+      setThemeMode(savedThemeMode);
+      return;
+    }
+
+    const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+    setThemeMode(prefersDark ? 'dark' : 'light');
   }, []);
 
   // Save feeds to localStorage when changed
@@ -46,6 +59,11 @@ export const useAppState = () => {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.VIEW_MODE, viewMode);
   }, [viewMode]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.THEME, themeMode);
+    document.documentElement.setAttribute('data-theme', themeMode);
+  }, [themeMode]);
 
   const addFeed = useCallback(async (url: string, title: string) => {
     if (!RSSService.validateFeedUrl(url)) {
@@ -119,10 +137,17 @@ export const useAppState = () => {
     setState(prev => ({ ...prev, error: null }));
   }, []);
 
+  const toggleTheme = useCallback(() => {
+    setThemeMode(prev => (prev === 'light' ? 'dark' : 'light'));
+  }, []);
+
   return {
     state,
     viewMode,
     setViewMode,
+    themeMode,
+    setThemeMode,
+    toggleTheme,
     filterOptions,
     setFilterOptions,
     addFeed,

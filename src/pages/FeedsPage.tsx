@@ -20,14 +20,14 @@ export const FeedsPage = ({
   const [showForm, setShowForm] = useState(false);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Gestione Feed RSS</h2>
+    <div className="app-container py-8 stagger-in">
+      <h2 className="text-2xl font-bold text-primary mb-6">Gestione Feed RSS</h2>
       
       {/* Buttons header - aligned horizontally */}
       <div className="flex gap-3 mb-6">
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+          className="btn-brand px-4 py-2 rounded-lg font-medium transition"
         >
           + Aggiungi Feed RSS
         </button>
@@ -35,7 +35,7 @@ export const FeedsPage = ({
           <button
             onClick={onRefresh}
             disabled={loading}
-            className="bg-green-500 hover:bg-green-600 disabled:bg-green-300 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+            className="btn-success disabled:opacity-60 text-white px-4 py-2 rounded-lg font-medium transition"
           >
             {loading ? 'Aggiornando...' : '🔄 Aggiorna'}
           </button>

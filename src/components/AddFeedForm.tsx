@@ -25,13 +25,13 @@ export const AddFeedForm = ({ onAddFeed, loading, onClose }: AddFeedFormProps) =
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm mb-6">
+    <div className="surface rounded-lg p-4 mb-6">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold text-gray-800">Aggiungi Feed RSS</h3>
+        <h3 className="text-lg font-semibold text-primary">Aggiungi Feed RSS</h3>
         {onClose && (
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-muted hover:text-primary"
           >
             ✕
           </button>
@@ -40,7 +40,7 @@ export const AddFeedForm = ({ onAddFeed, loading, onClose }: AddFeedFormProps) =
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="feed-title" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="feed-title" className="block text-sm font-medium text-secondary mb-1">
             Nome del Feed
           </label>
           <input
@@ -49,13 +49,13 @@ export const AddFeedForm = ({ onAddFeed, loading, onClose }: AddFeedFormProps) =
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="es. Corriere della Sera"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="input-field"
             required
           />
         </div>
 
         <div>
-          <label htmlFor="feed-url" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="feed-url" className="block text-sm font-medium text-secondary mb-1">
             URL del Feed RSS
           </label>
           <input
@@ -64,7 +64,7 @@ export const AddFeedForm = ({ onAddFeed, loading, onClose }: AddFeedFormProps) =
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="es. example.com/rss o www.example.com/feed"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="input-field"
             required
           />
         </div>
@@ -73,7 +73,7 @@ export const AddFeedForm = ({ onAddFeed, loading, onClose }: AddFeedFormProps) =
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white px-4 py-2 rounded-md font-medium transition-colors"
+            className="btn-brand disabled:opacity-60 px-4 py-2 rounded-md font-medium transition"
           >
             {loading ? 'Aggiungendo...' : 'Aggiungi Feed'}
           </button>
@@ -81,7 +81,7 @@ export const AddFeedForm = ({ onAddFeed, loading, onClose }: AddFeedFormProps) =
             <button
               type="button"
               onClick={onClose}
-              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md font-medium transition-colors"
+              className="btn-neutral px-4 py-2 rounded-md font-medium transition"
             >
               Annulla
             </button>

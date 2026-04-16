@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-labelledby="title desc">
+  <title id="title">PickUpNews Apple Touch Icon</title>
+  <desc id="desc">PickUpNews icon optimized for Apple touch bookmarks</desc>
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f766e" />
+      <stop offset="55%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="markGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#fde68a" />
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="164" height="164" rx="36" fill="url(#bgGrad)" />
+  <path d="M52 45h28c25 0 40 14 40 35 0 22-16 36-42 36H70v19H52V45Zm18 16v38h8c15 0 24-8 24-20 0-12-9-18-24-18h-8Z" fill="white"/>
+  <path d="M95 69h14l21 31V69h16v65h-15L113 103v31H95V69Z" fill="url(#markGrad)"/>
+</svg>

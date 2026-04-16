@@ -8,23 +8,23 @@ interface ViewControlsProps {
 export const ViewControls = ({ viewMode, onViewModeChange }: ViewControlsProps) => {
   return (
     <div className="flex justify-end mb-6">
-      <div className="flex bg-gray-100 rounded-lg p-1">
+      <div className="flex surface-muted rounded-lg p-1">
         <button
           onClick={() => onViewModeChange('chronological')}
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border ${
             viewMode === 'chronological'
-              ? 'bg-white text-gray-800 shadow-sm'
-              : 'text-gray-600 hover:text-gray-800'
+              ? 'surface-strong text-primary border-[color:var(--border)] shadow-sm'
+              : 'text-secondary border-transparent hover:text-primary'
           }`}
         >
           Cronologico
         </button>
         <button
           onClick={() => onViewModeChange('by-feed')}
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border ${
             viewMode === 'by-feed'
-              ? 'bg-white text-gray-800 shadow-sm'
-              : 'text-gray-600 hover:text-gray-800'
+              ? 'surface-strong text-primary border-[color:var(--border)] shadow-sm'
+              : 'text-secondary border-transparent hover:text-primary'
           }`}
         >
           Per Sito
