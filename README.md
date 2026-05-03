@@ -200,10 +200,11 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - Feeds added to the end of existing feeds list
   - Duplicate detection by feed URL
   - Feeds with duplicate URL are skipped
-- 🍎 AirDrop compatibility between iOS devices
-  - The exported `.pickupnews` file can be sent via AirDrop between iOS devices
-  - The PickUp News iOS app is configured to recognize and import `.pickupnews` files automatically
-  - Integration is based on a custom UTI derived from `public.json` and configured through dedicated `Info.plist` keys
+- 🔁 File sharing across devices (including AirDrop)
+  - The exported `.pickupnews` file can be shared across devices, including via AirDrop on iOS
+  - On iOS, the received file can be saved in Files or shared using system options
+  - The file can then be imported in the PickUp News PWA through the in-app import function (drag and drop or file picker)
+  - Note: as a PWA, direct automatic file opening/import via AirDrop is not supported on iOS; users must select the `.pickupnews` file manually from the PWA
 
 ### v2.1.0
 - 📲 Installable PWA
