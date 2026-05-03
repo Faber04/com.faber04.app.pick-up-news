@@ -191,21 +191,6 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - "Read full article" button is always visible regardless of article length
 - ✅ Aligned mobile navigation button colors with desktop and other views
 
-### v2.1.0
-- 📥 Export feeds to JSON file
-  - Download all feeds with title and URL as a JSON file
-  - Export format now uses a custom extension: `.pickupnews`
-- 📤 Import feeds from JSON file
-  - Load previously exported feeds
-  - Feeds added to the end of existing feeds list
-  - Duplicate detection by feed URL
-  - Feeds with duplicate URL are skipped
-- 🔁 File sharing across devices (including AirDrop)
-  - The exported `.pickupnews` file can be shared across devices, including via AirDrop on iOS
-  - On iOS, the received file can be saved in Files or shared using system options
-  - The file can then be imported in the PickUp News PWA through the in-app import function (drag and drop or file picker)
-  - Note: as a PWA, direct automatic file opening/import via AirDrop is not supported on iOS; users must select the `.pickupnews` file manually from the PWA
-
 ### v2.0.0
 - 📲 Installable PWA
   - `manifest.json` with app name, icons, theme color, and `standalone` display mode
@@ -221,6 +206,21 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - Each entry shows: feed name, article title, and timestamp
   - Notifications persisted in localStorage and cleared when read
   - "Mark all as read" action in the notification panel
+
+### v2.1.0
+- 📥 Export feeds to JSON file
+  - Download all feeds with title and URL as a JSON file
+  - Export format now uses a custom extension: `.pickupnews`
+- 📤 Import feeds from JSON file
+  - Load previously exported feeds
+  - Feeds added to the end of existing feeds list
+  - Duplicate detection by feed URL
+  - Feeds with duplicate URL are skipped
+- 🔁 File sharing across devices (including AirDrop)
+  - The exported `.pickupnews` file can be shared across devices, including via AirDrop on iOS
+  - On iOS, the received file can be saved in Files or shared using system options
+  - The file can then be imported in the PickUp News PWA through the in-app import function (drag and drop or file picker)
+  - Note: as a PWA, direct automatic file opening/import via AirDrop is not supported on iOS; users must select the `.pickupnews` file manually from the PWA
 
 ### v3.0.0
 - 🔧 Replace `corsproxy.io` with a self-hosted Cloudflare Worker
