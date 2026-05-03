@@ -191,7 +191,7 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - "Read full article" button is always visible regardless of article length
 - ✅ Aligned mobile navigation button colors with desktop and other views
 
-### v2.0.0
+### v2.1.0
 - 📥 Export feeds to JSON file
   - Download all feeds with title and URL as a JSON file
   - Export format now uses a custom extension: `.pickupnews`
@@ -206,7 +206,7 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - The file can then be imported in the PickUp News PWA through the in-app import function (drag and drop or file picker)
   - Note: as a PWA, direct automatic file opening/import via AirDrop is not supported on iOS; users must select the `.pickupnews` file manually from the PWA
 
-### v2.1.0
+### v2.0.0
 - 📲 Installable PWA
   - `manifest.json` with app name, icons, theme color, and `standalone` display mode
   - Service Worker for offline caching of shell assets
