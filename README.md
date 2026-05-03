@@ -194,11 +194,16 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
 ### v2.0.0
 - 📥 Export feeds to JSON file
   - Download all feeds with title and URL as a JSON file
+  - Export format now uses a custom extension: `.pickupnews`
 - 📤 Import feeds from JSON file
   - Load previously exported feeds
   - Feeds added to the end of existing feeds list
   - Duplicate detection by feed URL
   - Feeds with duplicate URL are skipped
+- 🍎 AirDrop compatibility between iOS devices
+  - The exported `.pickupnews` file can be sent via AirDrop between iOS devices
+  - The PickUp News iOS app is configured to recognize and import `.pickupnews` files automatically
+  - Integration is based on a custom UTI derived from `public.json` and configured through dedicated `Info.plist` keys
 
 ### v2.1.0
 - 📲 Installable PWA
