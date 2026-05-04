@@ -6,7 +6,7 @@ export const ViewControls = ({ viewMode, onViewModeChange }: ViewControlsProps) 
   const { messages } = useI18n();
 
   return (
-    <div className="flex justify-end mb-6">
+    <div className="mb-6 hidden justify-end sm:flex">
       <div className="flex rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-muted)] p-1 shadow-[0_14px_30px_-24px_rgba(2,8,23,0.55)]">
         <Button
           type="button"
