@@ -30,6 +30,7 @@ PickUpNews allows you to easily aggregate and read all your favorite RSS feeds. 
 - **💾 Accordion State Persistence**: Open/closed state per feed is remembered in localStorage
 - **🧭 Consistent Source Order**: In "By Site" mode, Home follows the same order configured in Feeds
 - **🧱 Mobile Navigation Drawer**: On mobile, navigation opens as a right-side drawer with overlay
+- **📍 Mobile Sticky Bottom Menu**: On smartphone/tablet, a sticky bottom icon menu gives one-tap access to Home, Sort mode, and Settings
 - **🗓️ Compact Article Metadata**: Article modal uses compact `DD/MM/YY (HH:MM)` date format and wraps metadata cleanly on mobile
 - **📱 Responsive Design**: Perfect on desktop, tablet, and mobile
 - **💾 Local Persistence**: Your feeds are automatically saved in the browser
@@ -191,6 +192,13 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - "Read full article" button is always visible regardless of article length
 - ✅ Aligned mobile navigation button colors with desktop and other views
 
+### v1.5.0 ✅
+- ✅ Added mobile/tablet sticky bottom navigation menu with icon-only actions
+  - Home shortcut
+  - Sort mode toggle (By Site / Chronological)
+  - Settings shortcut
+- ✅ Kept desktop navigation behavior unchanged
+
 ### v2.0.0
 - 📲 Installable PWA
   - `manifest.json` with app name, icons, theme color, and `standalone` display mode
@@ -285,6 +293,11 @@ Notes:
 The app has two top-level sections accessible from the header:
 - **🏠 Home** — the list of news from your feeds
 - **⚙️ Settings** — app info, credits, and access to feed management
+
+On smartphone/tablet, a sticky bottom icon menu is also available:
+- **🏠 Home** icon
+- **🔀 Sort** icon (toggles Chronological / By Site)
+- **⚙️ Settings** icon
 
 ### Adding an RSS Feed
 1. Open **Settings** from the header

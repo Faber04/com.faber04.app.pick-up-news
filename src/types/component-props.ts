@@ -43,6 +43,13 @@ export interface HeaderProps {
   onNavigate: (page: 'home' | 'settings') => void;
 }
 
+export interface MobileBottomNavProps {
+  currentPage: 'home' | 'settings';
+  viewMode: ViewMode;
+  onNavigate: (page: 'home' | 'settings') => void;
+  onToggleViewMode: () => void;
+}
+
 export interface NewsDetailModalProps {
   newsItem: NewsItem | null;
   isOpen: boolean;

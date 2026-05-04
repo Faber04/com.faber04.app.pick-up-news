@@ -1,0 +1,79 @@
+import type { MobileBottomNavProps } from '../types/component-props';
+import { useI18n } from '../i18n/useI18n';
+import { Button } from './ui';
+
+export const MobileBottomNav = ({
+  currentPage,
+  viewMode,
+  onNavigate,
+  onToggleViewMode,
+}: MobileBottomNavProps) => {
+  const { messages } = useI18n();
+
+  const sortTitle = viewMode === 'chronological'
+    ? `${messages.viewModes.chronological} → ${messages.viewModes.byFeed}`
+    : `${messages.viewModes.byFeed} → ${messages.viewModes.chronological}`;
+
+  return (
+    <nav
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--border)] bg-[color:var(--surface)]/95 px-4 pb-[calc(env(safe-area-inset-bottom)+0.55rem)] pt-2 backdrop-blur lg:hidden"
+      aria-label={messages.common.navigation}
+    >
+      <div className="mx-auto grid w-full max-w-lg grid-cols-3 gap-2">
+        <Button
+          type="button"
+          onClick={() => onNavigate('home')}
+          variant={currentPage === 'home' ? 'brand' : 'ghost'}
+          size="icon"
+          className="h-11 w-full rounded-2xl"
+          aria-label={messages.common.home}
+          title={messages.common.home}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 10.5 12 3l9 7.5" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 9.75V21h13.5V9.75" />
+          </svg>
+        </Button>
+
+        <Button
+          type="button"
+          onClick={onToggleViewMode}
+          variant={currentPage === 'home' ? 'secondary' : 'ghost'}
+          size="icon"
+          className="h-11 w-full rounded-2xl"
+          aria-label={sortTitle}
+          title={sortTitle}
+        >
+          {viewMode === 'chronological' ? (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h13" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h9" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 17h5" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.5 7h.01M3.5 12h.01M3.5 17h.01" />
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <rect x="3" y="4" width="18" height="6" rx="1.5" />
+              <rect x="3" y="14" width="18" height="6" rx="1.5" />
+            </svg>
+          )}
+        </Button>
+
+        <Button
+          type="button"
+          onClick={() => onNavigate('settings')}
+          variant={currentPage === 'settings' ? 'brand' : 'ghost'}
+          size="icon"
+          className="h-11 w-full rounded-2xl"
+          aria-label={messages.common.settings}
+          title={messages.common.settings}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.25 4.5h3.5l.65 2.03a6.89 6.89 0 0 1 1.52.88l2-.8 1.75 3.03-1.53 1.5c.07.42.11.85.11 1.28 0 .43-.04.86-.11 1.28l1.53 1.5-1.75 3.03-2-.8a6.89 6.89 0 0 1-1.52.88l-.65 2.03h-3.5l-.65-2.03a6.89 6.89 0 0 1-1.52-.88l-2 .8-1.75-3.03 1.53-1.5A7.41 7.41 0 0 1 5 12c0-.43.04-.86.11-1.28l-1.53-1.5L5.33 6.2l2 .8c.46-.36.97-.66 1.52-.88z" />
+            <circle cx="12" cy="12" r="2.8" />
+          </svg>
+        </Button>
+      </div>
+    </nav>
+  );
+};

@@ -10,13 +10,14 @@ import {
   Breadcrumb,
   SubpageContainer,
   FeedsContent,
+  MobileBottomNav,
 } from './components';
 import { Alert, AlertDescription, Badge, Button, Card, CardContent, CardHeader, CardTitle } from './components/ui';
 import { SettingsPage } from './pages/SettingsPage';
 import { NewsItem } from './types';
 import type { NavigationState, BreadcrumbNode, NavigationActions } from './types/navigation';
 
-const APP_VERSION = '1.4.10';
+const APP_VERSION = '1.5.0';
 
 function App() {
   const { messages, supportedLanguages, language, setLanguage } = useI18n();
@@ -110,20 +111,31 @@ function App() {
 
   const filteredNews = getFilteredNews();
 
+  const handleNavigate = (page: 'home' | 'settings') => {
+    if (page === 'home') {
+      navigationActions.reset();
+      return;
+    }
+
+    navigationActions.reset();
+    navigationActions.push(createNode('settings'));
+  };
+
+  const handleToggleViewMode = () => {
+    if (currentPageNode.id !== 'home') {
+      navigationActions.reset();
+    }
+
+    setViewMode((prev) => (prev === 'chronological' ? 'by-feed' : 'chronological'));
+  };
+
   return (
-    <div className="app-shell">
+    <div className="app-shell pb-24 lg:pb-0">
       <Header
         currentPage={headerPage}
         themeMode={themeMode}
         onToggleTheme={toggleTheme}
-        onNavigate={(page) => {
-          if (page === 'home') {
-            navigationActions.reset();
-          } else if (page === 'settings') {
-            navigationActions.reset();
-            navigationActions.push(createNode('settings'));
-          }
-        }}
+        onNavigate={handleNavigate}
       />
 
       {/* Breadcrumb Navigation */}
@@ -274,6 +286,13 @@ function App() {
         newsItem={selectedNews}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
+      />
+
+      <MobileBottomNav
+        currentPage={headerPage}
+        viewMode={viewMode}
+        onNavigate={handleNavigate}
+        onToggleViewMode={handleToggleViewMode}
       />
     </div>
   );
