@@ -1,11 +1,38 @@
+import { useState } from 'react';
 import type { SettingsPageProps } from '../types/page-props';
 import { useI18n } from '../i18n/useI18n';
 import { Button } from '../components/ui';
 
 const currentYear = new Date().getFullYear();
 
-export const SettingsPage = ({ version, onOpenFeeds, onOpenLanguage }: SettingsPageProps) => {
+export const SettingsPage = ({
+  version,
+  onOpenFeeds,
+  onOpenLanguage,
+  notificationsEnabled,
+  onToggleNotifications,
+  canInstallPWA,
+  onInstallPWA,
+}: SettingsPageProps) => {
   const { messages } = useI18n();
+  const [notifPending, setNotifPending] = useState(false);
+  const [notifError, setNotifError] = useState('');
+
+  const notificationsSupported = 'Notification' in window;
+
+  const handleToggleNotifications = async () => {
+    setNotifPending(true);
+    setNotifError('');
+    const result = await onToggleNotifications();
+    if (!result && !notificationsEnabled) {
+      setNotifError(
+        Notification.permission === 'denied'
+          ? messages.notifications.permissionDenied
+          : messages.notifications.notSupported,
+      );
+    }
+    setNotifPending(false);
+  };
 
   return (
     <div className="app-container py-8 stagger-in">
@@ -29,6 +56,48 @@ export const SettingsPage = ({ version, onOpenFeeds, onOpenLanguage }: SettingsP
             <span>{messages.settings.manageFeedsAction}</span>
             <span aria-hidden="true">→</span>
           </Button>
+
+          {/* Browser notifications toggle */}
+          {notificationsSupported && (
+            <div className="flex flex-col gap-2 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-muted)] px-5 py-4">
+              <div className="flex items-center justify-between gap-4">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-primary">🔔 {messages.notifications.enableTitle}</p>
+                  <p className="mt-0.5 text-xs text-secondary">{messages.notifications.enableDescription}</p>
+                </div>
+                <Button
+                  type="button"
+                  variant={notificationsEnabled ? 'brand' : 'outline'}
+                  size="sm"
+                  disabled={notifPending}
+                  onClick={handleToggleNotifications}
+                  className="shrink-0"
+                >
+                  {notifPending ? '…' : notificationsEnabled ? messages.notifications.disable : messages.notifications.enable}
+                </Button>
+              </div>
+              {notifError && <p className="text-xs text-[color:var(--danger)]">{notifError}</p>}
+            </div>
+          )}
+
+          {/* PWA install prompt */}
+          {canInstallPWA && (
+            <div className="flex items-center justify-between gap-4 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-muted)] px-5 py-4">
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-primary">📲 {messages.pwa.installTitle}</p>
+                <p className="mt-0.5 text-xs text-secondary">{messages.pwa.installDescription}</p>
+              </div>
+              <Button
+                type="button"
+                variant="brand"
+                size="sm"
+                onClick={onInstallPWA}
+                className="shrink-0"
+              >
+                {messages.pwa.installButton}
+              </Button>
+            </div>
+          )}
         </section>
 
         <section className="space-y-5 pt-1">

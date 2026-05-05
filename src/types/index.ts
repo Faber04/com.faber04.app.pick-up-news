@@ -65,6 +65,17 @@ export interface FeedDetectionResult {
   format: FeedFormat;
 }
 
+// In-app notification
+export interface AppNotification {
+  id: string;
+  feedId: string;
+  feedTitle: string;
+  articleTitle: string;
+  articleLink?: string;
+  timestamp: string; // ISO date string
+  read: boolean;
+}
+
 // Navigation types
 export type { BreadcrumbNode, NavigationState, NavigationActions } from './navigation';
 

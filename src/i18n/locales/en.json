@@ -81,6 +81,24 @@
     "readFullArticle": "Read the full article →",
     "authorBy": "by {author}"
   },
+  "notifications": {
+    "bell": "Notifications",
+    "noNotifications": "No notifications",
+    "noNotificationsHint": "New articles will appear here on the next refresh.",
+    "markAllRead": "Mark all as read",
+    "enableTitle": "Browser notifications",
+    "enableDescription": "Receive a notification when there are new articles.",
+    "enable": "Enable notifications",
+    "disable": "Disable notifications",
+    "permissionDenied": "Notification permission denied by the browser.",
+    "notSupported": "Browser notifications are not supported on this device.",
+    "unreadCount": "{count} unread"
+  },
+  "pwa": {
+    "installTitle": "Install PickUpNews",
+    "installDescription": "Add the app to your home screen for quick access.",
+    "installButton": "Install app"
+  },
   "errors": {
     "invalidFeedUrl": "Invalid RSS feed URL",
     "autoDetectFailed": "Feed was not detected automatically. Enter a valid RSS/Atom/JSON feed URL.",

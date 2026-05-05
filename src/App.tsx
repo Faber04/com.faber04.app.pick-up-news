@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAppState } from './hooks/useAppState';
+import { usePWAInstall } from './hooks/usePWAInstall';
 import { getNavigationLabel } from './i18n';
 import { useI18n } from './i18n/useI18n';
 import {
@@ -11,13 +12,14 @@ import {
   SubpageContainer,
   FeedsContent,
   MobileBottomNav,
+  NotificationPanel,
 } from './components';
 import { Alert, AlertDescription, Badge, Button, Card, CardContent, CardHeader, CardTitle } from './components/ui';
 import { SettingsPage } from './pages/SettingsPage';
 import { NewsItem } from './types';
 import type { NavigationState, BreadcrumbNode, NavigationActions } from './types/navigation';
 
-const APP_VERSION = '1.5.1';
+const APP_VERSION = '2.0.0';
 
 function App() {
   const { messages, supportedLanguages, language, setLanguage } = useI18n();
@@ -35,7 +37,16 @@ function App() {
     refreshNews,
     getFilteredNews,
     clearError,
+    notifications,
+    notificationsEnabled,
+    markAllNotificationsRead,
+    clearAllNotifications,
+    toggleNotifications,
   } = useAppState(messages.errors);
+
+  const { canInstall, install } = usePWAInstall();
+  const [isNotificationPanelOpen, setIsNotificationPanelOpen] = useState(false);
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   const createNode = (id: string, params?: Record<string, unknown>): BreadcrumbNode => ({
     id,
@@ -136,6 +147,8 @@ function App() {
         themeMode={themeMode}
         onToggleTheme={toggleTheme}
         onNavigate={handleNavigate}
+        unreadNotificationsCount={unreadCount}
+        onOpenNotifications={() => setIsNotificationPanelOpen(true)}
       />
 
       {/* Breadcrumb Navigation */}
@@ -216,6 +229,10 @@ function App() {
           onOpenFeeds={() => {
             navigationActions.push(createNode('feeds'));
           }}
+          notificationsEnabled={notificationsEnabled}
+          onToggleNotifications={toggleNotifications}
+          canInstallPWA={canInstall}
+          onInstallPWA={install}
         />
       ) : currentPageNode.id === 'language' ? (
         <SubpageContainer
@@ -286,6 +303,18 @@ function App() {
         newsItem={selectedNews}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
+      />
+
+      {/* Notification Panel */}
+      <NotificationPanel
+        notifications={notifications}
+        isOpen={isNotificationPanelOpen}
+        onClose={() => {
+          setIsNotificationPanelOpen(false);
+          if (unreadCount > 0) markAllNotificationsRead();
+        }}
+        onMarkAllRead={markAllNotificationsRead}
+        onClearAll={clearAllNotifications}
       />
 
       <MobileBottomNav

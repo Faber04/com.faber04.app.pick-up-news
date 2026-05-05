@@ -1,7 +1,7 @@
 {
   "name": "com.faber04.pick-up-news",
   "private": true,
-  "version": "1.5.1",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -34,6 +34,7 @@
     "postcss": "^8.5.9",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vite-plugin-pwa": "^0.14.7"
   }
 }

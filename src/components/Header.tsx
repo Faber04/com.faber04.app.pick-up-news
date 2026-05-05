@@ -4,7 +4,7 @@ import type { HeaderProps } from '../types/component-props';
 import { useI18n } from '../i18n/useI18n';
 import { Button } from './ui';
 
-export const Header = ({ currentPage, themeMode, onToggleTheme, onNavigate }: HeaderProps) => {
+export const Header = ({ currentPage, themeMode, onToggleTheme, onNavigate, unreadNotificationsCount, onOpenNotifications }: HeaderProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { messages } = useI18n();
 
@@ -131,10 +131,46 @@ export const Header = ({ currentPage, themeMode, onToggleTheme, onNavigate }: He
           >
             <span aria-hidden="true">{themeMode === 'dark' ? '☀️' : '🌙'}</span>
           </Button>
+          {/* Bell — desktop */}
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={onOpenNotifications}
+            aria-label={messages.notifications.bell}
+            className="relative rounded-xl"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            {unreadNotificationsCount > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[color:var(--brand)] text-[10px] font-bold text-white">
+                {unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}
+              </span>
+            )}
+          </Button>
         </nav>
 
-        {/* Mobile Hamburger Button */}
-        <div className="sm:hidden flex items-center gap-2">
+        {/* Mobile controls */}
+        <div className="sm:hidden flex items-center gap-1">
+          {/* Bell — mobile */}
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={onOpenNotifications}
+            aria-label={messages.notifications.bell}
+            className="relative rounded-xl"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            {unreadNotificationsCount > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[color:var(--brand)] text-[10px] font-bold text-white">
+                {unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}
+              </span>
+            )}
+          </Button>
           <Button
             type="button"
             variant="ghost"

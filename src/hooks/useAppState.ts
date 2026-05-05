@@ -1,16 +1,26 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { RSSFeed, AppState, ViewMode, FilterOptions, ThemeMode } from '../types';
+import { RSSFeed, AppState, ViewMode, FilterOptions, ThemeMode, AppNotification, NewsItem } from '../types';
 import { RSSService } from '../services';
 import type { LocaleDictionary } from '../i18n';
 
 const STORAGE_KEYS = {
   FEEDS: 'pickUpNews_feeds',
   VIEW_MODE: 'pickUpNews_viewMode',
-  THEME: 'pickUpNews_theme'
+  THEME: 'pickUpNews_theme',
+  NOTIFICATIONS: 'pickUpNews_notifications',
+  SEEN_GUIDS: 'pickUpNews_seenGuids',
+  NOTIFICATIONS_ENABLED: 'pickUpNews_notificationsEnabled',
 };
+
+const MAX_NOTIFICATIONS = 50;
+
+const getArticleGuid = (item: NewsItem): string =>
+  item.guid || item.link || item.title || '';
 
 export const useAppState = (messages: LocaleDictionary['errors']) => {
   const pendingAddUrlsRef = useRef<Set<string>>(new Set());
+  const seenGuidsRef = useRef<Set<string>>(new Set());
+  const isFirstLoadRef = useRef(true);
 
   const [state, setState] = useState<AppState>({
     feeds: [],
@@ -22,12 +32,17 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
   const [viewMode, setViewMode] = useState<ViewMode>('chronological');
   const [themeMode, setThemeMode] = useState<ThemeMode>('light');
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({});
+  const [notifications, setNotifications] = useState<AppNotification[]>([]);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
 
   // Load data from localStorage on mount
   useEffect(() => {
     const savedFeeds = localStorage.getItem(STORAGE_KEYS.FEEDS);
     const savedViewMode = localStorage.getItem(STORAGE_KEYS.VIEW_MODE);
     const savedThemeMode = localStorage.getItem(STORAGE_KEYS.THEME) as ThemeMode | null;
+    const savedNotifications = localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS);
+    const savedNotificationsEnabled = localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS_ENABLED);
+    const savedSeenGuids = localStorage.getItem(STORAGE_KEYS.SEEN_GUIDS);
 
     if (savedFeeds) {
       try {
@@ -44,11 +59,30 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
 
     if (savedThemeMode === 'light' || savedThemeMode === 'dark') {
       setThemeMode(savedThemeMode);
-      return;
+    } else {
+      const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+      setThemeMode(prefersDark ? 'dark' : 'light');
     }
 
-    const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-    setThemeMode(prefersDark ? 'dark' : 'light');
+    if (savedNotifications) {
+      try {
+        setNotifications(JSON.parse(savedNotifications));
+      } catch { /* keep default */ }
+    }
+
+    if (savedNotificationsEnabled === 'true') {
+      setNotificationsEnabled(true);
+    }
+
+    if (savedSeenGuids) {
+      try {
+        const guidsArray = JSON.parse(savedSeenGuids) as string[];
+        seenGuidsRef.current = new Set(guidsArray);
+        if (guidsArray.length > 0) {
+          isFirstLoadRef.current = false;
+        }
+      } catch { /* keep empty set */ }
+    }
   }, []);
 
   // Save feeds to localStorage when changed
@@ -65,6 +99,11 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
     localStorage.setItem(STORAGE_KEYS.THEME, themeMode);
     document.documentElement.setAttribute('data-theme', themeMode);
   }, [themeMode]);
+
+  // Save notifications to localStorage when changed
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(notifications));
+  }, [notifications]);
 
   const addFeed = useCallback(async (url: string, title: string): Promise<boolean> => {
     if (!RSSService.validateFeedUrl(url)) {
@@ -278,6 +317,49 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
 
     try {
       const news = await RSSService.fetchAllFeeds(state.feeds);
+
+      // ── New-article detection for notification center ──
+      const currentGuids = new Set(news.map(getArticleGuid).filter(Boolean));
+
+      if (!isFirstLoadRef.current && seenGuidsRef.current.size > 0) {
+        const newArticles = news.filter(item => {
+          const guid = getArticleGuid(item);
+          return guid !== '' && !seenGuidsRef.current.has(guid);
+        });
+
+        if (newArticles.length > 0) {
+          const newNotifications: AppNotification[] = newArticles.slice(0, 20).map(item => ({
+            id: `notif-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+            feedId: item.feedId,
+            feedTitle: item.feedTitle,
+            articleTitle: item.title ?? '—',
+            articleLink: item.link,
+            timestamp: new Date().toISOString(),
+            read: false,
+          }));
+
+          setNotifications(prev => [...newNotifications, ...prev].slice(0, MAX_NOTIFICATIONS));
+
+          // Browser notification (Notification API — no push server required)
+          if (notificationsEnabled && 'Notification' in window && Notification.permission === 'granted') {
+            const body = newArticles
+              .slice(0, 3)
+              .map(a => a.title)
+              .filter(Boolean)
+              .join('\n');
+            new Notification(`PickUpNews — ${newArticles.length} nuov${newArticles.length === 1 ? 'o articolo' : 'i articoli'}`, {
+              body,
+              icon: '/app/pick-up-news/pickupnews-mark.svg',
+            });
+          }
+        }
+      }
+
+      // Update seen GUIDs and first-load flag
+      seenGuidsRef.current = currentGuids;
+      isFirstLoadRef.current = false;
+      localStorage.setItem(STORAGE_KEYS.SEEN_GUIDS, JSON.stringify([...currentGuids]));
+
       setState(prev => ({ ...prev, news, loading: false }));
     } catch (error) {
       setState(prev => ({
@@ -286,7 +368,32 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
         error: error instanceof Error ? error.message : messages.fetchNewsFailed
       }));
     }
-  }, [messages.fetchNewsFailed, state.feeds]);
+  }, [messages.fetchNewsFailed, state.feeds, notificationsEnabled]);
+
+  // ── Notification actions ──
+  const markAllNotificationsRead = useCallback(() => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+  }, []);
+
+  const clearAllNotifications = useCallback(() => {
+    setNotifications([]);
+  }, []);
+
+  const toggleNotifications = useCallback(async (): Promise<boolean> => {
+    if (!('Notification' in window)) return false;
+
+    if (!notificationsEnabled) {
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') return false;
+      setNotificationsEnabled(true);
+      localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS_ENABLED, 'true');
+      return true;
+    } else {
+      setNotificationsEnabled(false);
+      localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS_ENABLED, 'false');
+      return false;
+    }
+  }, [notificationsEnabled]);
 
   const getFilteredNews = useCallback(() => {
     let filtered = state.news;
@@ -330,6 +437,11 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
     updateFeed,
     refreshNews,
     getFilteredNews,
-    clearError
+    clearError,
+    notifications,
+    notificationsEnabled,
+    markAllNotificationsRead,
+    clearAllNotifications,
+    toggleNotifications,
   };
 };

@@ -41,6 +41,8 @@ export interface HeaderProps {
   themeMode: ThemeMode;
   onToggleTheme: () => void;
   onNavigate: (page: 'home' | 'settings') => void;
+  unreadNotificationsCount: number;
+  onOpenNotifications: () => void;
 }
 
 export interface MobileBottomNavProps {

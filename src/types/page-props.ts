@@ -17,4 +17,8 @@ export interface SettingsPageProps {
   version: string;
   onOpenFeeds: () => void;
   onOpenLanguage: () => void;
+  notificationsEnabled: boolean;
+  onToggleNotifications: () => Promise<boolean>;
+  canInstallPWA: boolean;
+  onInstallPWA: () => Promise<boolean>;
 }

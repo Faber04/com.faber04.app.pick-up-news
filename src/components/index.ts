@@ -8,3 +8,4 @@ export { Breadcrumb } from './Breadcrumb';
 export { SubpageContainer } from './SubpageContainer';
 export { FeedsContent } from './FeedsContent';
 export { MobileBottomNav } from './MobileBottomNav';
+export { NotificationPanel } from './NotificationPanel';

@@ -81,6 +81,24 @@
     "readFullArticle": "Leggi l'articolo completo →",
     "authorBy": "di {author}"
   },
+  "notifications": {
+    "bell": "Notifiche",
+    "noNotifications": "Nessuna notifica",
+    "noNotificationsHint": "Le nuove news appariranno qui al prossimo aggiornamento.",
+    "markAllRead": "Segna tutte come lette",
+    "enableTitle": "Notifiche browser",
+    "enableDescription": "Ricevi una notifica quando ci sono nuovi articoli.",
+    "enable": "Attiva notifiche",
+    "disable": "Disattiva notifiche",
+    "permissionDenied": "Permesso notifiche negato dal browser.",
+    "notSupported": "Le notifiche browser non sono supportate su questo dispositivo.",
+    "unreadCount": "{count} non lette"
+  },
+  "pwa": {
+    "installTitle": "Installa PickUpNews",
+    "installDescription": "Aggiungi l'app alla schermata iniziale per un accesso rapido.",
+    "installButton": "Installa app"
+  },
   "errors": {
     "invalidFeedUrl": "URL feed RSS non valido",
     "autoDetectFailed": "Feed non rilevato automaticamente. Inserisci un URL feed RSS/Atom/JSON valido.",
