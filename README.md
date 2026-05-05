@@ -199,6 +199,11 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - Settings shortcut
 - ✅ Kept desktop navigation behavior unchanged
 
+### v1.5.1 ✅
+- ✅ Removed the top `Chronological / By Site` switch on mobile
+  - `ViewControls` stays visible from `sm` upward only
+  - On mobile/tablet, sort switching continues through the sticky bottom menu
+
 ### v2.0.0
 - 📲 Installable PWA
   - `manifest.json` with app name, icons, theme color, and `standalone` display mode
