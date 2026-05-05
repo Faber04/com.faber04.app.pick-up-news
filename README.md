@@ -229,27 +229,6 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - ✅ Subsequent refreshes create `AppNotification` entries (max 20 per refresh, 50 total)
   - ✅ i18n support: `notifications.*` and `pwa.*` sections in Italian and English
 
-### v1.5.1 ✅
-- ✅ Removed the top `Chronological / By Site` switch on mobile
-  - `ViewControls` stays visible from `sm` upward only
-  - On mobile/tablet, sort switching continues through the sticky bottom menu
-
-### v2.0.0
-- 📲 Installable PWA
-  - `manifest.json` with app name, icons, theme color, and `standalone` display mode
-  - Service Worker for offline caching of shell assets
-  - Install prompt surfaced on supported browsers (Android Chrome, desktop Chromium)
-- 🔔 Push alert subscription
-  - Settings toggle to enable/disable browser push notifications
-  - Web Push API with VAPID keys to subscribe the user's browser
-  - Push notification triggered when a feed refresh detects new articles since the last visit
-- 🗃️ In-app notification center
-  - Bell icon in the header with unread badge count
-  - Notification panel (side panel or dropdown) listing recent alerts
-  - Each entry shows: feed name, article title, and timestamp
-  - Notifications persisted in localStorage and cleared when read
-  - "Mark all as read" action in the notification panel
-
 ### v2.1.0
 - 📥 Export feeds to JSON file
   - Download all feeds with title and URL as a JSON file
