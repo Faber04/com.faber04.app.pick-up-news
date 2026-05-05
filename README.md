@@ -37,12 +37,16 @@ PickUpNews allows you to easily aggregate and read all your favorite RSS feeds. 
 - **🔍 Smart Preview**: Descriptions truncated to 120 characters for quick reading
 - **📖 Full Reading**: Modal with full article and original link
 - **⚡ Parallel Feed Detection**: Candidate probes run concurrently — detection worst case is O(timeout) regardless of candidate count
+- **📱 Installable Web App (PWA)**: Install PickUpNews as a native-like app on mobile and desktop with offline support
+- **🔔 Push Notifications**: Get notified when new articles are detected in your feeds; toggle browser notifications in Settings
+- **🔔 Notification Center**: In-app notification panel with a bell icon (shows unread count) to track and manage all detected articles
 - **⚡ Performance**: Fast loading thanks to Vite and React optimizations
 
 ## 🛠️ Technologies Used
 
 - **Frontend Framework**: React 18 with TypeScript
 - **Build Tool**: Vite 4 (fast development and optimized build)
+- **PWA Support**: `vite-plugin-pwa` v0.14.7 with Workbox 6 (offline caching, manifest, service worker)
 - **Styling**: Tailwind CSS 3 (utility-first CSS framework)
 - **UI Primitives**: shadcn/ui-style component foundation with `class-variance-authority`, `clsx`, `tailwind-merge`, and Radix Slot
 - **RSS Parsing**: Custom XML parser via the browser's native `DOMParser` (supports RSS 2.0 and Atom)
@@ -198,6 +202,32 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - Sort mode toggle (By Site / Chronological)
   - Settings shortcut
 - ✅ Kept desktop navigation behavior unchanged
+
+### v1.5.1 ✅
+- ✅ Removed top view-switch (`Cronologico / Per Sito`) from mobile Home page
+- ✅ Sort mode toggle remains available via sticky bottom menu on mobile
+- ✅ Desktop view unchanged
+
+### v2.0.0 ✅
+- ✅ **Installable Web App (PWA)**
+  - ✅ Integrated `vite-plugin-pwa@0.14.7` with Workbox 6 for offline support
+  - ✅ Web App manifest with name "PickUpNews", standalone display, and app icons
+  - ✅ Service worker auto-generated with precaching of shell assets and Google Fonts
+  - ✅ Install prompt button in Settings; triggers native browser install dialog
+- ✅ **In-App Notification Center**
+  - ✅ New `AppNotification` type with feed, article, and timestamp metadata
+  - ✅ `NotificationPanel` portal-based side panel (slides from right); lists unread/read notifications
+  - ✅ Bell icon in Header with red badge showing unread count (both desktop and mobile)
+  - ✅ "Mark all as read" and "Clear all" actions in notification panel
+- ✅ **Browser Notification API**
+  - ✅ Toggle for browser notifications in Settings page
+  - ✅ `Notification.requestPermission()` on first activation
+  - ✅ Fires native OS notifications when new articles detected and permission granted
+- ✅ **Smart Article Detection**
+  - ✅ New article detection via GUID comparison (localStorage `seenGuids`)
+  - ✅ First app run silently populates seenGuids without notifications
+  - ✅ Subsequent refreshes create `AppNotification` entries (max 20 per refresh, 50 total)
+  - ✅ i18n support: `notifications.*` and `pwa.*` sections in Italian and English
 
 ### v1.5.1 ✅
 - ✅ Removed the top `Chronological / By Site` switch on mobile
