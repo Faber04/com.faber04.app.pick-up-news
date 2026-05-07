@@ -141,7 +141,6 @@ export const FeedsContent = ({
       <input
         ref={fileInputRef}
         type="file"
-        accept=".pickupnews,application/json"
         className="hidden"
         onChange={handleImportInputChange}
       />
