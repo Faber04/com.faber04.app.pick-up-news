@@ -28,6 +28,8 @@ export interface FeedsContentProps {
   loading: boolean;
   addFeedError: string | null;
   onAddFeed: (url: string, title: string) => Promise<boolean>;
+  onExportFeeds: () => boolean;
+  onImportFeeds: (file: File) => Promise<{ added: number; skipped: number }>;
   onClearError: () => void;
   onRemoveFeed: (feedId: string) => void;
   onMoveFeed: (feedId: string, direction: 'up' | 'down') => void;

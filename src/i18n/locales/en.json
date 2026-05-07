@@ -48,8 +48,16 @@
     "addFeedButton": "Add Feed",
     "addFeedSubmitting": "Adding...",
     "addFeedToggle": "+ Add RSS Feed",
+    "importButton": "📥 Import Feeds",
+    "exportButton": "📤 Export Feeds",
     "refresh": "🔄 Refresh",
     "refreshing": "Refreshing...",
+    "importDropTitle": "Import a .pickupnews file",
+    "importDropHint": "Drag the file here or use the \"Import Feeds\" button.",
+    "importSuccess": "Import completed: {added} added, {skipped} duplicate or invalid.",
+    "importNoNewFeeds": "No new feeds were imported.",
+    "exportSuccess": "Export completed: {count} feeds saved.",
+    "exportNoFeeds": "Add at least one feed before exporting.",
     "cancel": "Cancel",
     "feedName": "Feed Name",
     "feedNameShort": "Feed name",
@@ -104,6 +112,7 @@
     "autoDetectFailed": "Feed was not detected automatically. Enter a valid RSS/Atom/JSON feed URL.",
     "duplicateFeed": "Feed already added",
     "refreshFeedFailed": "Unable to refresh the feed after editing",
-    "fetchNewsFailed": "Unable to fetch news"
+    "fetchNewsFailed": "Unable to fetch news",
+    "invalidImportFile": "Invalid import file. Use a .pickupnews file exported by PickUpNews."
   }
 }

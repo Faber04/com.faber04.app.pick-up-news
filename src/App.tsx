@@ -19,7 +19,7 @@ import { SettingsPage } from './pages/SettingsPage';
 import { NewsItem } from './types';
 import type { NavigationState, BreadcrumbNode, NavigationActions } from './types/navigation';
 
-const APP_VERSION = '2.0.0';
+const APP_VERSION = '2.1.0';
 
 function App() {
   const { messages, supportedLanguages, language, setLanguage } = useI18n();
@@ -37,6 +37,8 @@ function App() {
     refreshNews,
     getFilteredNews,
     clearError,
+    exportFeeds,
+    importFeeds,
     notifications,
     notificationsEnabled,
     markAllNotificationsRead,
@@ -280,6 +282,8 @@ function App() {
             loading={state.loading}
             addFeedError={state.error}
             onAddFeed={addFeed}
+            onExportFeeds={exportFeeds}
+            onImportFeeds={importFeeds}
             onClearError={clearError}
             onRemoveFeed={removeFeed}
             onMoveFeed={moveFeed}

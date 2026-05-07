@@ -13,6 +13,48 @@ const STORAGE_KEYS = {
 };
 
 const MAX_NOTIFICATIONS = 50;
+const TRANSFER_FILE_FORMAT = 'pickupnews-feeds';
+const TRANSFER_FILE_VERSION = 1;
+
+type FeedTransferFile = {
+  format: typeof TRANSFER_FILE_FORMAT;
+  version: typeof TRANSFER_FILE_VERSION;
+  exportedAt: string;
+  feeds: Array<{
+    title: string;
+    url: string;
+  }>;
+};
+
+const isFeedTransferFile = (value: unknown): value is FeedTransferFile => {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+
+  const parsed = value as Partial<FeedTransferFile>;
+
+  if (
+    parsed.format !== TRANSFER_FILE_FORMAT
+    || parsed.version !== TRANSFER_FILE_VERSION
+    || !Array.isArray(parsed.feeds)
+  ) {
+    return false;
+  }
+
+  return parsed.feeds.every((feed) => (
+    feed
+    && typeof feed === 'object'
+    && typeof feed.title === 'string'
+    && typeof feed.url === 'string'
+  ));
+};
+
+const createExportFileName = () => {
+  const now = new Date();
+  const datePart = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+  const timePart = `${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
+  return `pickupnews-feeds-${datePart}-${timePart}.pickupnews`;
+};
 
 const getArticleGuid = (item: NewsItem): string =>
   item.guid || item.link || item.title || '';
@@ -421,6 +463,91 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
     setThemeMode(prev => (prev === 'light' ? 'dark' : 'light'));
   }, []);
 
+  const exportFeeds = useCallback(() => {
+    if (state.feeds.length === 0) {
+      return false;
+    }
+
+    const transferFile: FeedTransferFile = {
+      format: TRANSFER_FILE_FORMAT,
+      version: TRANSFER_FILE_VERSION,
+      exportedAt: new Date().toISOString(),
+      feeds: state.feeds.map(feed => ({
+        title: feed.title,
+        url: feed.url,
+      })),
+    };
+
+    const fileName = createExportFileName();
+    const blob = new Blob([JSON.stringify(transferFile, null, 2)], { type: 'application/json' });
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = objectUrl;
+    link.download = fileName;
+    link.click();
+    URL.revokeObjectURL(objectUrl);
+
+    return true;
+  }, [state.feeds]);
+
+  const importFeeds = useCallback(async (file: File): Promise<{ added: number; skipped: number }> => {
+    const fileContent = await file.text();
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(fileContent);
+    } catch {
+      throw new Error(messages.invalidImportFile);
+    }
+
+    if (!isFeedTransferFile(parsed)) {
+      throw new Error(messages.invalidImportFile);
+    }
+
+    const importedFile = parsed as FeedTransferFile;
+    const existingUrls = new Set(state.feeds.map((feed) => RSSService.normalizeUrl(feed.url).toLowerCase()));
+    const importedUrls = new Set<string>();
+    const newFeeds: RSSFeed[] = [];
+    let skipped = 0;
+
+    importedFile.feeds.forEach((entry, index) => {
+      const normalizedUrl = RSSService.normalizeUrl(entry.url.trim());
+      const normalizedTitle = entry.title.trim();
+      const lookupUrl = normalizedUrl.toLowerCase();
+
+      if (!normalizedTitle || !RSSService.validateFeedUrl(normalizedUrl)) {
+        skipped += 1;
+        return;
+      }
+
+      if (existingUrls.has(lookupUrl) || importedUrls.has(lookupUrl)) {
+        skipped += 1;
+        return;
+      }
+
+      importedUrls.add(lookupUrl);
+      newFeeds.push({
+        id: `${Date.now()}-${index}-${Math.random().toString(36).slice(2, 8)}`,
+        title: normalizedTitle,
+        url: normalizedUrl,
+        lastFetched: new Date(),
+      });
+    });
+
+    if (newFeeds.length > 0) {
+      setState(prev => ({
+        ...prev,
+        feeds: [...prev.feeds, ...newFeeds],
+        error: null,
+      }));
+    }
+
+    return {
+      added: newFeeds.length,
+      skipped,
+    };
+  }, [messages.invalidImportFile, state.feeds]);
+
   return {
     state,
     viewMode,
@@ -438,6 +565,8 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
     refreshNews,
     getFilteredNews,
     clearError,
+    exportFeeds,
+    importFeeds,
     notifications,
     notificationsEnabled,
     markAllNotificationsRead,

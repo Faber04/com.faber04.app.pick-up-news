@@ -40,6 +40,8 @@ PickUpNews allows you to easily aggregate and read all your favorite RSS feeds. 
 - **📱 Installable Web App (PWA)**: Install PickUpNews as a native-like app on mobile and desktop with offline support
 - **🔔 Push Notifications**: Get notified when new articles are detected in your feeds; toggle browser notifications in Settings
 - **🔔 Notification Center**: In-app notification panel with a bell icon (shows unread count) to track and manage all detected articles
+- **📤 Feed Export (.pickupnews)**: Export all configured feeds to a portable `.pickupnews` file
+- **📥 Feed Import (.pickupnews)**: Import feeds from file (file picker or drag & drop), append to the end, and skip duplicates automatically
 - **⚡ Performance**: Fast loading thanks to Vite and React optimizations
 
 ## 🛠️ Technologies Used
@@ -229,20 +231,16 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - ✅ Subsequent refreshes create `AppNotification` entries (max 20 per refresh, 50 total)
   - ✅ i18n support: `notifications.*` and `pwa.*` sections in Italian and English
 
-### v2.1.0
-- 📥 Export feeds to JSON file
-  - Download all feeds with title and URL as a JSON file
-  - Export format now uses a custom extension: `.pickupnews`
-- 📤 Import feeds from JSON file
-  - Load previously exported feeds
-  - Feeds added to the end of existing feeds list
-  - Duplicate detection by feed URL
-  - Feeds with duplicate URL are skipped
-- 🔁 File sharing across devices (including AirDrop)
-  - The exported `.pickupnews` file can be shared across devices, including via AirDrop on iOS
-  - On iOS, the received file can be saved in Files or shared using system options
-  - The file can then be imported in the PickUp News PWA through the in-app import function (drag and drop or file picker)
-  - Note: as a PWA, direct automatic file opening/import via AirDrop is not supported on iOS; users must select the `.pickupnews` file manually from the PWA
+### v2.1.0 ✅
+- ✅ Feed export to `.pickupnews`
+  - Downloads all feeds with title and URL
+- ✅ Feed import from `.pickupnews`
+  - Feeds are appended to the end of the existing list
+  - Duplicate detection by feed URL with automatic skip
+  - Supports both file picker and drag & drop import
+- ✅ File sharing across devices (including AirDrop)
+  - `.pickupnews` files can be shared cross-device and imported manually from the PWA
+  - On iOS, direct auto-open into PWA is not supported; manual selection remains required
 
 ### v3.0.0
 - 🔧 Replace `corsproxy.io` with a self-hosted Cloudflare Worker
@@ -374,6 +372,21 @@ In **By Site** mode:
 5. Verify the URL status in real time
 6. Click **Salva** and confirm
 7. The feed is reloaded automatically and "Last updated" is refreshed
+
+### Exporting Feeds
+1. Open **Settings** from the header
+2. Click **"Gestisci Feed"**
+3. Click **"📤 Export Feeds"**
+4. PickUpNews downloads a `.pickupnews` file with all configured feeds
+
+### Importing Feeds
+1. Open **Settings** from the header
+2. Click **"Gestisci Feed"**
+3. Import using one of these methods:
+4. Click **"📥 Import Feeds"** and select a `.pickupnews` file
+5. Drag and drop a `.pickupnews` file into the import area
+6. Imported feeds are appended to the end of the current list
+7. Duplicate or invalid entries are skipped automatically
 
 ## 📁 Project Structure
 
