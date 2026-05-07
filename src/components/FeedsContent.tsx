@@ -23,6 +23,8 @@ export const FeedsContent = ({
   const [importFeedback, setImportFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { messages, formatMessage } = useI18n();
+  const topActionButtonClass = 'w-full sm:min-w-[9rem] sm:justify-center';
+  const importExportButtonClass = `${topActionButtonClass} border-[color:color-mix(in_srgb,var(--brand)_34%,var(--border)_66%)] bg-[color:color-mix(in_srgb,var(--brand)_10%,var(--surface)_90%)] text-[color:var(--brand-strong)] hover:bg-[color:color-mix(in_srgb,var(--brand)_16%,var(--surface)_84%)]`;
 
   const handleImport = async (file: File) => {
     try {
@@ -102,37 +104,35 @@ export const FeedsContent = ({
           onClick={() => setShowForm(!showForm)}
           variant="brand"
           size="xl"
-          className="w-full sm:w-auto"
+          className={topActionButtonClass}
         >
           {messages.feeds.addFeedToggle}
+        </Button>
+        <Button
+          type="button"
+          onClick={onRefresh}
+          disabled={loading || feeds.length === 0}
+          variant="secondary"
+          size="xl"
+          className={topActionButtonClass}
+        >
+          {loading ? messages.feeds.refreshing : messages.feeds.refresh}
         </Button>
         <Button
           type="button"
           onClick={handleImportButtonClick}
           variant="secondary"
           size="xl"
-          className="w-full sm:w-auto"
+          className={importExportButtonClass}
         >
           {messages.feeds.importButton}
         </Button>
-        {feeds.length > 0 && (
-          <Button
-            type="button"
-            onClick={onRefresh}
-            disabled={loading}
-            variant="secondary"
-            size="xl"
-            className="w-full sm:w-auto"
-          >
-            {loading ? messages.feeds.refreshing : messages.feeds.refresh}
-          </Button>
-        )}
         <Button
           type="button"
           onClick={handleExport}
           variant="secondary"
           size="xl"
-          className="w-full sm:w-auto"
+          className={importExportButtonClass}
         >
           {messages.feeds.exportButton}
         </Button>
@@ -147,7 +147,7 @@ export const FeedsContent = ({
       />
 
       <div
-        className={`mb-4 rounded-2xl border border-dashed px-4 py-4 text-sm transition ${
+        className={`mb-4 hidden rounded-2xl border border-dashed px-4 py-4 text-sm transition sm:block ${
           isImportDragActive
             ? 'border-[color:var(--ring)] bg-[color:var(--surface-strong)]'
             : 'border-[color:var(--border)] bg-[color:var(--surface)]'

@@ -19,7 +19,7 @@ import { SettingsPage } from './pages/SettingsPage';
 import { NewsItem } from './types';
 import type { NavigationState, BreadcrumbNode, NavigationActions } from './types/navigation';
 
-const APP_VERSION = '2.1.0';
+const APP_VERSION = '2.1.1';
 
 function App() {
   const { messages, supportedLanguages, language, setLanguage } = useI18n();

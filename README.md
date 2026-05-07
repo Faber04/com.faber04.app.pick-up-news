@@ -242,6 +242,15 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - `.pickupnews` files can be shared cross-device and imported manually from the PWA
   - On iOS, direct auto-open into PWA is not supported; manual selection remains required
 
+### v2.1.1 ✅
+- ✅ Updated `Gestisci Feed` actions order to:
+  - `Aggiungi Feed` → `Aggiorna` → `Carica` → `Esporta`
+  - `Aggiorna` now stays visible (disabled when no feeds), so order is always consistent
+- ✅ Hidden `Importa un file .pickupnews` drag-and-drop panel on mobile
+  - Drag-and-drop import remains available from `sm` and above
+  - File-picker import (`Carica`) remains available on all breakpoints
+- ✅ Improved visual emphasis for `Carica` and `Esporta` actions for faster scan/readability
+
 ### v3.0.0
 - 🔧 Replace `corsproxy.io` with a self-hosted Cloudflare Worker
   - `corsproxy.io` free tier is limited to localhost; production requests may be blocked
@@ -376,14 +385,14 @@ In **By Site** mode:
 ### Exporting Feeds
 1. Open **Settings** from the header
 2. Click **"Gestisci Feed"**
-3. Click **"📤 Export Feeds"**
+3. Click **"💾 Esporta"**
 4. PickUpNews downloads a `.pickupnews` file with all configured feeds
 
 ### Importing Feeds
 1. Open **Settings** from the header
 2. Click **"Gestisci Feed"**
 3. Import using one of these methods:
-4. Click **"📥 Import Feeds"** and select a `.pickupnews` file
+4. Click **"📂 Carica"** and select a `.pickupnews` file
 5. Drag and drop a `.pickupnews` file into the import area
 6. Imported feeds are appended to the end of the current list
 7. Duplicate or invalid entries are skipped automatically
