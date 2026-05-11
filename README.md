@@ -251,6 +251,14 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - File-picker import (`Carica`) remains available on all breakpoints
 - ✅ Improved visual emphasis for `Carica` and `Esporta` actions for faster scan/readability
 
+### v2.2.0 🚧
+- 🎨 Modern UI restyling (incremental, low-risk)
+  - Introduce semantic design tokens and shared UI primitives for consistency
+  - Refactor app shell, sidebar, and top bar for a cleaner responsive layout
+  - Redesign article list and reader surfaces for better readability and scanning
+  - Standardize light/dark behavior, loading/empty/error states, and interaction polish
+  - Include accessibility and responsive QA pass on redesigned flows
+
 ### v3.0.0
 - 🔧 Replace `corsproxy.io` with a self-hosted Cloudflare Worker
   - `corsproxy.io` free tier is limited to localhost; production requests may be blocked
