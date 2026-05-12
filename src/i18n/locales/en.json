@@ -17,7 +17,8 @@
     "changeTheme": "Change theme",
     "pageNotFound": "Page not found",
     "back": "Back",
-    "close": "Close"
+    "close": "Close",
+    "clear": "Clear"
   },
   "viewModes": {
     "chronological": "Chronological",

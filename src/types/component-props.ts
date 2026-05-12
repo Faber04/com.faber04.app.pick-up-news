@@ -64,12 +64,12 @@ export interface NewsDetailModalProps {
 
 export interface NewsListProps {
   news: NewsItem[];
-  viewMode: ViewMode;
-  feedOrder: string[];
   loading: boolean;
   onNewsClick: (newsItem: NewsItem) => void;
   onToggleSave: (newsItem: NewsItem) => void;
   isNewsSaved: (newsItem: NewsItem) => boolean;
+  activeFeedId?: string;
+  onFeedFilterChange?: (feedId?: string) => void;
 }
 
 export interface FeedAccordionProps {

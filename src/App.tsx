@@ -6,7 +6,6 @@ import { useI18n } from './i18n/useI18n';
 import {
   Header,
   NewsList,
-  ViewControls,
   NewsDetailModal,
   Breadcrumb,
   SubpageContainer,
@@ -26,8 +25,8 @@ function App() {
   const { messages, supportedLanguages, language, setLanguage } = useI18n();
   const {
     state,
-    viewMode,
-    setViewMode,
+    filterOptions,
+    setFilterOptions,
     themeMode,
     toggleTheme,
     addFeed,
@@ -214,18 +213,19 @@ function App() {
             </Card>
           ) : (
             <>
-              <ViewControls
-                viewMode={viewMode}
-                onViewModeChange={setViewMode}
-              />
               <NewsList
                 news={filteredNews}
-                viewMode={viewMode}
-                feedOrder={state.feeds.map((feed) => feed.id)}
                 loading={state.loading}
                 onNewsClick={handleNewsClick}
                 onToggleSave={toggleSaveNews}
                 isNewsSaved={isNewsSaved}
+                activeFeedId={filterOptions.feedId}
+                onFeedFilterChange={(feedId) => {
+                  setFilterOptions((prev) => ({
+                    ...prev,
+                    feedId,
+                  }));
+                }}
               />
             </>
           )}
@@ -242,8 +242,6 @@ function App() {
           ) : (
             <NewsList
               news={savedNews}
-              viewMode="chronological"
-              feedOrder={[]}
               loading={false}
               onNewsClick={handleNewsClick}
               onToggleSave={toggleSaveNews}

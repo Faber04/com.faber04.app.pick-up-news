@@ -275,6 +275,10 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - Added **Saved** button in mobile bottom menu
 - 📱 Mobile footer simplification
   - Removed view-mode switch control from mobile footer
+- 📰 Home view simplification
+  - Removed **By Site** accordion mode (chronological view is now the only list mode)
+  - Feed names in cards now act as filter buttons
+  - Added **Clear** action to reset feed filtering
 
 ### v3.0.0
 - 🔧 Replace `corsproxy.io` with a self-hosted Cloudflare Worker

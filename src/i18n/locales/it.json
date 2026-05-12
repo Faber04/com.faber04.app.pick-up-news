@@ -17,7 +17,8 @@
     "changeTheme": "Cambia tema",
     "pageNotFound": "Pagina non trovata",
     "back": "Indietro",
-    "close": "Chiudi"
+    "close": "Chiudi",
+    "clear": "Pulisci"
   },
   "viewModes": {
     "chronological": "Cronologico",
