@@ -7,7 +7,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Badge, Bu
 const ACCORDION_STORAGE_KEY = 'pickUpNews_byFeed_openAccordions';
 
 export const NewsList = ({ news, viewMode, feedOrder, loading, onNewsClick }: NewsListProps) => {
-  const { messages, locale, formatMessage } = useI18n();
+  const { messages, locale } = useI18n();
   const [openFeedIds, setOpenFeedIds] = useState<Set<string>>(() => {
     try {
       const rawValue = localStorage.getItem(ACCORDION_STORAGE_KEY);
@@ -92,11 +92,6 @@ export const NewsList = ({ news, viewMode, feedOrder, loading, onNewsClick }: Ne
     setOpenFeedIds(new Set<string>());
   };
 
-  const openCount = orderedGroups.reduce((count, [feedId]) => {
-    return openFeedIds.has(feedId) ? count + 1 : count;
-  }, 0);
-  const totalCount = orderedGroups.length;
-
   if (loading) {
     return (
       <Card>
@@ -129,26 +124,25 @@ export const NewsList = ({ news, viewMode, feedOrder, loading, onNewsClick }: Ne
         </div>
       ) : (
         <div className="space-y-3.5">
-          <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-2">
+          <div className="flex justify-end gap-1.5 px-1">
             <Button
               type="button"
               onClick={handleExpandAll}
-              variant="outline"
+              variant="ghost"
               size="sm"
+              className="h-8 rounded-xl px-2.5 text-xs"
             >
               {messages.home.expandAll}
             </Button>
             <Button
               type="button"
               onClick={handleCollapseAll}
-              variant="outline"
+              variant="ghost"
               size="sm"
+              className="h-8 rounded-xl px-2.5 text-xs"
             >
               {messages.home.collapseAll}
             </Button>
-            <span className="ml-auto text-xs font-medium text-muted">
-              {formatMessage(messages.home.openCount, { openCount, totalCount })}
-            </span>
           </div>
 
           <Accordion

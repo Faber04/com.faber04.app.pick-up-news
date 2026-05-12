@@ -91,13 +91,13 @@ export const Header = ({ currentPage, themeMode, onToggleTheme, onNavigate, unre
     <>
       <header className="sticky top-0 z-50 border-b border-[color:var(--border)] bg-[color:var(--surface)]/90 backdrop-blur">
         <div className="app-container py-3">
-          <div className="flex h-14 items-center justify-between rounded-[1.35rem] border border-[color:var(--border)] bg-[color:var(--surface-strong)]/95 px-3 shadow-[var(--shadow-soft)] sm:px-4">
+          <div className="flex h-14 items-center justify-between rounded-[1.35rem] bg-[color:var(--surface-strong)]/95 px-3 shadow-[var(--shadow-soft)] sm:px-4">
             <button
               type="button"
               onClick={() => handleNavigate('home')}
               className="group flex items-center gap-3 rounded-2xl px-1 py-1 text-left transition-opacity hover:opacity-90"
             >
-              <span className="inline-flex rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-strong)] p-1.5 shadow-[var(--shadow-soft)]">
+              <span className="inline-flex rounded-2xl bg-[color:var(--surface-strong)] p-1.5 shadow-[var(--shadow-soft)]">
                 <img
                   src={`${import.meta.env.BASE_URL}pickupnews-mark.svg`}
                   alt="PN"
@@ -113,7 +113,7 @@ export const Header = ({ currentPage, themeMode, onToggleTheme, onNavigate, unre
             </button>
 
             <div className="flex items-center gap-1.5 sm:gap-2">
-              <nav className="hidden sm:flex items-center gap-1 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)]/90 p-1">
+              <nav className="hidden sm:flex items-center gap-1 rounded-2xl bg-[color:var(--surface)]/90 p-1">
                 {navItems.map(({ page, label }) => (
                   <Button
                     key={page}

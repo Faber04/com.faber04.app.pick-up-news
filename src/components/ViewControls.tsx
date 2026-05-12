@@ -6,7 +6,7 @@ export const ViewControls = ({ viewMode, onViewModeChange }: ViewControlsProps) 
   const { messages } = useI18n();
 
   return (
-    <div className="mb-6 hidden justify-end sm:flex">
+    <div className="mb-6 hidden justify-end min-[1025px]:flex">
       <div
         className="flex rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-muted)] p-1 shadow-[var(--shadow-soft)]"
         role="group"

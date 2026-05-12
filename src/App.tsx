@@ -289,7 +289,7 @@ function App() {
             onMoveFeed={moveFeed}
             onMoveFeedToIndex={moveFeedToIndex}
             onEditFeed={updateFeed}
-            onRefresh={refreshNews}
+            onRefresh={() => refreshNews('manual')}
           />
         </SubpageContainer>
       ) : (

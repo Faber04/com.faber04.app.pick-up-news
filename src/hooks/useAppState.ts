@@ -352,10 +352,21 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
     }
   }, [messages.invalidFeedUrl, messages.refreshFeedFailed]);
 
-  const refreshNews = useCallback(async () => {
+  const refreshNews = useCallback(async (trigger: 'auto' | 'manual' = 'auto') => {
     if (state.feeds.length === 0) return;
 
-    setState(prev => ({ ...prev, loading: true, error: null }));
+    const requestedAt = new Date();
+    setState(prev => ({
+      ...prev,
+      loading: true,
+      error: null,
+      feeds: trigger === 'manual'
+        ? prev.feeds.map((feed) => ({
+            ...feed,
+            lastFetched: requestedAt,
+          }))
+        : prev.feeds,
+    }));
 
     try {
       const news = await RSSService.fetchAllFeeds(state.feeds);
