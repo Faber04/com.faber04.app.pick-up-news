@@ -6,7 +6,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Badge, Bu
 
 const ACCORDION_STORAGE_KEY = 'pickUpNews_byFeed_openAccordions';
 
-export const NewsList = ({ news, viewMode, feedOrder, loading, onNewsClick }: NewsListProps) => {
+export const NewsList = ({ news, viewMode, feedOrder, loading, onNewsClick, onToggleSave, isNewsSaved }: NewsListProps) => {
   const { messages, locale } = useI18n();
   const [openFeedIds, setOpenFeedIds] = useState<Set<string>>(() => {
     try {
@@ -119,7 +119,14 @@ export const NewsList = ({ news, viewMode, feedOrder, loading, onNewsClick }: Ne
       {viewMode === 'chronological' ? (
         <div className="space-y-3 sm:space-y-4">
           {news.map((item, index) => (
-            <NewsCard key={`${item.feedId}-${index}`} newsItem={item} onClick={onNewsClick} locale={locale} />
+            <NewsCard
+              key={`${item.feedId}-${index}`}
+              newsItem={item}
+              onClick={onNewsClick}
+              onToggleSave={onToggleSave}
+              isSaved={isNewsSaved(item)}
+              locale={locale}
+            />
           ))}
         </div>
       ) : (
@@ -168,6 +175,8 @@ export const NewsList = ({ news, viewMode, feedOrder, loading, onNewsClick }: Ne
                         key={`${item.feedId}-${index}`}
                         newsItem={item}
                         onClick={onNewsClick}
+                        onToggleSave={onToggleSave}
+                        isSaved={isNewsSaved(item)}
                         showFeedTitle={false}
                         locale={locale}
                         compact
@@ -183,7 +192,9 @@ export const NewsList = ({ news, viewMode, feedOrder, loading, onNewsClick }: Ne
     </div>
   );
 };
-const NewsCard = ({ newsItem, onClick, showFeedTitle = true, locale, compact = false }: NewsCardProps) => {
+const NewsCard = ({ newsItem, onClick, onToggleSave, isSaved, showFeedTitle = true, locale, compact = false }: NewsCardProps) => {
+  const { messages } = useI18n();
+
   const formatDate = (dateString?: string) => {
     if (!dateString) return '';
     try {
@@ -201,10 +212,17 @@ const NewsCard = ({ newsItem, onClick, showFeedTitle = true, locale, compact = f
 
   return (
     <Card className={`overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-soft)] ${compact ? 'rounded-2xl' : ''}`}>
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         onClick={() => onClick(newsItem)}
-        className="w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onClick(newsItem);
+          }
+        }}
+        className="w-full cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
         aria-label={newsItem.title || newsItem.feedTitle}
       >
         <CardContent className={compact ? 'p-3 pt-2.5' : 'p-4 sm:p-5'}>
@@ -216,9 +234,25 @@ const NewsCard = ({ newsItem, onClick, showFeedTitle = true, locale, compact = f
             ) : (
               <span className="text-[11px] font-semibold uppercase tracking-wide text-muted">{newsItem.feedTitle}</span>
             )}
-            <span className="whitespace-nowrap text-xs text-muted">
-              {formatDate(newsItem.isoDate || newsItem.pubDate)}
-            </span>
+            <div className="flex items-center gap-1.5">
+              <span className="whitespace-nowrap text-xs text-muted">
+                {formatDate(newsItem.isoDate || newsItem.pubDate)}
+              </span>
+              <Button
+                type="button"
+                variant={isSaved ? 'brand' : 'ghost'}
+                size="sm"
+                className="h-7 rounded-lg px-2 text-xs"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onToggleSave(newsItem);
+                }}
+                aria-label={isSaved ? messages.article.removeSaved : messages.article.save}
+                title={isSaved ? messages.article.removeSaved : messages.article.save}
+              >
+                {isSaved ? '★' : '☆'}
+              </Button>
+            </div>
           </div>
 
           <h4 className={`line-clamp-2 text-primary ${compact ? 'text-[0.95rem] font-semibold leading-snug' : 'text-[1.02rem] font-semibold leading-snug'}`}>
@@ -234,7 +268,7 @@ const NewsCard = ({ newsItem, onClick, showFeedTitle = true, locale, compact = f
             <span className="text-xs font-medium text-[color:var(--brand-strong)]">→</span>
           </div>
         </CardContent>
-      </button>
+      </div>
     </Card>
   );
 };

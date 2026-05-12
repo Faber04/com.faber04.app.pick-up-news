@@ -3,7 +3,7 @@ import type { NewsDetailModalProps } from '../types/component-props';
 import { useI18n } from '../i18n/useI18n';
 import { Badge, Button, Card } from './ui';
 
-export const NewsDetailModal = ({ newsItem, isOpen, onClose }: NewsDetailModalProps) => {
+export const NewsDetailModal = ({ newsItem, isOpen, onClose, isSaved, onToggleSave }: NewsDetailModalProps) => {
   const { messages, locale, formatMessage } = useI18n();
   const titleId = useId();
   const descriptionId = useId();
@@ -115,19 +115,29 @@ export const NewsDetailModal = ({ newsItem, isOpen, onClose }: NewsDetailModalPr
           )}
         </div>
 
-        {newsItem.link && (
-          <div className="border-t border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-4 sm:px-6">
-            <Button asChild variant="brand" className="w-full justify-center sm:w-auto">
-              <a
-                href={newsItem.link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {messages.article.readFullArticle}
-              </a>
+        <div className="border-t border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-4 sm:px-6">
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button
+              type="button"
+              variant={isSaved ? 'secondary' : 'ghost'}
+              onClick={() => onToggleSave(newsItem)}
+              className="w-full sm:w-auto"
+            >
+              {isSaved ? `★ ${messages.article.saved}` : `☆ ${messages.article.save}`}
             </Button>
+            {newsItem.link && (
+              <Button asChild variant="brand" className="w-full justify-center sm:w-auto">
+                <a
+                  href={newsItem.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {messages.article.readFullArticle}
+                </a>
+              </Button>
+            )}
           </div>
-        )}
+        </div>
       </Card>
     </div>
   );

@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 import type { NewsItem, RSSFeed, ViewMode, ThemeMode } from './index';
 import type { BreadcrumbNode, NavigationActions } from './navigation';
 
+export type PrimaryPage = 'home' | 'saved' | 'settings';
+
 export interface AddFeedFormProps {
   onAddFeed: (url: string, title: string) => Promise<boolean>;
   loading: boolean;
@@ -39,25 +41,25 @@ export interface FeedsContentProps {
 }
 
 export interface HeaderProps {
-  currentPage: 'home' | 'settings';
+  currentPage: PrimaryPage;
   themeMode: ThemeMode;
   onToggleTheme: () => void;
-  onNavigate: (page: 'home' | 'settings') => void;
+  onNavigate: (page: PrimaryPage) => void;
   unreadNotificationsCount: number;
   onOpenNotifications: () => void;
 }
 
 export interface MobileBottomNavProps {
-  currentPage: 'home' | 'settings';
-  viewMode: ViewMode;
-  onNavigate: (page: 'home' | 'settings') => void;
-  onToggleViewMode: () => void;
+  currentPage: PrimaryPage;
+  onNavigate: (page: PrimaryPage) => void;
 }
 
 export interface NewsDetailModalProps {
   newsItem: NewsItem | null;
   isOpen: boolean;
   onClose: () => void;
+  isSaved: boolean;
+  onToggleSave: (newsItem: NewsItem) => void;
 }
 
 export interface NewsListProps {
@@ -66,6 +68,8 @@ export interface NewsListProps {
   feedOrder: string[];
   loading: boolean;
   onNewsClick: (newsItem: NewsItem) => void;
+  onToggleSave: (newsItem: NewsItem) => void;
+  isNewsSaved: (newsItem: NewsItem) => boolean;
 }
 
 export interface FeedAccordionProps {
@@ -81,6 +85,8 @@ export interface FeedAccordionProps {
 export interface NewsCardProps {
   newsItem: NewsItem;
   onClick: (newsItem: NewsItem) => void;
+  onToggleSave: (newsItem: NewsItem) => void;
+  isSaved: boolean;
   showFeedTitle?: boolean;
   locale: string;
   compact?: boolean;

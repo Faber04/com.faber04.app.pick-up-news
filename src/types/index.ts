@@ -34,6 +34,10 @@ export interface NewsItem extends RSSItem {
   truncatedDescription: string; // max 120 chars
 }
 
+export interface SavedNewsItem extends NewsItem {
+  savedAt: string; // ISO date string
+}
+
 // App state types
 export interface AppState {
   feeds: RSSFeed[];

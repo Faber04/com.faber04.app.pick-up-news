@@ -39,6 +39,8 @@ export const getNavigationLabel = (nodeId: string, dictionary: LocaleDictionary)
       return dictionary.common.home;
     case 'settings':
       return dictionary.common.settings;
+    case 'saved':
+      return dictionary.common.saved;
     case 'feeds':
       return dictionary.common.manageFeeds;
     case 'language':

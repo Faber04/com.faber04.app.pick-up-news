@@ -265,6 +265,17 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - ✅ Included accessibility and responsive QA pass on redesigned flows
     - Added dialog semantics, improved labels, and `aria-current` hints on primary navigation controls
 
+### v2.2.2 ✅
+- 💾 Saved news flow
+  - Users can save/unsave articles from the news cards and article reader
+  - New dedicated **Saved** view shows all saved articles
+  - Saved items are persisted in localStorage
+- 🧭 Navigation updates for Saved view
+  - Added **Saved** entry in navigation menus (top and side/mobile drawer)
+  - Added **Saved** button in mobile bottom menu
+- 📱 Mobile footer simplification
+  - Removed view-mode switch control from mobile footer
+
 ### v3.0.0
 - 🔧 Replace `corsproxy.io` with a self-hosted Cloudflare Worker
   - `corsproxy.io` free tier is limited to localhost; production requests may be blocked

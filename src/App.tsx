@@ -18,8 +18,9 @@ import { Alert, AlertDescription, Badge, Button, Card, CardContent, CardHeader, 
 import { SettingsPage } from './pages/SettingsPage';
 import { NewsItem } from './types';
 import type { NavigationState, BreadcrumbNode, NavigationActions } from './types/navigation';
+import type { PrimaryPage } from './types/component-props';
 
-const APP_VERSION = '2.1.1';
+const APP_VERSION = '2.2.2';
 
 function App() {
   const { messages, supportedLanguages, language, setLanguage } = useI18n();
@@ -44,6 +45,9 @@ function App() {
     markAllNotificationsRead,
     clearAllNotifications,
     toggleNotifications,
+    savedNews,
+    isNewsSaved,
+    toggleSaveNews,
   } = useAppState(messages.errors);
 
   const { canInstall, install } = usePWAInstall();
@@ -64,7 +68,11 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const currentPageNode = navigation.trail[navigation.trail.length - 1];
-  const headerPage: 'home' | 'settings' = currentPageNode.id === 'home' ? 'home' : 'settings';
+  const headerPage: PrimaryPage = currentPageNode.id === 'saved'
+    ? 'saved'
+    : currentPageNode.id === 'home'
+      ? 'home'
+      : 'settings';
 
   const navigationActions: NavigationActions = {
     push: (node: BreadcrumbNode) => {
@@ -124,22 +132,20 @@ function App() {
 
   const filteredNews = getFilteredNews();
 
-  const handleNavigate = (page: 'home' | 'settings') => {
+  const handleNavigate = (page: PrimaryPage) => {
     if (page === 'home') {
       navigationActions.reset();
       return;
     }
 
-    navigationActions.reset();
-    navigationActions.push(createNode('settings'));
-  };
-
-  const handleToggleViewMode = () => {
-    if (currentPageNode.id !== 'home') {
+    if (page === 'saved') {
       navigationActions.reset();
+      navigationActions.push(createNode('saved'));
+      return;
     }
 
-    setViewMode((prev) => (prev === 'chronological' ? 'by-feed' : 'chronological'));
+    navigationActions.reset();
+    navigationActions.push(createNode('settings'));
   };
 
   return (
@@ -218,8 +224,31 @@ function App() {
                 feedOrder={state.feeds.map((feed) => feed.id)}
                 loading={state.loading}
                 onNewsClick={handleNewsClick}
+                onToggleSave={toggleSaveNews}
+                isNewsSaved={isNewsSaved}
               />
             </>
+          )}
+        </div>
+      ) : currentPageNode.id === 'saved' ? (
+        <div className="app-container py-8 stagger-in">
+          {savedNews.length === 0 ? (
+            <Card>
+              <CardHeader className="items-center text-center py-10">
+                <CardTitle className="max-w-lg text-3xl">{messages.saved.emptyTitle}</CardTitle>
+                <p className="max-w-md text-sm text-secondary">{messages.saved.emptyDescription}</p>
+              </CardHeader>
+            </Card>
+          ) : (
+            <NewsList
+              news={savedNews}
+              viewMode="chronological"
+              feedOrder={[]}
+              loading={false}
+              onNewsClick={handleNewsClick}
+              onToggleSave={toggleSaveNews}
+              isNewsSaved={isNewsSaved}
+            />
           )}
         </div>
       ) : currentPageNode.id === 'settings' ? (
@@ -307,6 +336,8 @@ function App() {
         newsItem={selectedNews}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
+        isSaved={selectedNews ? isNewsSaved(selectedNews) : false}
+        onToggleSave={toggleSaveNews}
       />
 
       {/* Notification Panel */}
@@ -323,9 +354,7 @@ function App() {
 
       <MobileBottomNav
         currentPage={headerPage}
-        viewMode={viewMode}
         onNavigate={handleNavigate}
-        onToggleViewMode={handleToggleViewMode}
       />
     </div>
   );

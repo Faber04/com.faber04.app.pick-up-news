@@ -16,13 +16,14 @@ export const Header = ({ currentPage, themeMode, onToggleTheme, onNavigate, unre
     };
   }, [menuOpen]);
 
-  const handleNavigate = (page: 'home' | 'settings') => {
+  const handleNavigate = (page: 'home' | 'saved' | 'settings') => {
     onNavigate(page);
     setMenuOpen(false);
   };
 
-  const navItems: { page: 'home' | 'settings'; label: string }[] = [
+  const navItems: { page: 'home' | 'saved' | 'settings'; label: string }[] = [
     { page: 'home', label: messages.common.home },
+    { page: 'saved', label: messages.common.saved },
     { page: 'settings', label: messages.common.settings },
   ];
 

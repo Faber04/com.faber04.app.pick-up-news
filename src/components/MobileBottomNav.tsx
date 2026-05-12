@@ -4,15 +4,9 @@ import { Button } from './ui';
 
 export const MobileBottomNav = ({
   currentPage,
-  viewMode,
   onNavigate,
-  onToggleViewMode,
 }: MobileBottomNavProps) => {
   const { messages } = useI18n();
-
-  const sortTitle = viewMode === 'chronological'
-    ? `${messages.viewModes.chronological} → ${messages.viewModes.byFeed}`
-    : `${messages.viewModes.byFeed} → ${messages.viewModes.chronological}`;
 
   return (
     <nav
@@ -38,26 +32,17 @@ export const MobileBottomNav = ({
 
         <Button
           type="button"
-          onClick={onToggleViewMode}
-          variant={currentPage === 'home' ? 'secondary' : 'ghost'}
+          onClick={() => onNavigate('saved')}
+          variant={currentPage === 'saved' ? 'brand' : 'ghost'}
           size="icon"
+          aria-current={currentPage === 'saved' ? 'page' : undefined}
           className="h-11 w-full rounded-2xl"
-          aria-label={sortTitle}
-          title={sortTitle}
+          aria-label={messages.common.saved}
+          title={messages.common.saved}
         >
-          {viewMode === 'chronological' ? (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h13" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h9" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8 17h5" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3.5 7h.01M3.5 12h.01M3.5 17h.01" />
-            </svg>
-          ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <rect x="3" y="4" width="18" height="6" rx="1.5" />
-              <rect x="3" y="14" width="18" height="6" rx="1.5" />
-            </svg>
-          )}
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 4h12a1 1 0 0 1 1 1v15l-7-4-7 4V5a1 1 0 0 1 1-1z" />
+          </svg>
         </Button>
 
         <Button

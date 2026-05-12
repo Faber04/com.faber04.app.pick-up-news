@@ -7,6 +7,7 @@
   },
   "common": {
     "home": "Home",
+    "saved": "Saved",
     "settings": "Settings",
     "manageFeeds": "Manage Feeds",
     "language": "Language",
@@ -32,6 +33,11 @@
     "expandAll": "Expand all",
     "collapseAll": "Collapse all",
     "openCount": "{openCount} open of {totalCount}"
+  },
+  "saved": {
+    "title": "Saved news",
+    "emptyTitle": "No saved news yet.",
+    "emptyDescription": "Save an article from the list or reader to find it here."
   },
   "settings": {
     "manageFeedsAction": "📡 Manage Feeds",
@@ -88,7 +94,10 @@
   "article": {
     "noContent": "No content available",
     "readFullArticle": "Read the full article →",
-    "authorBy": "by {author}"
+    "authorBy": "by {author}",
+    "save": "Save",
+    "saved": "Saved",
+    "removeSaved": "Remove saved"
   },
   "notifications": {
     "bell": "Notifications",

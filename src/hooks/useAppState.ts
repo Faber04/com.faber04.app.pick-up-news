@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { RSSFeed, AppState, ViewMode, FilterOptions, ThemeMode, AppNotification, NewsItem } from '../types';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { RSSFeed, AppState, ViewMode, FilterOptions, ThemeMode, AppNotification, NewsItem, SavedNewsItem } from '../types';
 import { RSSService } from '../services';
 import type { LocaleDictionary } from '../i18n';
 
@@ -8,6 +8,7 @@ const STORAGE_KEYS = {
   VIEW_MODE: 'pickUpNews_viewMode',
   THEME: 'pickUpNews_theme',
   NOTIFICATIONS: 'pickUpNews_notifications',
+  SAVED_NEWS: 'pickUpNews_savedNews',
   SEEN_GUIDS: 'pickUpNews_seenGuids',
   NOTIFICATIONS_ENABLED: 'pickUpNews_notificationsEnabled',
 };
@@ -59,6 +60,19 @@ const createExportFileName = () => {
 const getArticleGuid = (item: NewsItem): string =>
   item.guid || item.link || item.title || '';
 
+const getNewsStorageId = (item: NewsItem): string => {
+  const guid = getArticleGuid(item);
+  if (guid) {
+    return guid;
+  }
+
+  return [
+    item.feedId,
+    item.isoDate || item.pubDate || '',
+    item.title || '',
+  ].join('|');
+};
+
 export const useAppState = (messages: LocaleDictionary['errors']) => {
   const pendingAddUrlsRef = useRef<Set<string>>(new Set());
   const seenGuidsRef = useRef<Set<string>>(new Set());
@@ -76,6 +90,7 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({});
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [savedNews, setSavedNews] = useState<SavedNewsItem[]>([]);
 
   // Load data from localStorage on mount
   useEffect(() => {
@@ -83,6 +98,7 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
     const savedViewMode = localStorage.getItem(STORAGE_KEYS.VIEW_MODE);
     const savedThemeMode = localStorage.getItem(STORAGE_KEYS.THEME) as ThemeMode | null;
     const savedNotifications = localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS);
+    const savedSavedNews = localStorage.getItem(STORAGE_KEYS.SAVED_NEWS);
     const savedNotificationsEnabled = localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS_ENABLED);
     const savedSeenGuids = localStorage.getItem(STORAGE_KEYS.SEEN_GUIDS);
 
@@ -109,6 +125,15 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
     if (savedNotifications) {
       try {
         setNotifications(JSON.parse(savedNotifications));
+      } catch { /* keep default */ }
+    }
+
+    if (savedSavedNews) {
+      try {
+        const parsed = JSON.parse(savedSavedNews);
+        if (Array.isArray(parsed)) {
+          setSavedNews(parsed as SavedNewsItem[]);
+        }
       } catch { /* keep default */ }
     }
 
@@ -146,6 +171,10 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(notifications));
   }, [notifications]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.SAVED_NEWS, JSON.stringify(savedNews));
+  }, [savedNews]);
 
   const addFeed = useCallback(async (url: string, title: string): Promise<boolean> => {
     if (!RSSService.validateFeedUrl(url)) {
@@ -432,6 +461,30 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
     setNotifications([]);
   }, []);
 
+  const isNewsSaved = useCallback((newsItem: NewsItem): boolean => {
+    const id = getNewsStorageId(newsItem);
+    return savedNews.some((savedItem) => getNewsStorageId(savedItem) === id);
+  }, [savedNews]);
+
+  const toggleSaveNews = useCallback((newsItem: NewsItem) => {
+    const id = getNewsStorageId(newsItem);
+    setSavedNews((prev) => {
+      const alreadySaved = prev.some((savedItem) => getNewsStorageId(savedItem) === id);
+
+      if (alreadySaved) {
+        return prev.filter((savedItem) => getNewsStorageId(savedItem) !== id);
+      }
+
+      return [
+        {
+          ...newsItem,
+          savedAt: new Date().toISOString(),
+        },
+        ...prev,
+      ];
+    });
+  }, []);
+
   const toggleNotifications = useCallback(async (): Promise<boolean> => {
     if (!('Notification' in window)) return false;
 
@@ -465,6 +518,12 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
 
     return filtered;
   }, [state.news, filterOptions]);
+
+  const orderedSavedNews = useMemo(() => {
+    return [...savedNews].sort((a, b) => (
+      new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime()
+    ));
+  }, [savedNews]);
 
   const clearError = useCallback(() => {
     setState(prev => ({ ...prev, error: null }));
@@ -583,5 +642,8 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
     markAllNotificationsRead,
     clearAllNotifications,
     toggleNotifications,
+    savedNews: orderedSavedNews,
+    isNewsSaved,
+    toggleSaveNews,
   };
 };
