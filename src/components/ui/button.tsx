@@ -11,7 +11,7 @@ const buttonVariants = cva(
         default:
           'bg-[color:var(--text-primary)] text-[color:var(--surface-strong)] hover:opacity-92',
         brand:
-          'bg-[linear-gradient(135deg,var(--brand)_0%,var(--brand-strong)_100%)] text-white shadow-[0_18px_38px_-24px_rgba(2,8,23,0.8)] hover:-translate-y-0.5',
+          'bg-[linear-gradient(135deg,var(--brand)_0%,var(--brand-strong)_100%)] text-white shadow-[var(--shadow-soft)] hover:-translate-y-0.5',
         destructive:
           'bg-[color:var(--danger)] text-white shadow-[0_18px_38px_-24px_rgba(2,8,23,0.65)] hover:brightness-105',
         secondary:

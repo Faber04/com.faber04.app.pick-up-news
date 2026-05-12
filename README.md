@@ -251,13 +251,19 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - File-picker import (`Carica`) remains available on all breakpoints
 - ✅ Improved visual emphasis for `Carica` and `Esporta` actions for faster scan/readability
 
-### v2.2.0 🚧
+### v2.2.0 ✅
 - 🎨 Modern UI restyling (incremental, low-risk)
-  - Introduce semantic design tokens and shared UI primitives for consistency
-  - Refactor app shell, sidebar, and top bar for a cleaner responsive layout
-  - Redesign article list and reader surfaces for better readability and scanning
-  - Standardize light/dark behavior, loading/empty/error states, and interaction polish
-  - Include accessibility and responsive QA pass on redesigned flows
+  - ✅ Introduced semantic design tokens and aligned shared UI primitives for consistency
+  - ✅ Refactor app shell and top bar for a cleaner responsive layout
+    - Header now uses a modern framed top bar with clearer desktop/mobile action grouping
+    - Mobile drawer overlay and bottom nav visuals refreshed for better hierarchy and scanability
+  - ✅ Redesigned article list and reader surfaces for better readability and scanning
+    - News cards now use stronger metadata hierarchy, better spacing, and keyboard-focusable interactions
+    - Reader modal now uses improved metadata chips, clearer typography, and stronger action emphasis
+  - ✅ Standardized light/dark behavior, loading/empty/error state styling, and interaction polish
+    - Shared shadow/design tokens are now used consistently across updated shell and content surfaces
+  - ✅ Included accessibility and responsive QA pass on redesigned flows
+    - Added dialog semantics, improved labels, and `aria-current` hints on primary navigation controls
 
 ### v3.0.0
 - 🔧 Replace `corsproxy.io` with a self-hosted Cloudflare Worker

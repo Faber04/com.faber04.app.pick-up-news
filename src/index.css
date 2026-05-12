@@ -19,6 +19,9 @@
 	--brand-strong: #0f3f66;
 	--accent: #f59e0b;
 	--danger: #be123c;
+	--shadow-card: 0 24px 60px -32px rgba(2, 8, 23, 0.7);
+	--shadow-float: 0 26px 44px -30px rgba(2, 8, 23, 0.85);
+	--shadow-soft: 0 14px 32px -24px rgba(2, 8, 23, 0.75);
 }
 
 [data-theme='dark'] {
@@ -38,6 +41,9 @@
 	--brand-strong: #93c5fd;
 	--accent: #fbbf24;
 	--danger: #fb7185;
+	--shadow-card: 0 26px 56px -32px rgba(2, 8, 23, 0.78);
+	--shadow-float: 0 28px 46px -30px rgba(2, 8, 23, 0.88);
+	--shadow-soft: 0 16px 30px -22px rgba(2, 8, 23, 0.82);
 }
 
 html,

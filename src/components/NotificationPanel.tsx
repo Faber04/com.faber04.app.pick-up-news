@@ -32,9 +32,9 @@ export const NotificationPanel = ({
   onMarkAllRead,
   onClearAll,
 }: NotificationPanelProps) => {
-  const { messages, language } = useI18n();
-  const locale = language === 'it' ? 'it-IT' : 'en-GB';
+  const { messages, locale } = useI18n();
   const unreadCount = notifications.filter(n => !n.read).length;
+  const panelTitleId = 'notifications-panel-title';
 
   if (!isOpen) return null;
 
@@ -49,11 +49,16 @@ export const NotificationPanel = ({
       />
 
       {/* Panel */}
-      <aside className="fixed inset-y-0 right-0 z-10 flex h-dvh w-[min(92vw,24rem)] flex-col border-l border-[color:var(--border)] bg-[color:var(--surface-strong)] shadow-2xl">
+      <aside
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={panelTitleId}
+        className="fixed inset-y-0 right-0 z-10 flex h-dvh w-[min(92vw,24rem)] flex-col border-l border-[color:var(--border)] bg-[color:var(--surface-strong)] shadow-2xl"
+      >
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-[color:var(--border)] px-5 py-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">
+            <p id={panelTitleId} className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">
               {messages.notifications.bell}
             </p>
             {unreadCount > 0 && (
@@ -85,7 +90,7 @@ export const NotificationPanel = ({
               </Button>
             )}
             <Button type="button" variant="ghost" size="sm" onClick={onClearAll} className="ml-auto text-xs text-muted">
-              ✕ Cancella tutto
+              ✕ {messages.notifications.clearAll}
             </Button>
           </div>
         )}

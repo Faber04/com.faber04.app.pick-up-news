@@ -143,7 +143,7 @@ function App() {
   };
 
   return (
-    <div className="app-shell pb-24 lg:pb-0">
+    <div className="app-shell pb-28 lg:pb-6">
       <Header
         currentPage={headerPage}
         themeMode={themeMode}

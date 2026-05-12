@@ -16,15 +16,16 @@ export const MobileBottomNav = ({
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--border)] bg-[color:var(--surface)]/95 px-4 pb-[calc(env(safe-area-inset-bottom)+0.55rem)] pt-2 backdrop-blur lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 px-4 pb-[calc(env(safe-area-inset-bottom)+0.65rem)] pt-2 lg:hidden"
       aria-label={messages.common.navigation}
     >
-      <div className="mx-auto grid w-full max-w-lg grid-cols-3 gap-2">
+      <div className="mx-auto grid w-full max-w-lg grid-cols-3 gap-2 rounded-3xl border border-[color:var(--border)] bg-[color:var(--surface)]/95 p-2 shadow-[var(--shadow-float)] backdrop-blur">
         <Button
           type="button"
           onClick={() => onNavigate('home')}
           variant={currentPage === 'home' ? 'brand' : 'ghost'}
           size="icon"
+          aria-current={currentPage === 'home' ? 'page' : undefined}
           className="h-11 w-full rounded-2xl"
           aria-label={messages.common.home}
           title={messages.common.home}
@@ -64,6 +65,7 @@ export const MobileBottomNav = ({
           onClick={() => onNavigate('settings')}
           variant={currentPage === 'settings' ? 'brand' : 'ghost'}
           size="icon"
+          aria-current={currentPage === 'settings' ? 'page' : undefined}
           className="h-11 w-full rounded-2xl"
           aria-label={messages.common.settings}
           title={messages.common.settings}

@@ -15,7 +15,8 @@
     "toggleMenu": "Open menu",
     "changeTheme": "Change theme",
     "pageNotFound": "Page not found",
-    "back": "Back"
+    "back": "Back",
+    "close": "Close"
   },
   "viewModes": {
     "chronological": "Chronological",
@@ -94,6 +95,7 @@
     "noNotifications": "No notifications",
     "noNotificationsHint": "New articles will appear here on the next refresh.",
     "markAllRead": "Mark all as read",
+    "clearAll": "Clear all",
     "enableTitle": "Browser notifications",
     "enableDescription": "Receive a notification when there are new articles.",
     "enable": "Enable notifications",

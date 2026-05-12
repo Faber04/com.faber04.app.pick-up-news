@@ -15,7 +15,8 @@
     "toggleMenu": "Apri menu",
     "changeTheme": "Cambia tema",
     "pageNotFound": "Pagina non trovata",
-    "back": "Indietro"
+    "back": "Indietro",
+    "close": "Chiudi"
   },
   "viewModes": {
     "chronological": "Cronologico",
@@ -94,6 +95,7 @@
     "noNotifications": "Nessuna notifica",
     "noNotificationsHint": "Le nuove news appariranno qui al prossimo aggiornamento.",
     "markAllRead": "Segna tutte come lette",
+    "clearAll": "Cancella tutto",
     "enableTitle": "Notifiche browser",
     "enableDescription": "Ricevi una notifica quando ci sono nuovi articoli.",
     "enable": "Attiva notifiche",

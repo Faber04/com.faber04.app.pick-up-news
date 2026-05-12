@@ -99,18 +99,20 @@ export const NewsList = ({ news, viewMode, feedOrder, loading, onNewsClick }: Ne
 
   if (loading) {
     return (
-      <div className="text-center py-8">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[color:var(--brand)]"></div>
-        <p className="mt-2 text-secondary">{messages.home.loadingNews}</p>
-      </div>
+      <Card>
+        <CardContent className="flex flex-col items-center justify-center gap-3 py-10 text-center" aria-live="polite">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-[color:var(--brand)]" />
+          <p className="text-sm font-medium text-secondary">{messages.home.loadingNews}</p>
+        </CardContent>
+      </Card>
     );
   }
 
   if (news.length === 0) {
     return (
       <Card>
-        <CardContent className="py-8 text-center text-muted">
-          <p>{messages.home.noNewsTitle}</p>
+        <CardContent className="py-10 text-center text-muted">
+          <p className="text-base font-semibold text-primary">{messages.home.noNewsTitle}</p>
           <p className="mt-2 text-sm">{messages.home.noNewsDescription}</p>
         </CardContent>
       </Card>
@@ -120,30 +122,32 @@ export const NewsList = ({ news, viewMode, feedOrder, loading, onNewsClick }: Ne
   return (
     <div className="space-y-6">
       {viewMode === 'chronological' ? (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {news.map((item, index) => (
             <NewsCard key={`${item.feedId}-${index}`} newsItem={item} onClick={onNewsClick} locale={locale} />
           ))}
         </div>
       ) : (
-        <div className="space-y-3">
-          <div className="flex flex-wrap items-center gap-2">
+        <div className="space-y-3.5">
+          <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-2">
             <Button
+              type="button"
               onClick={handleExpandAll}
               variant="outline"
               size="sm"
             >
-                {messages.home.expandAll}
+              {messages.home.expandAll}
             </Button>
             <Button
+              type="button"
               onClick={handleCollapseAll}
               variant="outline"
               size="sm"
             >
-                {messages.home.collapseAll}
+              {messages.home.collapseAll}
             </Button>
-            <span className="ml-auto text-xs text-muted">
-                {formatMessage(messages.home.openCount, { openCount, totalCount })}
+            <span className="ml-auto text-xs font-medium text-muted">
+              {formatMessage(messages.home.openCount, { openCount, totalCount })}
             </span>
           </div>
 
@@ -202,36 +206,41 @@ const NewsCard = ({ newsItem, onClick, showFeedTitle = true, locale, compact = f
   };
 
   return (
-    <Card
-      className={`cursor-pointer transition-all duration-200 ${compact ? 'rounded-lg hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_14px_32px_-24px_rgba(2,8,23,0.9)] active:scale-95 active:translate-y-0' : 'hover:-translate-y-1 hover:scale-[1.01] hover:shadow-[0_14px_32px_-24px_rgba(2,8,23,0.85)] active:scale-95 active:translate-y-0'}`}
-      onClick={() => onClick(newsItem)}
-    >
-      <CardContent className={compact ? 'p-3 pt-2.5' : 'p-4'}>
-        <div className={`flex items-start justify-between ${compact ? 'mb-1.5' : 'mb-2'}`}>
-          <h4 className={`mr-4 line-clamp-2 flex-1 font-medium text-primary ${compact ? 'text-[0.92rem] leading-snug' : ''}`}>
+    <Card className={`overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-soft)] ${compact ? 'rounded-2xl' : ''}`}>
+      <button
+        type="button"
+        onClick={() => onClick(newsItem)}
+        className="w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+        aria-label={newsItem.title || newsItem.feedTitle}
+      >
+        <CardContent className={compact ? 'p-3 pt-2.5' : 'p-4 sm:p-5'}>
+          <div className={`mb-2 flex items-center justify-between gap-2 ${compact ? '' : 'sm:mb-2.5'}`}>
+            {showFeedTitle ? (
+              <Badge className="rounded-full border border-[color:var(--border)] px-2.5 py-0.5 text-[11px] uppercase tracking-wide text-secondary">
+                {newsItem.feedTitle}
+              </Badge>
+            ) : (
+              <span className="text-[11px] font-semibold uppercase tracking-wide text-muted">{newsItem.feedTitle}</span>
+            )}
+            <span className="whitespace-nowrap text-xs text-muted">
+              {formatDate(newsItem.isoDate || newsItem.pubDate)}
+            </span>
+          </div>
+
+          <h4 className={`line-clamp-2 text-primary ${compact ? 'text-[0.95rem] font-semibold leading-snug' : 'text-[1.02rem] font-semibold leading-snug'}`}>
             {newsItem.title}
           </h4>
-          <span className="whitespace-nowrap text-xs text-muted">
-            {formatDate(newsItem.isoDate || newsItem.pubDate)}
-          </span>
-        </div>
 
-        <div
-          className={`line-clamp-2 text-secondary ${compact ? 'mb-1.5 text-[0.82rem] leading-snug' : 'mb-2 text-sm'}`}
-          dangerouslySetInnerHTML={{ __html: newsItem.truncatedDescription }}
-        />
+          <div
+            className={`mt-2 line-clamp-3 text-secondary ${compact ? 'text-[0.84rem] leading-snug' : 'text-sm leading-relaxed'}`}
+            dangerouslySetInnerHTML={{ __html: newsItem.truncatedDescription }}
+          />
 
-        <div className="flex items-center justify-between">
-          {showFeedTitle && (
-            <span className="text-xs font-medium text-[color:var(--brand)]">
-              {newsItem.feedTitle}
-            </span>
-          )}
-          <span className="ml-auto text-xs text-muted">
-            →
-          </span>
-        </div>
-      </CardContent>
+          <div className="mt-3 flex justify-end">
+            <span className="text-xs font-medium text-[color:var(--brand-strong)]">→</span>
+          </div>
+        </CardContent>
+      </button>
     </Card>
   );
 };

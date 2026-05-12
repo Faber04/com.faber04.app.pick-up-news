@@ -7,8 +7,8 @@ export const Breadcrumb = ({ trail, onNavigate }: BreadcrumbProps) => {
   }
 
   return (
-    <div className="sticky top-16 z-40 border-b border-[color:var(--border)] bg-[color:var(--surface)]/95 backdrop-blur">
-      <div className="app-container h-auto flex items-center gap-1 px-4 py-2 overflow-x-auto">
+    <div className="sticky top-20 z-40 border-b border-[color:var(--border)] bg-[color:var(--surface)]/95 backdrop-blur">
+      <div className="app-container flex h-auto items-center gap-1 overflow-x-auto py-2">
         {trail.map((node, index) => (
           <div key={node.id} className="flex items-center gap-1 min-w-fit">
             <Button
