@@ -33,7 +33,11 @@
     "loadingNews": "Loading news...",
     "expandAll": "Expand all",
     "collapseAll": "Collapse all",
-    "openCount": "{openCount} open of {totalCount}"
+    "openCount": "{openCount} open of {totalCount}",
+    "searchPlaceholder": "Search by title, site or description…",
+    "searchNoResults": "No results for \"{query}\".",
+    "searchNoResultsHint": "Try changing or clearing your search.",
+    "clearSearch": "Clear search"
   },
   "saved": {
     "title": "Saved news",

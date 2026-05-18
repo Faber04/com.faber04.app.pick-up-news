@@ -70,6 +70,8 @@ export interface NewsListProps {
   isNewsSaved: (newsItem: NewsItem) => boolean;
   activeFeedId?: string;
   onFeedFilterChange?: (feedId?: string) => void;
+  searchQuery?: string;
+  onSearchChange?: (query: string) => void;
 }
 
 export interface FeedAccordionProps {

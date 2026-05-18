@@ -1,5 +1,6 @@
 import type { NewsCardProps, NewsListProps } from '../types/component-props';
 import { useI18n } from '../i18n/useI18n';
+import { formatMessage } from '../i18n';
 import { Badge, Button, Card, CardContent } from './ui';
 
 export const NewsList = ({
@@ -10,6 +11,8 @@ export const NewsList = ({
   isNewsSaved,
   activeFeedId,
   onFeedFilterChange,
+  searchQuery = '',
+  onSearchChange,
 }: NewsListProps) => {
   const { messages, locale } = useI18n();
   const selectedFeedTitle = activeFeedId
@@ -27,19 +30,66 @@ export const NewsList = ({
     );
   }
 
-  if (news.length === 0) {
-    return (
-      <Card>
-        <CardContent className="py-10 text-center text-muted">
-          <p className="text-base font-semibold text-primary">{messages.home.noNewsTitle}</p>
-          <p className="mt-2 text-sm">{messages.home.noNewsDescription}</p>
-        </CardContent>
-      </Card>
-    );
-  }
+  const hasSearch = searchQuery.trim().length > 0;
+
+  const noNewsContent = hasSearch ? (
+    <Card>
+      <CardContent className="py-10 text-center text-muted">
+        <p className="text-base font-semibold text-primary">
+          {formatMessage(messages.home.searchNoResults, { query: searchQuery.trim() })}
+        </p>
+        <p className="mt-2 text-sm">{messages.home.searchNoResultsHint}</p>
+        {onSearchChange && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="mt-4 rounded-xl"
+            onClick={() => onSearchChange('')}
+          >
+            {messages.home.clearSearch}
+          </Button>
+        )}
+      </CardContent>
+    </Card>
+  ) : (
+    <Card>
+      <CardContent className="py-10 text-center text-muted">
+        <p className="text-base font-semibold text-primary">{messages.home.noNewsTitle}</p>
+        <p className="mt-2 text-sm">{messages.home.noNewsDescription}</p>
+      </CardContent>
+    </Card>
+  );
 
   return (
     <div className="space-y-6">
+      {/* Search input */}
+      {onSearchChange && (
+        <div className="relative">
+          <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted text-sm select-none">
+            🔍
+          </span>
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            placeholder={messages.home.searchPlaceholder}
+            aria-label={messages.home.searchPlaceholder}
+            className="w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] py-2.5 pl-9 pr-10 text-sm text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-[color:var(--ring)]"
+          />
+          {hasSearch && (
+            <button
+              type="button"
+              onClick={() => onSearchChange('')}
+              aria-label={messages.home.clearSearch}
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-muted hover:text-primary focus:outline-none focus:ring-2 focus:ring-[color:var(--ring)]"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+      )}
+
       {activeFeedId && onFeedFilterChange && (
         <div className="flex items-center gap-2">
           {selectedFeedTitle && (
@@ -58,20 +108,23 @@ export const NewsList = ({
           </Button>
         </div>
       )}
-      <div className="space-y-3 sm:space-y-4">
-        {news.map((item, index) => (
-          <NewsCard
-            key={`${item.feedId}-${index}`}
-            newsItem={item}
-            onClick={onNewsClick}
-            onToggleSave={onToggleSave}
-            isSaved={isNewsSaved(item)}
-            locale={locale}
-            onFeedFilterChange={onFeedFilterChange}
-            activeFeedId={activeFeedId}
-          />
-        ))}
-      </div>
+
+      {news.length === 0 ? noNewsContent : (
+        <div className="space-y-3 sm:space-y-4">
+          {news.map((item, index) => (
+            <NewsCard
+              key={`${item.feedId}-${index}`}
+              newsItem={item}
+              onClick={onNewsClick}
+              onToggleSave={onToggleSave}
+              isSaved={isNewsSaved(item)}
+              locale={locale}
+              onFeedFilterChange={onFeedFilterChange}
+              activeFeedId={activeFeedId}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

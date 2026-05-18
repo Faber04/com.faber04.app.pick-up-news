@@ -19,7 +19,7 @@ import { NewsItem } from './types';
 import type { NavigationState, BreadcrumbNode, NavigationActions } from './types/navigation';
 import type { PrimaryPage } from './types/component-props';
 
-const APP_VERSION = '2.2.2';
+const APP_VERSION = '2.2.3';
 
 function App() {
   const { messages, supportedLanguages, language, setLanguage } = useI18n();
@@ -118,6 +118,13 @@ function App() {
       clearError();
     }
   }, [currentPageNode.id, state.error, clearError]);
+
+  // Clear search when navigating away from Home
+  useEffect(() => {
+    if (currentPageNode.id !== 'home') {
+      setFilterOptions((prev) => ({ ...prev, searchTerm: undefined }));
+    }
+  }, [currentPageNode.id, setFilterOptions]);
 
   const handleNewsClick = (newsItem: NewsItem) => {
     setSelectedNews(newsItem);
@@ -224,6 +231,13 @@ function App() {
                   setFilterOptions((prev) => ({
                     ...prev,
                     feedId,
+                  }));
+                }}
+                searchQuery={filterOptions.searchTerm ?? ''}
+                onSearchChange={(query) => {
+                  setFilterOptions((prev) => ({
+                    ...prev,
+                    searchTerm: query || undefined,
                   }));
                 }}
               />

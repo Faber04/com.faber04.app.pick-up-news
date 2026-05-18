@@ -510,10 +510,14 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
 
     if (filterOptions.searchTerm) {
       const term = filterOptions.searchTerm.toLowerCase();
-      filtered = filtered.filter(news =>
-        news.title?.toLowerCase().includes(term) ||
-        news.truncatedDescription.toLowerCase().includes(term)
-      );
+      filtered = filtered.filter(news => {
+        const descriptionText = news.truncatedDescription.replace(/<[^>]+>/g, '');
+        return (
+          news.title?.toLowerCase().includes(term) ||
+          news.feedTitle?.toLowerCase().includes(term) ||
+          descriptionText.toLowerCase().includes(term)
+        );
+      });
     }
 
     return filtered;

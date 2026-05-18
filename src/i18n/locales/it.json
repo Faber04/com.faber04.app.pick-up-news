@@ -33,7 +33,11 @@
     "loadingNews": "Caricamento news...",
     "expandAll": "Espandi tutti",
     "collapseAll": "Comprimi tutti",
-    "openCount": "{openCount} aperti su {totalCount}"
+    "openCount": "{openCount} aperti su {totalCount}",
+    "searchPlaceholder": "Cerca per titolo, sito o descrizione…",
+    "searchNoResults": "Nessun risultato per \"{query}\".",
+    "searchNoResultsHint": "Prova a modificare o cancellare la ricerca.",
+    "clearSearch": "Cancella ricerca"
   },
   "saved": {
     "title": "News salvate",
