@@ -280,6 +280,11 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - Feed names in cards now act as filter buttons
   - Added **Clear** action to reset feed filtering
 
+### v2.2.3
+- 🔎 Home page search box for news filtering
+  - Adds a search input in **Home**
+  - Filters news by **title**, **feed website name**, and **description**
+
 ### v3.0.0
 - 🔧 Replace `corsproxy.io` with a self-hosted Cloudflare Worker
   - `corsproxy.io` free tier is limited to localhost; production requests may be blocked
