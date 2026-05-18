@@ -15,16 +15,17 @@ const STORAGE_KEYS = {
 
 const MAX_NOTIFICATIONS = 50;
 const TRANSFER_FILE_FORMAT = 'pickupnews-feeds';
-const TRANSFER_FILE_VERSION = 1;
+const TRANSFER_FILE_VERSION = 2;
 
 type FeedTransferFile = {
   format: typeof TRANSFER_FILE_FORMAT;
-  version: typeof TRANSFER_FILE_VERSION;
+  version: 1 | 2;
   exportedAt: string;
   feeds: Array<{
     title: string;
     url: string;
   }>;
+  savedNews?: SavedNewsItem[];
 };
 
 const isFeedTransferFile = (value: unknown): value is FeedTransferFile => {
@@ -34,20 +35,32 @@ const isFeedTransferFile = (value: unknown): value is FeedTransferFile => {
 
   const parsed = value as Partial<FeedTransferFile>;
 
-  if (
-    parsed.format !== TRANSFER_FILE_FORMAT
-    || parsed.version !== TRANSFER_FILE_VERSION
-    || !Array.isArray(parsed.feeds)
-  ) {
+  if (parsed.format !== TRANSFER_FILE_FORMAT) {
     return false;
   }
 
-  return parsed.feeds.every((feed) => (
+  if (parsed.version !== 1 && parsed.version !== 2) {
+    return false;
+  }
+
+  if (!Array.isArray(parsed.feeds)) {
+    return false;
+  }
+
+  if (!parsed.feeds.every((feed) => (
     feed
     && typeof feed === 'object'
     && typeof feed.title === 'string'
     && typeof feed.url === 'string'
-  ));
+  ))) {
+    return false;
+  }
+
+  if (parsed.savedNews !== undefined && !Array.isArray(parsed.savedNews)) {
+    return false;
+  }
+
+  return true;
 };
 
 const createExportFileName = () => {
@@ -538,7 +551,7 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
   }, []);
 
   const exportFeeds = useCallback(() => {
-    if (state.feeds.length === 0) {
+    if (state.feeds.length === 0 && savedNews.length === 0) {
       return false;
     }
 
@@ -550,6 +563,7 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
         title: feed.title,
         url: feed.url,
       })),
+      savedNews: savedNews.length > 0 ? [...savedNews] : undefined,
     };
 
     const fileName = createExportFileName();
@@ -562,9 +576,9 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
     URL.revokeObjectURL(objectUrl);
 
     return true;
-  }, [state.feeds]);
+  }, [state.feeds, savedNews]);
 
-  const importFeeds = useCallback(async (file: File): Promise<{ added: number; skipped: number }> => {
+  const importFeeds = useCallback(async (file: File): Promise<{ added: number; skipped: number; savedAdded: number }> => {
     const fileContent = await file.text();
 
     let parsed: unknown;
@@ -616,9 +630,25 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
       }));
     }
 
+    // Import saved news (skip duplicates by storage ID)
+    let savedAdded = 0;
+    const incomingSaved = importedFile.savedNews ?? [];
+
+    if (incomingSaved.length > 0) {
+      setSavedNews(prev => {
+        const existingIds = new Set(prev.map(getNewsStorageId));
+        const newItems = incomingSaved.filter(
+          (item) => item && typeof item === 'object' && !existingIds.has(getNewsStorageId(item as SavedNewsItem))
+        ) as SavedNewsItem[];
+        savedAdded = newItems.length;
+        return newItems.length > 0 ? [...prev, ...newItems] : prev;
+      });
+    }
+
     return {
       added: newFeeds.length,
       skipped,
+      savedAdded,
     };
   }, [messages.invalidImportFile, state.feeds]);
 

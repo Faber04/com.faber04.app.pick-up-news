@@ -30,7 +30,22 @@ export const FeedsContent = ({
     try {
       const result = await onImportFeeds(file);
 
-      if (result.added === 0) {
+      const messageParts: string[] = [];
+
+      if (result.added > 0 || result.skipped > 0) {
+        messageParts.push(formatMessage(messages.feeds.importSuccess, {
+          added: result.added,
+          skipped: result.skipped,
+        }));
+      }
+
+      if (result.savedAdded > 0) {
+        messageParts.push(formatMessage(messages.feeds.importSavedAdded, {
+          count: result.savedAdded,
+        }));
+      }
+
+      if (messageParts.length === 0) {
         setImportFeedback({
           type: 'error',
           message: messages.feeds.importNoNewFeeds,
@@ -40,10 +55,7 @@ export const FeedsContent = ({
 
       setImportFeedback({
         type: 'success',
-        message: formatMessage(messages.feeds.importSuccess, {
-          added: result.added,
-          skipped: result.skipped,
-        }),
+        message: messageParts.join(' '),
       });
     } catch (error) {
       setImportFeedback({
