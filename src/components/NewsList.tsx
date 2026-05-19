@@ -2,7 +2,6 @@ import type { NewsCardProps, NewsListProps } from '../types/component-props';
 import { useI18n } from '../i18n/useI18n';
 import { formatMessage } from '../i18n';
 import { Button } from './ui';
-import { cn } from '../lib/utils';
 
 export const NewsList = ({
   news,
@@ -116,7 +115,6 @@ export const NewsList = ({
               isSaved={isNewsSaved(item)}
               locale={locale}
               onFeedFilterChange={onFeedFilterChange}
-              activeFeedId={activeFeedId}
               isLast={index === news.length - 1}
             />
           ))}
@@ -133,9 +131,8 @@ const NewsCard = ({
   isSaved,
   locale,
   onFeedFilterChange,
-  activeFeedId,
   isLast,
-}: NewsCardProps & { onFeedFilterChange?: (feedId?: string) => void; activeFeedId?: string; isLast: boolean }) => {
+}: NewsCardProps & { onFeedFilterChange?: (feedId?: string) => void; isLast: boolean }) => {
   const { messages } = useI18n();
 
   const formatDate = (dateString?: string) => {
@@ -164,54 +161,58 @@ const NewsCard = ({
             onClick(newsItem);
           }
         }}
-        className={cn(
-          'ios-list-row group w-full cursor-pointer px-4 py-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)] focus-visible:ring-inset',
-        )}
+        className="ios-list-row group w-full cursor-pointer px-4 py-3.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)] focus-visible:ring-inset"
         aria-label={newsItem.title || newsItem.feedTitle}
       >
-        {/* Top meta row */}
-        <div className="mb-1.5 flex items-center justify-between gap-2">
-          <button
-            type="button"
-            onClick={(e) => { e.stopPropagation(); onFeedFilterChange?.(newsItem.feedId); }}
-            className={cn(
-              'text-[11px] font-semibold uppercase tracking-wide transition-opacity active:opacity-50',
-              activeFeedId === newsItem.feedId ? 'text-[color:var(--brand)]' : 'text-[color:var(--brand)]'
-            )}
-          >
-            {newsItem.feedTitle}
-          </button>
+        <div className="flex items-stretch gap-3">
 
-          <div className="flex items-center gap-2">
-            <span className="whitespace-nowrap text-[11px] text-muted">
-              {formatDate(newsItem.isoDate || newsItem.pubDate)}
-            </span>
+          {/* Left: all text content */}
+          <div className="min-w-0 flex-1">
+
+            {/* Source + date */}
+            <div className="mb-1 flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); onFeedFilterChange?.(newsItem.feedId); }}
+                className="text-[11px] font-semibold uppercase tracking-wider transition-opacity active:opacity-50"
+                style={{ color: 'var(--brand)' }}
+              >
+                {newsItem.feedTitle}
+              </button>
+              <span className="text-[10px] text-muted">·</span>
+              <span className="text-[11px] text-muted">
+                {formatDate(newsItem.isoDate || newsItem.pubDate)}
+              </span>
+            </div>
+
+            {/* Headline */}
+            <h4 className="line-clamp-2 text-[15px] font-semibold leading-snug text-primary">
+              {newsItem.title}
+            </h4>
+
+            {/* Excerpt */}
+            <div
+              className="mt-1 line-clamp-2 text-[13px] leading-relaxed text-secondary"
+              dangerouslySetInnerHTML={{ __html: newsItem.truncatedDescription }}
+            />
+          </div>
+
+          {/* Right: save + chevron stacked */}
+          <div className="flex shrink-0 flex-col items-center justify-between py-0.5">
             <button
               type="button"
               onClick={(e) => { e.stopPropagation(); onToggleSave(newsItem); }}
               aria-label={isSaved ? messages.article.removeSaved : messages.article.save}
-              className="text-[17px] leading-none transition-opacity active:opacity-50"
+              className="flex h-7 w-7 items-center justify-center rounded-full text-[16px] leading-none transition-opacity active:opacity-50"
               style={{ color: isSaved ? 'var(--brand)' : 'var(--text-muted)' }}
             >
               {isSaved ? '★' : '☆'}
             </button>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
           </div>
-        </div>
 
-        {/* Headline */}
-        <h4 className="line-clamp-2 text-[15px] font-semibold leading-snug text-primary">
-          {newsItem.title}
-        </h4>
-
-        {/* Excerpt + chevron */}
-        <div className="mt-1 flex items-end justify-between gap-2">
-          <div
-            className="line-clamp-2 flex-1 text-[13px] leading-relaxed text-secondary"
-            dangerouslySetInnerHTML={{ __html: newsItem.truncatedDescription }}
-          />
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-          </svg>
         </div>
       </div>
       {!isLast && <div className="ios-list-separator ml-4" />}
