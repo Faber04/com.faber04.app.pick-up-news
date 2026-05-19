@@ -39,7 +39,7 @@ export const Header = ({ currentPage, themeMode, onToggleTheme, onNavigate, unre
           <div className="flex items-center gap-1">
 
             {/* Desktop segmented nav */}
-            <nav className="mr-2 hidden sm:flex items-center gap-0 rounded-lg bg-[color:var(--surface-muted)] p-1">
+            <nav className="mr-2 hidden lg:flex items-center gap-0 rounded-lg bg-[color:var(--surface-muted)] p-1">
               {navItems.map(({ page, label }) => (
                 <button
                   key={page}
@@ -90,5 +90,4 @@ export const Header = ({ currentPage, themeMode, onToggleTheme, onNavigate, unre
     </header>
   );
 };
-
 

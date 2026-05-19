@@ -164,7 +164,7 @@ const NewsCard = ({
         className="ios-list-row group w-full cursor-pointer px-4 py-3.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)] focus-visible:ring-inset"
         aria-label={newsItem.title || newsItem.feedTitle}
       >
-        <div className="flex items-stretch gap-3">
+        <div className="flex w-full min-w-0 items-stretch gap-3">
 
           {/* Left: all text content */}
           <div className="min-w-0 flex-1">
@@ -219,4 +219,3 @@ const NewsCard = ({
     </>
   );
 };
-

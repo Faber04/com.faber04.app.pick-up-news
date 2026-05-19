@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAppState } from './hooks/useAppState';
 import { usePWAInstall } from './hooks/usePWAInstall';
 import { getNavigationLabel } from './i18n';
@@ -19,7 +19,7 @@ import { NewsItem } from './types';
 import type { NavigationState, BreadcrumbNode, NavigationActions } from './types/navigation';
 import type { PrimaryPage } from './types/component-props';
 
-const APP_VERSION = '3.1.0';
+const APP_VERSION = '3.1.2';
 
 function App() {
   const { messages, supportedLanguages, language, setLanguage } = useI18n();
@@ -51,6 +51,7 @@ function App() {
 
   const { canInstall, install } = usePWAInstall();
   const [isNotificationPanelOpen, setIsNotificationPanelOpen] = useState(false);
+  const previousFeedIdsRef = useRef<string[]>([]);
   const unreadCount = notifications.filter(n => !n.read).length;
 
   const createNode = (id: string, params?: Record<string, unknown>): BreadcrumbNode => ({
@@ -105,12 +106,17 @@ function App() {
     }));
   }, [messages]);
 
-  // Auto-refresh news when feeds change
+  // Refresh automatically only when feeds are added, not when they are removed or reordered.
   useEffect(() => {
-    if (state.feeds.length > 0) {
+    const currentFeedIds = state.feeds.map((feed) => feed.id);
+    const hasNewFeed = currentFeedIds.some((feedId) => !previousFeedIdsRef.current.includes(feedId));
+
+    if (currentFeedIds.length > 0 && (previousFeedIdsRef.current.length === 0 || hasNewFeed)) {
       refreshNews();
     }
-  }, [state.feeds.length, refreshNews]);
+
+    previousFeedIdsRef.current = currentFeedIds;
+  }, [state.feeds, refreshNews]);
 
   // Clear feed-related errors when leaving the Feeds page
   useEffect(() => {

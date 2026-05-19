@@ -32,22 +32,14 @@ fi
 tmp_script="$(mktemp)"
 trap 'rm -f "$tmp_script"' EXIT
 
-{
-  echo "set net:timeout 60"
-  echo "set net:max-retries 3"
-  echo "set ftp:ssl-allow no"
-  echo "open -u \"$FTP_USER\",\"$FTP_PASS\" \"$FTP_HOST\""
-
-  while IFS= read -r file; do
-    rel="${file#dist/}"
-    dir="$(dirname "$rel")"
-    remote_dir="$FTP_BASE/$dir"
-    echo "mkdir -p \"$remote_dir\""
-    echo "put -O \"$remote_dir\" \"$file\""
-  done < <(find dist -type f | sort)
-
-  echo "bye"
-} > "$tmp_script"
+cat > "$tmp_script" <<EOF
+set net:timeout 60
+set net:max-retries 3
+set ftp:ssl-allow no
+open -u "$FTP_USER","$FTP_PASS" "$FTP_HOST"
+mirror --reverse --delete --verbose=1 dist "$FTP_BASE"
+bye
+EOF
 
 lftp -f "$tmp_script"
 
