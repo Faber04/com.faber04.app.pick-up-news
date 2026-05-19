@@ -114,10 +114,12 @@ export const FeedsContent = ({
           onClick={() => setShowForm(!showForm)}
           variant="brand"
           size="sm"
-          className="h-9 rounded-full px-4 text-[13px] font-semibold shadow-none hover:-translate-y-0"
+          className="h-9 w-9 rounded-full px-0 text-[13px] font-semibold shadow-none hover:-translate-y-0 sm:w-auto sm:px-4"
+          aria-label={messages.feeds.addFeedButton}
+          title={messages.feeds.addFeedButton}
         >
           <span className="text-[14px]" aria-hidden="true">＋</span>
-          {messages.feeds.addFeedButton}
+          <span className="hidden sm:inline">{messages.feeds.addFeedButton}</span>
         </Button>
         <Button
           type="button"
@@ -125,12 +127,14 @@ export const FeedsContent = ({
           disabled={loading || feeds.length === 0}
           variant="secondary"
           size="sm"
-          className="h-9 rounded-full border-[color:color-mix(in_srgb,var(--brand)_18%,var(--border)_82%)] bg-[color:color-mix(in_srgb,var(--brand)_8%,var(--surface)_92%)] px-4 text-[13px] font-semibold text-[color:var(--brand-strong)] shadow-none hover:bg-[color:color-mix(in_srgb,var(--brand)_12%,var(--surface)_88%)]"
+          className="h-9 w-9 rounded-full border-[color:color-mix(in_srgb,var(--brand)_18%,var(--border)_82%)] bg-[color:color-mix(in_srgb,var(--brand)_8%,var(--surface)_92%)] px-0 text-[13px] font-semibold text-[color:var(--brand-strong)] shadow-none hover:bg-[color:color-mix(in_srgb,var(--brand)_12%,var(--surface)_88%)] sm:w-auto sm:px-4"
+          aria-label={loading ? messages.feeds.refreshing : messages.feeds.refresh}
+          title={loading ? messages.feeds.refreshing : messages.feeds.refresh}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0 1 12.75-5.34L19 9.41M19.5 12a7.5 7.5 0 0 1-12.75 5.34L5 14.59" />
           </svg>
-          {loading ? messages.feeds.refreshing : messages.feeds.refresh}
+          <span className="hidden sm:inline">{loading ? messages.feeds.refreshing : messages.feeds.refresh}</span>
         </Button>
         <div className="inline-flex overflow-hidden rounded-full border border-[color:var(--border)] bg-[color:var(--surface-muted)]">
           <Button
@@ -139,30 +143,30 @@ export const FeedsContent = ({
             variant="ghost"
             size="sm"
             className={cn(
-              'h-9 rounded-none border-0 px-3 text-[13px] font-medium text-secondary hover:bg-[color:var(--surface)] hover:text-[color:var(--text-primary)]',
+              'h-9 w-9 rounded-none border-0 px-0 text-[13px] font-medium text-secondary hover:bg-[color:var(--surface)] hover:text-[color:var(--text-primary)] sm:w-auto sm:px-3',
               'border-r border-[color:var(--border)]'
             )}
             aria-label={messages.feeds.importButton}
             title={messages.feeds.importButton}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v10m0 0 4-4m-4 4-4-4M5 16.5a2.5 2.5 0 0 0 2.5 2.5h9a2.5 2.5 0 0 0 2.5-2.5" />
             </svg>
-            {messages.feeds.importButton}
+            <span className="hidden sm:inline">{messages.feeds.importButton}</span>
           </Button>
           <Button
             type="button"
             onClick={handleExport}
             variant="ghost"
             size="sm"
-            className="h-9 rounded-none border-0 px-3 text-[13px] font-medium text-secondary hover:bg-[color:var(--surface)] hover:text-[color:var(--text-primary)]"
+            className="h-9 w-9 rounded-none border-0 px-0 text-[13px] font-medium text-secondary hover:bg-[color:var(--surface)] hover:text-[color:var(--text-primary)] sm:w-auto sm:px-3"
             aria-label={messages.feeds.exportButton}
             title={messages.feeds.exportButton}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 21V11m0 0 4 4m-4-4-4 4M5 7.5A2.5 2.5 0 0 1 7.5 5h9A2.5 2.5 0 0 1 19 7.5" />
             </svg>
-            {messages.feeds.exportButton}
+            <span className="hidden sm:inline">{messages.feeds.exportButton}</span>
           </Button>
         </div>
       </div>
