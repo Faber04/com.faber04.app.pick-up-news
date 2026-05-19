@@ -12,7 +12,12 @@ import {
 
 export class RSSService {
   private static readonly RSS2JSON_API = 'https://api.rss2json.com/v1/api.json';
-  private static readonly CORSPROXY_API = 'https://corsproxy.io/?url=';
+  /** Fallback public proxy used only when VITE_CORS_PROXY_URL is not set (local dev). */
+  private static readonly CORSPROXY_FALLBACK = 'https://corsproxy.io/?url=';
+  /** Returns the configured CORS proxy base URL (Worker in production, corsproxy.io locally). */
+  private static get CORSPROXY_API(): string {
+    return import.meta.env.VITE_CORS_PROXY_URL ?? this.CORSPROXY_FALLBACK;
+  }
   private static readonly FETCH_TIMEOUT_MS = 10000;
   private static readonly COMMON_FEED_PATHS = [
     '/.well-known/feed.json',
