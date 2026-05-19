@@ -131,7 +131,7 @@ export const FeedsContent = ({
           aria-label={loading ? messages.feeds.refreshing : messages.feeds.refresh}
           title={loading ? messages.feeds.refreshing : messages.feeds.refresh}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0 1 12.75-5.34L19 9.41M19.5 12a7.5 7.5 0 0 1-12.75 5.34L5 14.59" />
           </svg>
           <span className="hidden sm:inline">{loading ? messages.feeds.refreshing : messages.feeds.refresh}</span>
@@ -149,7 +149,7 @@ export const FeedsContent = ({
             aria-label={messages.feeds.importButton}
             title={messages.feeds.importButton}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v10m0 0 4-4m-4 4-4-4M5 16.5a2.5 2.5 0 0 0 2.5 2.5h9a2.5 2.5 0 0 0 2.5-2.5" />
             </svg>
             <span className="hidden sm:inline">{messages.feeds.importButton}</span>
@@ -163,7 +163,7 @@ export const FeedsContent = ({
             aria-label={messages.feeds.exportButton}
             title={messages.feeds.exportButton}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 21V11m0 0 4 4m-4-4-4 4M5 7.5A2.5 2.5 0 0 1 7.5 5h9A2.5 2.5 0 0 1 19 7.5" />
             </svg>
             <span className="hidden sm:inline">{messages.feeds.exportButton}</span>
