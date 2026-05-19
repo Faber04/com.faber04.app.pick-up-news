@@ -3,6 +3,7 @@ import { AddFeedForm, FeedList } from './index';
 import type { FeedsContentProps } from '../types/component-props';
 import { useI18n } from '../i18n/useI18n';
 import { Alert, AlertDescription, Button } from './ui';
+import { cn } from '../lib/utils';
 
 export const FeedsContent = ({
   feeds,
@@ -23,9 +24,6 @@ export const FeedsContent = ({
   const [importFeedback, setImportFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { messages, formatMessage } = useI18n();
-  const topActionButtonClass = 'w-full sm:min-w-[9rem] sm:justify-center';
-  const importExportButtonClass = `${topActionButtonClass} border-[color:color-mix(in_srgb,var(--brand)_34%,var(--border)_66%)] bg-[color:color-mix(in_srgb,var(--brand)_10%,var(--surface)_90%)] text-[color:var(--brand-strong)] hover:bg-[color:color-mix(in_srgb,var(--brand)_16%,var(--surface)_84%)]`;
-
   const handleImport = async (file: File) => {
     try {
       const result = await onImportFeeds(file);
@@ -109,45 +107,64 @@ export const FeedsContent = ({
 
   return (
     <div>
-      {/* Buttons header - aligned horizontally */}
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row">
+      {/* Compact action toolbar */}
+      <div className="mb-6 inline-flex max-w-full flex-wrap items-center gap-2 rounded-2xl border border-[color:var(--border)] bg-[color:color-mix(in_srgb,var(--surface)_88%,transparent_12%)] p-2 shadow-[0_18px_40px_-30px_rgba(2,8,23,0.4)] backdrop-blur">
         <Button
           type="button"
           onClick={() => setShowForm(!showForm)}
           variant="brand"
-          size="xl"
-          className={topActionButtonClass}
+          size="sm"
+          className="h-9 rounded-full px-4 text-[13px] font-semibold shadow-none hover:-translate-y-0"
         >
-          {messages.feeds.addFeedToggle}
+          <span className="text-[14px]" aria-hidden="true">＋</span>
+          {messages.feeds.addFeedButton}
         </Button>
         <Button
           type="button"
           onClick={onRefresh}
           disabled={loading || feeds.length === 0}
           variant="secondary"
-          size="xl"
-          className={topActionButtonClass}
+          size="sm"
+          className="h-9 rounded-full border-[color:color-mix(in_srgb,var(--brand)_18%,var(--border)_82%)] bg-[color:color-mix(in_srgb,var(--brand)_8%,var(--surface)_92%)] px-4 text-[13px] font-semibold text-[color:var(--brand-strong)] shadow-none hover:bg-[color:color-mix(in_srgb,var(--brand)_12%,var(--surface)_88%)]"
         >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0 1 12.75-5.34L19 9.41M19.5 12a7.5 7.5 0 0 1-12.75 5.34L5 14.59" />
+          </svg>
           {loading ? messages.feeds.refreshing : messages.feeds.refresh}
         </Button>
-        <Button
-          type="button"
-          onClick={handleImportButtonClick}
-          variant="secondary"
-          size="xl"
-          className={importExportButtonClass}
-        >
-          {messages.feeds.importButton}
-        </Button>
-        <Button
-          type="button"
-          onClick={handleExport}
-          variant="secondary"
-          size="xl"
-          className={importExportButtonClass}
-        >
-          {messages.feeds.exportButton}
-        </Button>
+        <div className="inline-flex overflow-hidden rounded-full border border-[color:var(--border)] bg-[color:var(--surface-muted)]">
+          <Button
+            type="button"
+            onClick={handleImportButtonClick}
+            variant="ghost"
+            size="sm"
+            className={cn(
+              'h-9 rounded-none border-0 px-3 text-[13px] font-medium text-secondary hover:bg-[color:var(--surface)] hover:text-[color:var(--text-primary)]',
+              'border-r border-[color:var(--border)]'
+            )}
+            aria-label={messages.feeds.importButton}
+            title={messages.feeds.importButton}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v10m0 0 4-4m-4 4-4-4M5 16.5a2.5 2.5 0 0 0 2.5 2.5h9a2.5 2.5 0 0 0 2.5-2.5" />
+            </svg>
+            {messages.feeds.importButton}
+          </Button>
+          <Button
+            type="button"
+            onClick={handleExport}
+            variant="ghost"
+            size="sm"
+            className="h-9 rounded-none border-0 px-3 text-[13px] font-medium text-secondary hover:bg-[color:var(--surface)] hover:text-[color:var(--text-primary)]"
+            aria-label={messages.feeds.exportButton}
+            title={messages.feeds.exportButton}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 21V11m0 0 4 4m-4-4-4 4M5 7.5A2.5 2.5 0 0 1 7.5 5h9A2.5 2.5 0 0 1 19 7.5" />
+            </svg>
+            {messages.feeds.exportButton}
+          </Button>
+        </div>
       </div>
 
       <input

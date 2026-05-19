@@ -9,7 +9,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['pickupnews-mark.svg', 'apple-touch-icon.png', 'apple-touch-icon.svg'],
+      includeAssets: ['favicon.svg', 'pickupnews-mark.svg', 'apple-touch-icon.png', 'apple-touch-icon.svg'],
       manifest: {
         name: 'PickUpNews',
         short_name: 'PickUpNews',
