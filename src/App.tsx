@@ -19,7 +19,7 @@ import { NewsItem } from './types';
 import type { NavigationState, BreadcrumbNode, NavigationActions } from './types/navigation';
 import type { PrimaryPage } from './types/component-props';
 
-const APP_VERSION = '3.0.0';
+const APP_VERSION = '3.1.0';
 
 function App() {
   const { messages, supportedLanguages, language, setLanguage } = useI18n();

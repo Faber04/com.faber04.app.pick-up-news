@@ -1,36 +1,41 @@
 import type { BreadcrumbProps } from '../types/component-props';
-import { Button } from './ui';
 
 export const Breadcrumb = ({ trail, onNavigate }: BreadcrumbProps) => {
   if (trail.length <= 1) {
-    return null; // no breadcrumb at root level
+    return null;
   }
 
-  return (
-    <div className="sticky top-20 z-40 border-b border-[color:var(--border)] bg-[color:var(--surface)]/95 backdrop-blur">
-      <div className="app-container flex h-auto items-center gap-1 overflow-x-auto py-2">
-        {trail.map((node, index) => (
-          <div key={node.id} className="flex items-center gap-1 min-w-fit">
-            <Button
-              type="button"
-              onClick={() => onNavigate.goToIndex(index)}
-              variant={index === trail.length - 1 ? 'secondary' : 'ghost'}
-              size="sm"
-              disabled={index === trail.length - 1}
-              className={`h-8 rounded-lg px-2.5 ${
-                index === trail.length - 1
-                  ? 'cursor-default'
-                  : ''
-              }`}
-            >
-              {node.label}
-            </Button>
+  const previous = trail[trail.length - 2];
+  const current = trail[trail.length - 1];
 
-            {index < trail.length - 1 && (
-              <span className="text-muted text-xs">/</span>
-            )}
-          </div>
-        ))}
+  return (
+    <div
+      className="sticky top-14 z-40 border-b border-[color:var(--border)]"
+      style={{
+        background: 'var(--surface)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+      }}
+    >
+      <div className="app-container relative flex h-11 items-center">
+        {/* Back button — left */}
+        <button
+          type="button"
+          onClick={() => onNavigate.goToIndex(trail.length - 2)}
+          className="flex items-center gap-0.5 py-1 pr-3 text-[15px] font-medium transition-opacity active:opacity-50"
+          style={{ color: 'var(--brand)' }}
+          aria-label={`Back to ${previous.label}`}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          <span className="max-w-[120px] truncate">{previous.label}</span>
+        </button>
+
+        {/* Current page title — centered */}
+        <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 max-w-[50%] truncate text-[15px] font-semibold text-primary">
+          {current.label}
+        </span>
       </div>
     </div>
   );

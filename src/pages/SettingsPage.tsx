@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import type { SettingsPageProps } from '../types/page-props';
 import { useI18n } from '../i18n/useI18n';
-import { Button } from '../components/ui';
 
 const currentYear = new Date().getFullYear();
 
@@ -35,97 +34,123 @@ export const SettingsPage = ({
   };
 
   return (
-    <div className="app-container py-8 stagger-in">
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(19rem,0.85fr)] lg:items-start">
-        <section className="space-y-3">
-          <Button
-            variant="secondary"
-            size="lg"
-            className="w-full justify-between rounded-2xl px-5"
-            onClick={onOpenLanguage}
-          >
-            <span>{messages.settings.languageAction}</span>
-            <span aria-hidden="true">→</span>
-          </Button>
-          <Button
-            variant="secondary"
-            size="lg"
-            className="w-full justify-between rounded-2xl px-5"
-            onClick={onOpenFeeds}
-          >
-            <span>{messages.settings.manageFeedsAction}</span>
-            <span aria-hidden="true">→</span>
-          </Button>
+    <div className="app-container py-6 stagger-in space-y-8">
 
-          {/* Browser notifications toggle */}
+      {/* Preferences section */}
+      <section>
+        <p className="mb-2 px-4 text-[13px] font-semibold uppercase tracking-wider text-muted">
+          Preferences
+        </p>
+        <div className="ios-list-group">
+          {/* Language */}
+          <button
+            type="button"
+            onClick={onOpenLanguage}
+            className="ios-list-row flex w-full items-center justify-between px-4 py-3 transition-opacity active:opacity-60"
+          >
+            <span className="text-[15px] text-primary">{messages.settings.languageAction}</span>
+            <span className="text-secondary">›</span>
+          </button>
+
+          <div className="ios-list-separator ml-4" />
+
+          {/* Manage Feeds */}
+          <button
+            type="button"
+            onClick={onOpenFeeds}
+            className="ios-list-row flex w-full items-center justify-between px-4 py-3 transition-opacity active:opacity-60"
+          >
+            <span className="text-[15px] text-primary">{messages.settings.manageFeedsAction}</span>
+            <span className="text-secondary">›</span>
+          </button>
+
+          {/* Notifications toggle */}
           {notificationsSupported && (
-            <div className="flex flex-col gap-2 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-muted)] px-5 py-4">
-              <div className="flex items-center justify-between gap-4">
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-primary">🔔 {messages.notifications.enableTitle}</p>
-                  <p className="mt-0.5 text-xs text-secondary">{messages.notifications.enableDescription}</p>
+            <>
+              <div className="ios-list-separator ml-4" />
+              <div className="ios-list-row flex items-center justify-between px-4 py-3">
+                <div className="min-w-0 flex-1 pr-4">
+                  <p className="text-[15px] text-primary">{messages.notifications.enableTitle}</p>
+                  <p className="text-[13px] text-secondary">{messages.notifications.enableDescription}</p>
                 </div>
-                <Button
+                <button
                   type="button"
-                  variant={notificationsEnabled ? 'brand' : 'outline'}
-                  size="sm"
+                  role="switch"
+                  aria-checked={notificationsEnabled}
                   disabled={notifPending}
                   onClick={handleToggleNotifications}
-                  className="shrink-0"
+                  aria-label={notificationsEnabled ? messages.notifications.disable : messages.notifications.enable}
+                  className={`relative inline-flex h-[31px] w-[51px] shrink-0 cursor-pointer rounded-full transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)] ${notifPending ? 'opacity-50' : ''}`}
+                  style={{ background: notificationsEnabled ? 'var(--brand)' : 'var(--border)' }}
                 >
-                  {notifPending ? '…' : notificationsEnabled ? messages.notifications.disable : messages.notifications.enable}
-                </Button>
+                  <span
+                    className="pointer-events-none absolute top-[2px] left-[2px] h-[27px] w-[27px] rounded-full bg-white shadow-[0_2px_6px_rgba(0,0,0,0.25)] transition-transform duration-200"
+                    style={{ transform: notificationsEnabled ? 'translateX(20px)' : 'translateX(0)' }}
+                  />
+                </button>
               </div>
-              {notifError && <p className="text-xs text-[color:var(--danger)]">{notifError}</p>}
-            </div>
+            </>
           )}
 
-          {/* PWA install prompt */}
+          {notifError && (
+            <p className="px-4 pb-3 text-[13px] text-[color:var(--danger)]">{notifError}</p>
+          )}
+
+          {/* PWA install */}
           {canInstallPWA && (
-            <div className="flex items-center justify-between gap-4 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-muted)] px-5 py-4">
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-primary">📲 {messages.pwa.installTitle}</p>
-                <p className="mt-0.5 text-xs text-secondary">{messages.pwa.installDescription}</p>
-              </div>
-              <Button
-                type="button"
-                variant="brand"
-                size="sm"
-                onClick={onInstallPWA}
-                className="shrink-0"
-              >
-                {messages.pwa.installButton}
-              </Button>
-            </div>
-          )}
-        </section>
-
-        <section className="space-y-5 pt-1">
-          <dl className="space-y-4 text-sm text-secondary">
-            <div className="flex items-start justify-between gap-4 border-b border-[color:var(--border)] pb-4">
-              <dt className="text-muted">{messages.settings.copyright}</dt>
-              <dd className="font-medium text-primary">© {currentYear}</dd>
-            </div>
-            <div className="flex items-start justify-between gap-4 border-b border-[color:var(--border)] pb-4">
-              <dt className="text-muted">{messages.settings.repository}</dt>
-              <dd className="font-medium text-primary">
-                <a
-                  href="https://github.com/Faber04"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex text-sm font-medium text-[var(--brand-strong)] hover:opacity-80"
+            <>
+              <div className="ios-list-separator ml-4" />
+              <div className="ios-list-row flex items-center justify-between px-4 py-3">
+                <div className="min-w-0 flex-1 pr-4">
+                  <p className="text-[15px] text-primary">{messages.pwa.installTitle}</p>
+                  <p className="text-[13px] text-secondary">{messages.pwa.installDescription}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={onInstallPWA}
+                  className="shrink-0 rounded-full px-4 py-1.5 text-[14px] font-semibold text-white transition-opacity active:opacity-70"
+                  style={{ background: 'var(--brand)' }}
                 >
-                  github.com/Faber04
-                </a>
-              </dd>
-            </div>
-            <div className="flex items-start justify-between gap-4">
-              <dt className="text-muted">{messages.settings.version}</dt>
-              <dd className="font-medium text-primary">v{version}</dd>
-            </div>
-          </dl>
-        </section>
-      </div>
+                  {messages.pwa.installButton}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+
+      {/* About section */}
+      <section>
+        <p className="mb-2 px-4 text-[13px] font-semibold uppercase tracking-wider text-muted">
+          {messages.settings.appInfo}
+        </p>
+        <div className="ios-list-group">
+          <div className="ios-list-row flex items-center justify-between px-4 py-3">
+            <span className="text-[15px] text-primary">{messages.settings.copyright}</span>
+            <span className="text-[15px] text-secondary">© {currentYear}</span>
+          </div>
+          <div className="ios-list-separator ml-4" />
+          <div className="ios-list-row flex items-center justify-between px-4 py-3">
+            <span className="text-[15px] text-primary">{messages.settings.repository}</span>
+            <a
+              href="https://github.com/Faber04"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[15px] font-medium"
+              style={{ color: 'var(--brand)' }}
+            >
+              github.com/Faber04
+            </a>
+          </div>
+          <div className="ios-list-separator ml-4" />
+          <div className="ios-list-row flex items-center justify-between px-4 py-3">
+            <span className="text-[15px] text-primary">{messages.settings.version}</span>
+            <span className="text-[15px] text-secondary">v{version}</span>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 };
+

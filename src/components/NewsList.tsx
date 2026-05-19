@@ -1,7 +1,8 @@
 import type { NewsCardProps, NewsListProps } from '../types/component-props';
 import { useI18n } from '../i18n/useI18n';
 import { formatMessage } from '../i18n';
-import { Badge, Button, Card, CardContent } from './ui';
+import { Button } from './ui';
+import { cn } from '../lib/utils';
 
 export const NewsList = ({
   news,
@@ -21,53 +22,50 @@ export const NewsList = ({
 
   if (loading) {
     return (
-      <Card>
-        <CardContent className="flex flex-col items-center justify-center gap-3 py-10 text-center" aria-live="polite">
+      <div className="ios-list-group">
+        <div className="flex flex-col items-center justify-center gap-3 py-10 text-center" aria-live="polite">
           <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-[color:var(--brand)]" />
           <p className="text-sm font-medium text-secondary">{messages.home.loadingNews}</p>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
   const hasSearch = searchQuery.trim().length > 0;
 
-  const noNewsContent = hasSearch ? (
-    <Card>
-      <CardContent className="py-10 text-center text-muted">
-        <p className="text-base font-semibold text-primary">
-          {formatMessage(messages.home.searchNoResults, { query: searchQuery.trim() })}
-        </p>
-        <p className="mt-2 text-sm">{messages.home.searchNoResultsHint}</p>
-        {onSearchChange && (
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="mt-4 rounded-xl"
-            onClick={() => onSearchChange('')}
-          >
-            {messages.home.clearSearch}
-          </Button>
-        )}
-      </CardContent>
-    </Card>
-  ) : (
-    <Card>
-      <CardContent className="py-10 text-center text-muted">
-        <p className="text-base font-semibold text-primary">{messages.home.noNewsTitle}</p>
-        <p className="mt-2 text-sm">{messages.home.noNewsDescription}</p>
-      </CardContent>
-    </Card>
+  const noNewsContent = (
+    <div className="ios-list-group py-10 text-center text-muted">
+      <p className="text-base font-semibold text-primary">
+        {hasSearch
+          ? formatMessage(messages.home.searchNoResults, { query: searchQuery.trim() })
+          : messages.home.noNewsTitle}
+      </p>
+      <p className="mt-2 text-sm">
+        {hasSearch ? messages.home.searchNoResultsHint : messages.home.noNewsDescription}
+      </p>
+      {hasSearch && onSearchChange && (
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="mt-4 rounded-xl"
+          onClick={() => onSearchChange('')}
+        >
+          {messages.home.clearSearch}
+        </Button>
+      )}
+    </div>
   );
 
   return (
-    <div className="space-y-6">
-      {/* Search input */}
+    <div className="space-y-4">
+      {/* iOS search bar */}
       {onSearchChange && (
         <div className="relative">
-          <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted text-sm select-none">
-            🔍
+          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 select-none text-muted">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+            </svg>
           </span>
           <input
             type="search"
@@ -75,14 +73,14 @@ export const NewsList = ({
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder={messages.home.searchPlaceholder}
             aria-label={messages.home.searchPlaceholder}
-            className="w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] py-2.5 pl-9 pr-10 text-sm text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-[color:var(--ring)]"
+            className="w-full rounded-[10px] border-0 bg-[color:var(--surface-muted)] py-2 pl-8 pr-9 text-[15px] text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-[color:var(--ring)]"
           />
           {hasSearch && (
             <button
               type="button"
               onClick={() => onSearchChange('')}
               aria-label={messages.home.clearSearch}
-              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-muted hover:text-primary focus:outline-none focus:ring-2 focus:ring-[color:var(--ring)]"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-[color:var(--text-muted)] text-[color:var(--surface)] text-xs"
             >
               ✕
             </button>
@@ -90,27 +88,25 @@ export const NewsList = ({
         </div>
       )}
 
-      {activeFeedId && onFeedFilterChange && (
+      {/* Active feed badge */}
+      {activeFeedId && onFeedFilterChange && selectedFeedTitle && (
         <div className="flex items-center gap-2">
-          {selectedFeedTitle && (
-            <Badge className="rounded-full border border-[color:var(--border)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[color:var(--brand-strong)]">
-              {selectedFeedTitle}
-            </Badge>
-          )}
-          <Button
+          <span className="rounded-full bg-[color:var(--brand)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-white">
+            {selectedFeedTitle}
+          </span>
+          <button
             type="button"
-            size="sm"
-            variant="ghost"
-            className="h-8 rounded-xl px-2.5 text-xs font-medium"
+            className="text-[13px] font-medium text-[color:var(--brand)] transition-opacity active:opacity-50"
             onClick={() => onFeedFilterChange(undefined)}
           >
             {messages.common.clear}
-          </Button>
+          </button>
         </div>
       )}
 
+      {/* List */}
       {news.length === 0 ? noNewsContent : (
-        <div className="space-y-3 sm:space-y-4">
+        <div className="ios-list-group">
           {news.map((item, index) => (
             <NewsCard
               key={`${item.feedId}-${index}`}
@@ -121,6 +117,7 @@ export const NewsList = ({
               locale={locale}
               onFeedFilterChange={onFeedFilterChange}
               activeFeedId={activeFeedId}
+              isLast={index === news.length - 1}
             />
           ))}
         </div>
@@ -128,6 +125,7 @@ export const NewsList = ({
     </div>
   );
 };
+
 const NewsCard = ({
   newsItem,
   onClick,
@@ -136,18 +134,18 @@ const NewsCard = ({
   locale,
   onFeedFilterChange,
   activeFeedId,
-}: NewsCardProps & { onFeedFilterChange?: (feedId?: string) => void; activeFeedId?: string }) => {
+  isLast,
+}: NewsCardProps & { onFeedFilterChange?: (feedId?: string) => void; activeFeedId?: string; isLast: boolean }) => {
   const { messages } = useI18n();
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return '';
     try {
       return new Date(dateString).toLocaleDateString(locale, {
-        year: 'numeric',
         month: 'short',
         day: 'numeric',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
       });
     } catch {
       return '';
@@ -155,7 +153,7 @@ const NewsCard = ({
   };
 
   return (
-    <Card className="overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-soft)]">
+    <>
       <div
         role="button"
         tabIndex={0}
@@ -166,66 +164,58 @@ const NewsCard = ({
             onClick(newsItem);
           }
         }}
-        className="w-full cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+        className={cn(
+          'ios-list-row group w-full cursor-pointer px-4 py-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)] focus-visible:ring-inset',
+        )}
         aria-label={newsItem.title || newsItem.feedTitle}
       >
-        <CardContent className="p-4 sm:p-5">
-          <div className="mb-2 flex items-center justify-between gap-2 sm:mb-2.5">
-            {onFeedFilterChange ? (
-              <Button
-                type="button"
-                size="sm"
-                variant={activeFeedId === newsItem.feedId ? 'brand' : 'secondary'}
-                className={`h-7 rounded-lg px-2 text-[11px] font-semibold uppercase tracking-wide ${
-                  activeFeedId === newsItem.feedId ? '' : 'text-[color:var(--brand-strong)]'
-                }`}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onFeedFilterChange(newsItem.feedId);
-                }}
-              >
-                {newsItem.feedTitle}
-              </Button>
-            ) : (
-              <Badge className="rounded-full border border-[color:var(--border)] px-2.5 py-0.5 text-[11px] uppercase tracking-wide text-secondary">
-                {newsItem.feedTitle}
-              </Badge>
+        {/* Top meta row */}
+        <div className="mb-1.5 flex items-center justify-between gap-2">
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); onFeedFilterChange?.(newsItem.feedId); }}
+            className={cn(
+              'text-[11px] font-semibold uppercase tracking-wide transition-opacity active:opacity-50',
+              activeFeedId === newsItem.feedId ? 'text-[color:var(--brand)]' : 'text-[color:var(--brand)]'
             )}
-            <div className="flex items-center gap-1.5">
-              <span className="whitespace-nowrap text-xs text-muted">
-                {formatDate(newsItem.isoDate || newsItem.pubDate)}
-              </span>
-              <Button
-                type="button"
-                variant={isSaved ? 'brand' : 'ghost'}
-                size="sm"
-                className="h-7 rounded-lg px-2 text-xs"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onToggleSave(newsItem);
-                }}
-                aria-label={isSaved ? messages.article.removeSaved : messages.article.save}
-                title={isSaved ? messages.article.removeSaved : messages.article.save}
-              >
-                {isSaved ? '★' : '☆'}
-              </Button>
-            </div>
+          >
+            {newsItem.feedTitle}
+          </button>
+
+          <div className="flex items-center gap-2">
+            <span className="whitespace-nowrap text-[11px] text-muted">
+              {formatDate(newsItem.isoDate || newsItem.pubDate)}
+            </span>
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onToggleSave(newsItem); }}
+              aria-label={isSaved ? messages.article.removeSaved : messages.article.save}
+              className="text-[17px] leading-none transition-opacity active:opacity-50"
+              style={{ color: isSaved ? 'var(--brand)' : 'var(--text-muted)' }}
+            >
+              {isSaved ? '★' : '☆'}
+            </button>
           </div>
+        </div>
 
-          <h4 className="line-clamp-2 text-[1.02rem] font-semibold leading-snug text-primary">
-            {newsItem.title}
-          </h4>
+        {/* Headline */}
+        <h4 className="line-clamp-2 text-[15px] font-semibold leading-snug text-primary">
+          {newsItem.title}
+        </h4>
 
+        {/* Excerpt + chevron */}
+        <div className="mt-1 flex items-end justify-between gap-2">
           <div
-            className="mt-2 line-clamp-3 text-sm leading-relaxed text-secondary"
+            className="line-clamp-2 flex-1 text-[13px] leading-relaxed text-secondary"
             dangerouslySetInnerHTML={{ __html: newsItem.truncatedDescription }}
           />
-
-          <div className="mt-3 flex justify-end">
-            <span className="text-xs font-medium text-[color:var(--brand-strong)]">→</span>
-          </div>
-        </CardContent>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
       </div>
-    </Card>
+      {!isLast && <div className="ios-list-separator ml-4" />}
+    </>
   );
 };
+

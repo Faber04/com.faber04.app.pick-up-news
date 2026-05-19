@@ -97,7 +97,7 @@ export interface NewsCardProps {
 export interface SubpageContainerProps {
   title: string;
   children: ReactNode;
-  onBack: () => void;
+  onBack?: () => void;
 }
 
 export interface ViewControlsProps {
