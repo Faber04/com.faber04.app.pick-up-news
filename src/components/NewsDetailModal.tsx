@@ -1,4 +1,4 @@
-import { useEffect, useId } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { NewsDetailModalProps } from '../types/component-props';
 import { useI18n } from '../i18n/useI18n';
 
@@ -6,6 +6,9 @@ export const NewsDetailModal = ({ newsItem, isOpen, onClose, isSaved, onToggleSa
   const { messages, locale, formatMessage } = useI18n();
   const titleId = useId();
   const descriptionId = useId();
+  const dragStartYRef = useRef<number | null>(null);
+  const [sheetOffsetY, setSheetOffsetY] = useState(0);
+  const closeThreshold = 80;
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return '';
@@ -26,6 +29,39 @@ export const NewsDetailModal = ({ newsItem, isOpen, onClose, isSaved, onToggleSa
     if (e.target === e.currentTarget) onClose();
   };
 
+  const handleDragStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    dragStartYRef.current = event.touches[0]?.clientY ?? null;
+    setSheetOffsetY(0);
+  };
+
+  const handleDragMove = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (dragStartYRef.current === null) {
+      return;
+    }
+
+    const currentY = event.touches[0]?.clientY ?? dragStartYRef.current;
+    const deltaY = Math.max(0, currentY - dragStartYRef.current);
+    setSheetOffsetY(deltaY);
+    if (deltaY > 0) {
+      event.preventDefault();
+    }
+  };
+
+  const resetDragState = useCallback(() => {
+    dragStartYRef.current = null;
+    setSheetOffsetY(0);
+  }, []);
+
+  const handleDragEnd = () => {
+    if (dragStartYRef.current !== null && sheetOffsetY >= closeThreshold) {
+      resetDragState();
+      onClose();
+      return;
+    }
+
+    resetDragState();
+  };
+
   useEffect(() => {
     if (!isOpen) return;
     const onKeyDown = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose(); };
@@ -37,6 +73,12 @@ export const NewsDetailModal = ({ newsItem, isOpen, onClose, isSaved, onToggleSa
       document.body.style.overflow = originalOverflow;
     };
   }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      resetDragState();
+    }
+  }, [isOpen, resetDragState]);
 
   if (!isOpen || !newsItem) return null;
 
@@ -50,10 +92,18 @@ export const NewsDetailModal = ({ newsItem, isOpen, onClose, isSaved, onToggleSa
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
-        className="ios-sheet-enter flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-3xl border border-[color:var(--border)] bg-[color:var(--surface)] shadow-[0_-4px_40px_rgba(0,0,0,0.18)] sm:max-w-4xl sm:rounded-2xl"
+        className="ios-sheet-enter flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-3xl border border-[color:var(--border)] bg-[color:var(--surface)] shadow-[0_-4px_40px_rgba(0,0,0,0.18)] transition-transform duration-200 ease-out sm:max-w-4xl sm:rounded-2xl"
+        style={{ transform: `translateY(${sheetOffsetY}px)` }}
       >
         {/* Drag indicator (mobile) */}
-        <div className="flex justify-center pt-3 pb-1 sm:hidden">
+        <div
+          className="flex justify-center pt-3 pb-1 sm:hidden touch-none"
+          onTouchStart={handleDragStart}
+          onTouchMove={handleDragMove}
+          onTouchEnd={handleDragEnd}
+          onTouchCancel={handleDragEnd}
+          aria-label={messages.common.close}
+        >
           <div className="h-[5px] w-10 rounded-full bg-[color:var(--border)]" />
         </div>
 
@@ -136,4 +186,3 @@ export const NewsDetailModal = ({ newsItem, isOpen, onClose, isSaved, onToggleSa
     </div>
   );
 };
-
