@@ -64,7 +64,7 @@
     "exportButton": "Esporta",
     "refresh": "Aggiorna",
     "refreshing": "Aggiornando...",
-    "importDropTitle": "Importa un file .pickupnews",
+    "importDropTitle": "Importa un file .json",
     "importDropHint": "Trascina qui il file oppure usa il pulsante \"Carica\".",
     "importSuccess": "Import completato: {added} feed aggiunti, {skipped} duplicati o non validi.",
     "importSavedAdded": "{count} articoli salvati importati.",
@@ -130,6 +130,6 @@
     "duplicateFeed": "Feed già presente",
     "refreshFeedFailed": "Impossibile aggiornare il feed dopo la modifica",
     "fetchNewsFailed": "Impossibile recuperare le news",
-    "invalidImportFile": "File di importazione non valido. Usa un file .pickupnews esportato da PickUpNews."
+    "invalidImportFile": "File di importazione non valido. Usa un file .json esportato da PickUpNews."
   }
 }

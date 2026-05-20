@@ -40,8 +40,8 @@ PickUpNews allows you to easily aggregate and read all your favorite RSS feeds. 
 - **📱 Installable Web App (PWA)**: Install PickUpNews as a native-like app on mobile and desktop with offline support
 - **🔔 Push Notifications**: Get notified when new articles are detected in your feeds; toggle browser notifications in Settings
 - **🔔 Notification Center**: In-app notification panel with a bell icon (shows unread count) to track and manage all detected articles
-- **📤 Feed Export (.pickupnews)**: Export all configured feeds to a portable `.pickupnews` file
-- **📥 Feed Import (.pickupnews)**: Import feeds from file (file picker or drag & drop), append to the end, and skip duplicates automatically
+- **📤 Feed Export (.json)**: Export all configured feeds to a portable `.json` file
+- **📥 Feed Import (.json)**: Import feeds from file (file picker or drag & drop), append to the end, and skip duplicates automatically
 - **⚡ Performance**: Fast loading thanks to Vite and React optimizations
 
 ## 🛠️ Technologies Used
@@ -232,21 +232,21 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - ✅ i18n support: `notifications.*` and `pwa.*` sections in Italian and English
 
 ### v2.1.0 ✅
-- ✅ Feed export to `.pickupnews`
+- ✅ Feed export to `.json`
   - Downloads all feeds with title and URL
-- ✅ Feed import from `.pickupnews`
+- ✅ Feed import from `.json`
   - Feeds are appended to the end of the existing list
   - Duplicate detection by feed URL with automatic skip
   - Supports both file picker and drag & drop import
 - ✅ File sharing across devices (including AirDrop)
-  - `.pickupnews` files can be shared cross-device and imported manually from the PWA
+  - `.json` files can be shared cross-device and imported manually from the PWA
   - On iOS, direct auto-open into PWA is not supported; manual selection remains required
 
 ### v2.1.1 ✅
 - ✅ Updated `Gestisci Feed` actions order to:
   - `Aggiungi Feed` → `Aggiorna` → `Carica` → `Esporta`
   - `Aggiorna` now stays visible (disabled when no feeds), so order is always consistent
-- ✅ Hidden `Importa un file .pickupnews` drag-and-drop panel on mobile
+- ✅ Hidden `Importa un file .json` drag-and-drop panel on mobile
   - Drag-and-drop import remains available from `sm` and above
   - File-picker import (`Carica`) remains available on all breakpoints
 - ✅ Improved visual emphasis for `Carica` and `Esporta` actions for faster scan/readability
@@ -420,14 +420,14 @@ In **By Site** mode:
 1. Open **Settings** from the header
 2. Click **"Gestisci Feed"**
 3. Click **"💾 Esporta"**
-4. PickUpNews downloads a `.pickupnews` file with all configured feeds
+4. PickUpNews downloads a `.json` file with all configured feeds
 
 ### Importing Feeds
 1. Open **Settings** from the header
 2. Click **"Gestisci Feed"**
 3. Import using one of these methods:
-4. Click **"📂 Carica"** and select a `.pickupnews` file
-5. Drag and drop a `.pickupnews` file into the import area
+4. Click **"📂 Carica"** and select a `.json` file
+5. Drag and drop a `.json` file into the import area
 6. Imported feeds are appended to the end of the current list
 7. Duplicate or invalid entries are skipped automatically
 
