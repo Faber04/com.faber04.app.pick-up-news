@@ -53,7 +53,7 @@ export const NewsDetailModal = ({ newsItem, isOpen, onClose, isSaved, onToggleSa
         className="ios-sheet-enter flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-3xl border border-[color:var(--border)] bg-[color:var(--surface)] shadow-[0_-4px_40px_rgba(0,0,0,0.18)] sm:max-w-4xl sm:rounded-2xl"
       >
         {/* Header */}
-        <div className="flex items-start justify-between gap-4 border-b border-[color:var(--border)] px-4 py-3 sm:items-center sm:px-6 sm:py-4">
+        <div className="flex items-start justify-between gap-4 border-b border-[color:var(--border)] px-4 pt-6 pb-3 sm:items-center sm:px-6 sm:py-4">
           <h2 id={titleId} className="line-clamp-3 text-[17px] font-semibold text-primary sm:text-xl">
             {newsItem.title}
           </h2>
