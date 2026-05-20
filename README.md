@@ -8,41 +8,12 @@ PickUpNews allows you to easily aggregate and read all your favorite RSS feeds. 
 
 ## ✨ Key Features
 
-- **📡 RSS Feed Management**: Easily add and remove RSS feeds manually
-- **🌍 Bilingual UI Foundation**: Interface available in Italian and English with persistent language preference
-- **🏳️ Language Settings**: Dedicated Settings subpage for language selection with flag + native label
-- **🧱 UI Refresh Foundation**: New reusable UI primitives for buttons, cards, and alerts now drive the first v1.4.9 refreshed surfaces
-- **↕️ Feed Ordering**: Reorder feeds in the Feeds page and keep order persisted in localStorage
-- **🖱️ Drag & Drop Ordering**: Reorder feeds by dragging directly in the Feeds page
-- **📲 Touch Drag & Drop**: Feed drag & drop sorting also works on mobile touch devices
-- **✏️ Feed Editing**: Edit feed name and URL with real-time URL validation and save confirmation
-- **🔄 Instant Feed Reload on Edit**: Saving feed edits reloads the feed and updates "Last updated"
-- **🧠 Auto Feed Detection**: Enter a website URL and PickUpNews auto-detects JSON Feed first, then RSS/Atom
-- **🧯 Inline Add Feed Errors**: If detection fails, the add panel stays open and shows an inline URL error (no modal alerts)
-- **🛑 Duplicate Protection**: Duplicate feed URLs are blocked with immediate inline feedback
-- **🧩 Multi-Format Support**: Native support for JSON Feed, RSS 2.0, and Atom feeds
-- **⚙️ Settings Hub**: Menu first, mobile-first settings page with top actions for theme and feed management
-- **🧭 Breadcrumb Navigation**: Sticky breadcrumb for fast movement between pages and nested subpages
-- **📅 Chronological View**: See all news sorted by date (most recent first)
-- **🏷️ Site View**: Group news by source/site
-- **🗂️ Collapsed By-Site Start**: In "By Site" view, all accordions start collapsed to improve navigation with many feeds
-- **🧰 By-Site Controls**: "Espandi tutti" / "Comprimi tutti" quick actions and open/total counter
-- **💾 Accordion State Persistence**: Open/closed state per feed is remembered in localStorage
-- **🧭 Consistent Source Order**: In "By Site" mode, Home follows the same order configured in Feeds
-- **🧱 Mobile Navigation Drawer**: On mobile, navigation opens as a right-side drawer with overlay
-- **📍 Mobile Sticky Bottom Menu**: On smartphone/tablet, a sticky bottom icon menu gives one-tap access to Home, Sort mode, and Settings
-- **🗓️ Compact Article Metadata**: Article modal uses compact `DD/MM/YY (HH:MM)` date format and wraps metadata cleanly on mobile
-- **📱 Responsive Design**: Perfect on desktop, tablet, and mobile
-- **💾 Local Persistence**: Your feeds are automatically saved in the browser
-- **🔍 Smart Preview**: Descriptions truncated to 120 characters for quick reading
-- **📖 Full Reading**: Modal with full article and original link
-- **⚡ Parallel Feed Detection**: Candidate probes run concurrently — detection worst case is O(timeout) regardless of candidate count
-- **📱 Installable Web App (PWA)**: Install PickUpNews as a native-like app on mobile and desktop with offline support
-- **🔔 Push Notifications**: Get notified when new articles are detected in your feeds; toggle browser notifications in Settings
-- **🔔 Notification Center**: In-app notification panel with a bell icon (shows unread count) to track and manage all detected articles
-- **📤 Feed Export (.json)**: Export all configured feeds to a portable `.json` file
-- **📥 Feed Import (.json)**: Import feeds from file (file picker or drag & drop), append to the end, and skip duplicates automatically
-- **⚡ Performance**: Fast loading thanks to Vite and React optimizations
+- **📡 Smart feed management**: Add/edit/reorder feeds with auto-detection (JSON Feed, RSS, Atom), validation, and duplicate protection.
+- **📰 Clean reading experience**: Chronological news list, Home search (title/source/description), saved articles, and full article modal.
+- **🔔 Notifications**: In-app notification center plus browser push notifications (when supported).
+- **📱 PWA-ready**: Installable app with offline support and mobile-first UX.
+- **💾 Import/Export**: Transfer feeds and saved articles using `.json` files.
+- **🌍 Localized UI**: Italian and English interface with persistent settings.
 
 ## 🛠️ Technologies Used
 
@@ -69,239 +40,23 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
 
 ## 🗓️ Roadmap
 
-### v1.0.0 ✅
-- ✅ Removed 1st level CORS management (`api.allorigins.win`)
-  - Reduces external dependencies and simplifies the fallback chain
-  - Chain: corsproxy.io → rss2json.com
+1. **v1.x — Core RSS reader foundations** ✅  
+   Feed CRUD, ordering/editing, auto-detection, resilient parsing, localization base, and UI architecture cleanup.
 
-### v1.1.1 ✅
-- ✅ URL parsing without protocol (e.g., `example.com` → `https://example.com`)
-- ✅ UI improvements in the Feeds section
-  - Removed "Feed RSS (n)" title
-  - Aligned "+Add" and "Refresh" buttons
-- ✅ Robust XML parsing and HTML error detection
+2. **v2.0 — PWA + notifications** ✅  
+   Installable app, offline caching, notification center, and browser notification support.
 
-### v1.2.0 ✅
-- ✅ Icon alignment and branding consistency
-  - ✅ Icon alignment in header and README
-  - ✅ Visual consistency with PN branding
-- ✅ Dark mode / light mode layout
-- ✅ Restyling based on logo color scale
-  - ✅ Color palette derived from the PickUpNews logo
-  - ✅ Consistent application throughout the UI
+3. **v2.1 — Data portability** ✅  
+   Feed import/export via `.json` and improved management UX.
 
-### v1.2.1 ✅
-- ✅ Feed sorting in the Feeds section
-  - Reorder feeds via up/down arrow buttons
-  - Automatic order saving in localStorage
-- ✅ RSS feed editing
-  - Edit mode for each feed's name and URL
-  - Real-time URL validation
-  - Save changes with confirmation
+4. **v2.2 — Product UX maturation** ✅  
+   Modern UI refresh, saved articles, and Home search.
 
-### v1.2.2 ✅
-- ✅ Feed sorting via drag & drop in the Feeds section
-- ✅ "By Site" order in Home aligned with the feed order configured in Feeds
+5. **v3.0 — Infrastructure hardening** ✅  
+   Migration from public CORS proxy to self-hosted Cloudflare Worker.
 
-### v1.2.3 ✅
-- ✅ Mobile Feeds layout fix: action controls moved under metadata/"Last updated"
-- ✅ Touch drag & drop support for feed ordering on mobile
-- ✅ Feed edit save now triggers feed reload and updates "Last updated"
-
-### v1.3.0 ✅
-- ✅ Auto-detect feeds from website URLs
-  - ✅ Priority to JSON Feed detection
-  - ✅ Fallback to RSS/Atom when JSON is unavailable
-  - ✅ Manual URL fallback if auto-detection does not find a feed
-  - ✅ Multi-format detection support (JSON Feed, RSS, Atom)
-
-### v1.3.1 ✅
-- ✅ Feed add flow hardening
-  - ✅ Prevent duplicate feed insertions — instant inline feedback
-  - ✅ Add panel stays open on failure with inline error under URL field (no modal alerts)
-  - ✅ HTML candidate discovery + path-segment probing for broader site coverage
-  - ✅ Parallel candidate probing via `firstSuccess()` — detection worst case drops from O(n × timeout) to O(timeout)
-
-### v1.4.0 ✅
-- ✅ Settings page creation
-- ✅ Credits in the settings page
-  - ✅ App created by Faber04 with link to the GitHub profile
-  - ✅ Version number
-  - ✅ Copyright and year
-- ✅ Mobile layout adjustment
-  - ✅ In the selected article modal, metadata wraps onto multiple lines
-  - ✅ Compact date format: `DD/MM/YY (HH:MM)`
-- ✅ Mobile navigation drawer
-  - ✅ On mobile, nav menu slides in from the right instead of dropping down from the top
-
-### v1.4.1 ✅
-- 🗑️ Removed "Tema" (dark/light toggle) from the mobile lateral drawer
-- 🧹 Removed "Versione" and "Autore" fields from the "Informazioni app e crediti" panel in Settings
-- 🔀 Merged the two Settings boxes into a single "Informazioni app e crediti" panel
-- 📂 Moved the main "Feed" menu item into the Settings page (no longer a top-level nav entry)
-- 🌙 Moved dark/light theme toggle to Settings; removed all other occurrences from the UI
-
-### v1.4.2 ✅
-- ✅ Home empty-state CTA updated from "Vai a Settings" to "Aggiungi un feed RSS" (direct access to Settings > Gestisci Feed)
-- ✅ Settings layout flattened: removed nested PickUpNews card and removed logo/title/subtitle block
-- ✅ Settings top actions are now full-width menu actions: theme toggle + "Gestisci Feed"
-- ✅ "Gestione Feed" converted into a nested Settings subpage
-- ✅ Introduced scalable stack-based breadcrumb navigation for nested pages/subpages
-- ✅ Added sticky top breadcrumb for mobile-first navigation between sections and sub-sections
-
-### v1.4.3 ✅
-- ✅ Removed dark/light toggle from Settings page
-- ✅ Added dark/light toggle to main header navigation and mobile hamburger drawer
-- ✅ Styled theme action as a distinct menu control to visually separate it from regular navigation items
-
-### v1.4.4 ✅
-- ✅ In **By Site** view, feed accordions now start collapsed by default
-- ✅ Added global controls: **Espandi tutti** and **Comprimi tutti**
-- ✅ Added live counter: `X aperti su Y`
-- ✅ Persisted accordion open/closed state by feed via localStorage
-
-### v1.4.5 ✅
-- ✅ Fixed production crash (`Minified React error #310`) caused by hook-order mismatch in `NewsList`
-- ✅ Kept by-site accordion UX behavior unchanged after fix
-
-### v1.4.6 ✅
-- ✅ Fixed the `orderedGroups` dependency warning in `NewsList`
-- ✅ Memoized by-site derived collections to keep dependencies stable across renders
-- ✅ Kept existing by-site behavior unchanged while reducing internal React noise
-
-### v1.4.7 ✅
-- ✅ Centralized component and page prop interfaces into dedicated `src/types/*` modules
-- ✅ Moved shared `ThemeMode` typing into the common type layer
-- ✅ Tightened navigation param typing from `any` to `unknown`
-- ✅ Kept runtime behavior unchanged; structural TypeScript refactor only
-
-### v1.4.8 ✅
-- ✅ Added app localization foundation for Italian and English with persistent language selection
-- ✅ Added a Settings > Language nested subpage using the existing breadcrumb stack
-- ✅ Introduced centralized JSON locale dictionaries for visible UI labels
-- ✅ Added language picker with flag + native language label, ready for future variants such as `English (UK)` and `English (US)`
-
-### v1.4.9 ✅
-- 🎨 UI refresh using a shadcn/ui-style foundation
-  - ✅ Added reusable Button, Card, and Alert primitives
-  - ✅ Added reusable Input primitive and completed migration of the replaceable legacy UI components
-  - ✅ Refreshed Header, Settings, Home empty state, feed management, breadcrumbs, language selection, news cards, and article modal with the new component layer
-  - ✅ Replaced custom by-site accordion with Radix/shadcn accordion primitive
-  - ✅ Improved grouped news readability with optimized spacing/padding
-
-### v1.4.10 ✅
-- ✅ Enhanced visual emphasis on article hover/tap in Home page
-  - `scale` + `hover:-translate-y-1` transforms and increased shadow intensity on hover
-  - `active:scale-95` for immediate tap feedback on mobile
-- ✅ Fixed news modal layout for long articles
-  - Modal refactored with scrollable content area + fixed footer button
-  - "Read full article" button is always visible regardless of article length
-- ✅ Aligned mobile navigation button colors with desktop and other views
-
-### v1.5.0 ✅
-- ✅ Added mobile/tablet sticky bottom navigation menu with icon-only actions
-  - Home shortcut
-  - Sort mode toggle (By Site / Chronological)
-  - Settings shortcut
-- ✅ Kept desktop navigation behavior unchanged
-
-### v1.5.1 ✅
-- ✅ Removed top view-switch (`Cronologico / Per Sito`) from mobile Home page
-- ✅ Sort mode toggle remains available via sticky bottom menu on mobile
-- ✅ Desktop view unchanged
-
-### v2.0.0 ✅
-- ✅ **Installable Web App (PWA)**
-  - ✅ Integrated `vite-plugin-pwa@0.14.7` with Workbox 6 for offline support
-  - ✅ Web App manifest with name "PickUpNews", standalone display, and app icons
-  - ✅ Service worker auto-generated with precaching of shell assets and Google Fonts
-  - ✅ Install prompt button in Settings; triggers native browser install dialog
-- ✅ **In-App Notification Center**
-  - ✅ New `AppNotification` type with feed, article, and timestamp metadata
-  - ✅ `NotificationPanel` portal-based side panel (slides from right); lists unread/read notifications
-  - ✅ Bell icon in Header with red badge showing unread count (both desktop and mobile)
-  - ✅ "Mark all as read" and "Clear all" actions in notification panel
-- ✅ **Browser Notification API**
-  - ✅ Toggle for browser notifications in Settings page
-  - ✅ `Notification.requestPermission()` on first activation
-  - ✅ Fires native OS notifications when new articles detected and permission granted
-- ✅ **Smart Article Detection**
-  - ✅ New article detection via GUID comparison (localStorage `seenGuids`)
-  - ✅ First app run silently populates seenGuids without notifications
-  - ✅ Subsequent refreshes create `AppNotification` entries (max 20 per refresh, 50 total)
-  - ✅ i18n support: `notifications.*` and `pwa.*` sections in Italian and English
-
-### v2.1.0 ✅
-- ✅ Feed export to `.json`
-  - Downloads all feeds with title and URL
-- ✅ Feed import from `.json`
-  - Feeds are appended to the end of the existing list
-  - Duplicate detection by feed URL with automatic skip
-  - Supports both file picker and drag & drop import
-- ✅ File sharing across devices (including AirDrop)
-  - `.json` files can be shared cross-device and imported manually from the PWA
-  - On iOS, direct auto-open into PWA is not supported; manual selection remains required
-
-### v2.1.1 ✅
-- ✅ Updated `Gestisci Feed` actions order to:
-  - `Aggiungi Feed` → `Aggiorna` → `Carica` → `Esporta`
-  - `Aggiorna` now stays visible (disabled when no feeds), so order is always consistent
-- ✅ Hidden `Importa un file .json` drag-and-drop panel on mobile
-  - Drag-and-drop import remains available from `sm` and above
-  - File-picker import (`Carica`) remains available on all breakpoints
-- ✅ Improved visual emphasis for `Carica` and `Esporta` actions for faster scan/readability
-
-### v2.2.0 ✅
-- 🎨 Modern UI restyling (incremental, low-risk)
-  - ✅ Introduced semantic design tokens and aligned shared UI primitives for consistency
-  - ✅ Refactor app shell and top bar for a cleaner responsive layout
-    - Header now uses a modern framed top bar with clearer desktop/mobile action grouping
-    - Mobile drawer overlay and bottom nav visuals refreshed for better hierarchy and scanability
-  - ✅ Redesigned article list and reader surfaces for better readability and scanning
-    - News cards now use stronger metadata hierarchy, better spacing, and keyboard-focusable interactions
-    - Reader modal now uses improved metadata chips, clearer typography, and stronger action emphasis
-  - ✅ Standardized light/dark behavior, loading/empty/error state styling, and interaction polish
-    - Shared shadow/design tokens are now used consistently across updated shell and content surfaces
-  - ✅ Included accessibility and responsive QA pass on redesigned flows
-    - Added dialog semantics, improved labels, and `aria-current` hints on primary navigation controls
-
-### v2.2.2 ✅
-- 💾 Saved news flow
-  - Users can save/unsave articles from the news cards and article reader
-  - New dedicated **Saved** view shows all saved articles
-  - Saved items are persisted in localStorage
-- 🧭 Navigation updates for Saved view
-  - Added **Saved** entry in navigation menus (top and side/mobile drawer)
-  - Added **Saved** button in mobile bottom menu
-- 📱 Mobile footer simplification
-  - Removed view-mode switch control from mobile footer
-- 📰 Home view simplification
-  - Removed **By Site** accordion mode (chronological view is now the only list mode)
-  - Feed names in cards now act as filter buttons
-  - Added **Clear** action to reset feed filtering
-
-### v2.2.3 ✅
-- 🔎 Home page search box for news filtering
-  - Adds a search input in **Home**
-  - Filters news by **title**, **feed website name**, and **description**
-
-### v2.2.4 ✅
-- 💾 Export/import format v2 includes saved articles
-  - Export now includes saved articles
-  - Import restores saved articles and skips duplicates
-  - Backward compatibility with earlier export files is preserved
-
-### v3.0.0 ✅
-- 🔧 Replace `corsproxy.io` with a self-hosted Cloudflare Worker
-  - `corsproxy.io` free tier is limited to localhost; production requests may be blocked
-  - Cloudflare Worker proxies RSS/HTML fetch requests with CORS headers
-  - `rss2json.com` remains as secondary fallback
-  - Worker script in `workers/` folder, deployed on Cloudflare free plan (100k req/day)
-
-### v3.1.0 ✅
-- 🍎 iOS-native UI restyling
-  - iOS visual language across header, list rows, bottom tab bar, and modal sheet
-  - Improved safe-area handling and mobile-first interaction polish
+6. **v3.1 — iOS-native polish** ✅  
+   iOS-style visual and interaction refinements across key mobile surfaces.
 
 ## Prerequisites
 
