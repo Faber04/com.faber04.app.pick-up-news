@@ -72,7 +72,7 @@ export const NewsList = ({
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder={messages.home.searchPlaceholder}
             aria-label={messages.home.searchPlaceholder}
-            className="w-full rounded-[10px] border-0 bg-[color:var(--surface-muted)] py-2 pl-8 pr-9 text-[15px] text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-[color:var(--ring)]"
+            className="w-full rounded-[10px] border-0 bg-[color:var(--surface-muted)] py-2 pl-8 pr-9 text-base text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-[color:var(--ring)]"
           />
           {hasSearch && (
             <button
