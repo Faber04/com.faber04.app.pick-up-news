@@ -280,17 +280,28 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
   - Feed names in cards now act as filter buttons
   - Added **Clear** action to reset feed filtering
 
-### v2.2.3
+### v2.2.3 ✅
 - 🔎 Home page search box for news filtering
   - Adds a search input in **Home**
   - Filters news by **title**, **feed website name**, and **description**
 
-### v3.0.0
+### v2.2.4 ✅
+- 💾 Export/import format v2 includes saved articles
+  - Export now includes saved articles
+  - Import restores saved articles and skips duplicates
+  - Backward compatibility with earlier export files is preserved
+
+### v3.0.0 ✅
 - 🔧 Replace `corsproxy.io` with a self-hosted Cloudflare Worker
   - `corsproxy.io` free tier is limited to localhost; production requests may be blocked
   - Cloudflare Worker proxies RSS/HTML fetch requests with CORS headers
   - `rss2json.com` remains as secondary fallback
   - Worker script in `workers/` folder, deployed on Cloudflare free plan (100k req/day)
+
+### v3.1.0 ✅
+- 🍎 iOS-native UI restyling
+  - iOS visual language across header, list rows, bottom tab bar, and modal sheet
+  - Improved safe-area handling and mobile-first interaction polish
 
 ## Prerequisites
 
