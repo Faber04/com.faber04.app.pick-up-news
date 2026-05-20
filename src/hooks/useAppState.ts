@@ -275,6 +275,11 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
       feeds: prev.feeds.filter(feed => feed.id !== feedId),
       news: prev.news.filter(news => news.feedId !== feedId)
     }));
+    setFilterOptions(prev => (
+      prev.feedId === feedId
+        ? { ...prev, feedId: undefined }
+        : prev
+    ));
   }, []);
 
   const moveFeed = useCallback((feedId: string, direction: 'up' | 'down') => {
