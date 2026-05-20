@@ -37,7 +37,7 @@ set net:timeout 60
 set net:max-retries 3
 set ftp:ssl-allow no
 open -u "$FTP_USER","$FTP_PASS" "$FTP_HOST"
-mirror --reverse --delete --verbose=1 dist "$FTP_BASE"
+mirror --reverse --delete --delete-first --verbose=1 dist "$FTP_BASE"
 bye
 EOF
 

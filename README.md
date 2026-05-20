@@ -341,6 +341,7 @@ npm run deploy
 Notes:
 - `INTERNAL/` is ignored by git, so local credentials are not committed.
 - `npm run deploy` performs build + FTP publish.
+- FTP publish removes stale files on server (`--delete`), including outdated hashed JS/CSS assets.
 
 ## 📖 How to Use PickUpNews
 
