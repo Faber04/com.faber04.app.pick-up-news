@@ -20,7 +20,7 @@ import type { NavigationState, BreadcrumbNode, NavigationActions } from './types
 import type { PrimaryPage } from './types/component-props';
 import { Toast } from './components/ui';
 
-const APP_VERSION = '3.1.3';
+const APP_VERSION = '3.1.4';
 
 function App() {
   const { messages, supportedLanguages, language, setLanguage } = useI18n();
