@@ -245,17 +245,18 @@ export const NewsDetailModal = ({
               aria-controls={shareMenuId}
               >
               <span className="hidden sm:inline">{messages.article.share}</span>
-              <span aria-hidden="true" className="text-[11px] leading-none sm:block">↗️</span>
+              <span aria-hidden="true" className="text-lg leading-none sm:block">⤴</span>
               </Button>
               {canShare && isShareMenuOpen && (
               <div
                 id={shareMenuId}
                 role="menu"
-                className="absolute bottom-full right-0 mb-3 w-full rounded-2xl overflow-hidden shadow-lg"
+                className="absolute bottom-full right-0 mb-3 w-screen sm:w-full rounded-2xl overflow-hidden shadow-lg max-w-xs sm:max-w-none"
                 style={{
                   backgroundColor: 'rgba(0, 0, 0, 0.05)',
                   backdropFilter: 'blur(10px)',
                   border: '1px solid rgba(0, 0, 0, 0.1)',
+                  marginLeft: 'calc((100vw - 100%) / -2)',
                 }}
               >
                 {/* Primary actions */}
