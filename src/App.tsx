@@ -22,6 +22,16 @@ import { Toast } from './components/ui';
 
 const APP_VERSION = '3.1.4';
 const BOOT_READY_EVENT = 'pickupnews:boot-ready';
+const PENDING_NOTIFICATION_TARGET_KEY = 'pickUpNews_pendingNotificationTarget';
+
+type PendingNotificationTarget = {
+  feedId: string;
+  articleLink?: string;
+  articleTitle: string;
+};
+
+const getNotificationArticleIdentifier = (articleLink?: string, articleTitle?: string): string =>
+  (articleLink?.trim() || articleTitle?.trim() || '').toLowerCase();
 
 function App() {
   const { messages, supportedLanguages, language, setLanguage } = useI18n();
@@ -58,11 +68,11 @@ function App() {
   const previousFeedIdsRef = useRef<string[]>([]);
   const unreadCount = notifications.filter(n => !n.read).length;
 
-  const createNode = (id: string, params?: Record<string, unknown>): BreadcrumbNode => ({
+  const createNode = useCallback((id: string, params?: Record<string, unknown>): BreadcrumbNode => ({
     id,
     label: getNavigationLabel(id, messages),
     params,
-  });
+  }), [messages]);
 
   const [navigation, setNavigation] = useState<NavigationState>({
     trail: [createNode('home')],
@@ -79,7 +89,7 @@ function App() {
       ? 'home'
       : 'settings';
 
-  const navigationActions: NavigationActions = {
+  const navigationActions: NavigationActions = useMemo(() => ({
     push: (node: BreadcrumbNode) => {
       setNavigation((prev) => ({
         trail: [...prev.trail, node],
@@ -100,7 +110,7 @@ function App() {
         trail: [createNode('home')],
       });
     },
-  };
+  }), [createNode]);
 
   useEffect(() => {
     setNavigation((prev) => ({
@@ -142,11 +152,11 @@ function App() {
     window.dispatchEvent(new Event(BOOT_READY_EVENT));
   }, [isInitialNewsLoadComplete]);
 
-  const handleNewsClick = (newsItem: NewsItem) => {
+  const handleNewsClick = useCallback((newsItem: NewsItem) => {
     markNewsAsRead(newsItem);
     setSelectedNews(newsItem);
     setIsModalOpen(true);
-  };
+  }, [markNewsAsRead]);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -193,6 +203,50 @@ function App() {
     navigationActions.reset();
     navigationActions.push(createNode('settings'));
   };
+
+  useEffect(() => {
+    const pendingRaw = localStorage.getItem(PENDING_NOTIFICATION_TARGET_KEY);
+    if (!pendingRaw) return;
+
+    let pendingTarget: PendingNotificationTarget | null = null;
+    try {
+      const parsed = JSON.parse(pendingRaw) as Partial<PendingNotificationTarget>;
+      if (typeof parsed.feedId === 'string' && typeof parsed.articleTitle === 'string') {
+        pendingTarget = {
+          feedId: parsed.feedId,
+          articleTitle: parsed.articleTitle,
+          articleLink: typeof parsed.articleLink === 'string' ? parsed.articleLink : undefined,
+        };
+      } else {
+        localStorage.removeItem(PENDING_NOTIFICATION_TARGET_KEY);
+        return;
+      }
+    } catch {
+      localStorage.removeItem(PENDING_NOTIFICATION_TARGET_KEY);
+      return;
+    }
+
+    const targetIdentifier = getNotificationArticleIdentifier(
+      pendingTarget.articleLink,
+      pendingTarget.articleTitle,
+    );
+    if (!targetIdentifier) {
+      localStorage.removeItem(PENDING_NOTIFICATION_TARGET_KEY);
+      return;
+    }
+
+    const matchedNews = state.news.find((newsItem) => (
+      newsItem.feedId === pendingTarget.feedId
+      && getNotificationArticleIdentifier(newsItem.link, newsItem.title) === targetIdentifier
+    ));
+
+    if (!matchedNews) return;
+
+    localStorage.removeItem(PENDING_NOTIFICATION_TARGET_KEY);
+    navigationActions.reset();
+    setIsNotificationPanelOpen(false);
+    handleNewsClick(matchedNews);
+  }, [state.news, handleNewsClick, navigationActions]);
 
   return (
     <div className="app-shell pb-28 lg:pb-6">

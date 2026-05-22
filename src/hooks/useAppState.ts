@@ -11,11 +11,17 @@ const STORAGE_KEYS = {
   SAVED_NEWS: 'pickUpNews_savedNews',
   SEEN_GUIDS: 'pickUpNews_seenGuids',
   NOTIFICATIONS_ENABLED: 'pickUpNews_notificationsEnabled',
+  DEFAULT_FEEDS_VERSION: 'pickUpNews_defaultFeedsVersion',
+  PENDING_NOTIFICATION_TARGET: 'pickUpNews_pendingNotificationTarget',
 };
 
 const MAX_NOTIFICATIONS = 50;
 const TRANSFER_FILE_FORMAT = 'pickupnews-feeds';
 const TRANSFER_FILE_VERSION = 2;
+const CURRENT_DEFAULT_FEEDS_VERSION = 2;
+const DEFAULT_FEEDS: Array<{ title: string; url: string }> = [
+  { title: 'BBC World', url: 'https://feeds.bbci.co.uk/news/world/rss.xml' },
+];
 
 type FeedTransferFile = {
   format: typeof TRANSFER_FILE_FORMAT;
@@ -113,12 +119,14 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
   useEffect(() => {
     let loadedFeedsCount = 0;
     const savedFeeds = localStorage.getItem(STORAGE_KEYS.FEEDS);
+    const savedDefaultFeedsVersion = Number(localStorage.getItem(STORAGE_KEYS.DEFAULT_FEEDS_VERSION) || '0');
     const savedViewMode = localStorage.getItem(STORAGE_KEYS.VIEW_MODE);
     const savedThemeMode = localStorage.getItem(STORAGE_KEYS.THEME) as ThemeMode | null;
     const savedNotifications = localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS);
     const savedSavedNews = localStorage.getItem(STORAGE_KEYS.SAVED_NEWS);
     const savedNotificationsEnabled = localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS_ENABLED);
     const savedSeenGuids = localStorage.getItem(STORAGE_KEYS.SEEN_GUIDS);
+    let shouldSeedDefaultFeeds = false;
 
     if (savedFeeds) {
       try {
@@ -126,10 +134,26 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
         if (Array.isArray(feeds)) {
           loadedFeedsCount = feeds.length;
           setState(prev => ({ ...prev, feeds }));
+          shouldSeedDefaultFeeds = feeds.length === 0 && savedDefaultFeedsVersion < CURRENT_DEFAULT_FEEDS_VERSION;
         }
       } catch (error) {
         console.error('Error loading feeds from localStorage:', error);
+        shouldSeedDefaultFeeds = true;
       }
+    } else {
+      shouldSeedDefaultFeeds = true;
+    }
+
+    if (shouldSeedDefaultFeeds) {
+      const seededFeeds: RSSFeed[] = DEFAULT_FEEDS.map((feed, index) => ({
+        id: `${Date.now()}-${index}`,
+        title: feed.title,
+        url: RSSService.normalizeUrl(feed.url),
+        lastFetched: new Date(),
+      }));
+      loadedFeedsCount = seededFeeds.length;
+      setState(prev => ({ ...prev, feeds: seededFeeds }));
+      localStorage.setItem(STORAGE_KEYS.DEFAULT_FEEDS_VERSION, String(CURRENT_DEFAULT_FEEDS_VERSION));
     }
 
     if (savedViewMode) {
@@ -452,14 +476,27 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
 
           // Browser notification (Notification API — no push server required)
           if (notificationsEnabled && 'Notification' in window && Notification.permission === 'granted') {
-            const body = newArticles
-              .slice(0, 3)
-              .map(a => a.title)
-              .filter(Boolean)
-              .join('\n');
-            new Notification(`PickUpNews — ${newArticles.length} nuov${newArticles.length === 1 ? 'o articolo' : 'i articoli'}`, {
-              body,
-              icon: '/app/pick-up-news/pickupnews-mark.svg',
+            newArticles.slice(0, 3).forEach((article) => {
+              const articleTitle = article.title?.trim() || 'New article';
+              const notification = new Notification(articleTitle, {
+                body: article.feedTitle || 'PickUpNews',
+                icon: '/app/pick-up-news/pickupnews-mark.svg',
+              });
+
+              notification.onclick = () => {
+                const target = {
+                  feedId: article.feedId,
+                  articleLink: article.link,
+                  articleTitle: article.title ?? '',
+                };
+                localStorage.setItem(STORAGE_KEYS.PENDING_NOTIFICATION_TARGET, JSON.stringify(target));
+                const appUrl = `${window.location.origin}${import.meta.env.BASE_URL}`;
+                if (window.location.pathname !== import.meta.env.BASE_URL) {
+                  window.location.assign(appUrl);
+                }
+                window.focus();
+                notification.close();
+              };
             });
           }
         }
