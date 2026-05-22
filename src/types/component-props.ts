@@ -60,6 +60,7 @@ export interface NewsDetailModalProps {
   onClose: () => void;
   isSaved: boolean;
   onToggleSave: (newsItem: NewsItem) => void;
+  onCopyLink: () => void;
 }
 
 export interface NewsListProps {
@@ -68,6 +69,7 @@ export interface NewsListProps {
   onNewsClick: (newsItem: NewsItem) => void;
   onToggleSave: (newsItem: NewsItem) => void;
   isNewsSaved: (newsItem: NewsItem) => boolean;
+  onRefresh?: () => Promise<void> | void;
   activeFeedId?: string;
   onFeedFilterChange?: (feedId?: string) => void;
   searchQuery?: string;

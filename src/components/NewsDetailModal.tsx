@@ -1,11 +1,25 @@
-import { useEffect, useId } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import type { NewsDetailModalProps } from '../types/component-props';
 import { useI18n } from '../i18n/useI18n';
+import { Button } from './ui';
 
-export const NewsDetailModal = ({ newsItem, isOpen, onClose, isSaved, onToggleSave }: NewsDetailModalProps) => {
+export const NewsDetailModal = ({
+  newsItem,
+  isOpen,
+  onClose,
+  isSaved,
+  onToggleSave,
+  onCopyLink,
+}: NewsDetailModalProps) => {
   const { messages, locale, formatMessage } = useI18n();
   const titleId = useId();
   const descriptionId = useId();
+  const shareMenuId = useId();
+  const shareDropdownRef = useRef<HTMLDivElement | null>(null);
+  const shareUrl = newsItem?.link?.trim() ?? '';
+  const shareText = newsItem?.title?.trim() || newsItem?.feedTitle || '';
+  const canShare = shareUrl.length > 0;
+  const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return '';
@@ -26,9 +40,59 @@ export const NewsDetailModal = ({ newsItem, isOpen, onClose, isSaved, onToggleSa
     if (e.target === e.currentTarget) onClose();
   };
 
+  const handleDeviceShare = async () => {
+    if (!canShare) return;
+
+    const shareData = {
+      title: shareText,
+      text: shareText,
+      url: shareUrl,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shareUrl);
+        return;
+      }
+
+      window.open(shareUrl, '_blank', 'noopener,noreferrer');
+    } catch {
+      window.open(shareUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  const handleCopyLink = async () => {
+    if (!canShare) return;
+
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(shareUrl);
+      onCopyLink();
+    }
+  };
+
+  const facebookShareUrl = canShare
+    ? `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`
+    : '';
+
+  const xShareUrl = canShare
+    ? `https://x.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`
+    : '';
+
   useEffect(() => {
     if (!isOpen) return;
-    const onKeyDown = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose(); };
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsShareMenuOpen(false);
+        onClose();
+      }
+    };
+
     document.addEventListener('keydown', onKeyDown);
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -37,6 +101,10 @@ export const NewsDetailModal = ({ newsItem, isOpen, onClose, isSaved, onToggleSa
       document.body.style.overflow = originalOverflow;
     };
   }, [isOpen, onClose]);
+
+  useEffect(() => {
+    setIsShareMenuOpen(false);
+  }, [newsItem?.link, newsItem?.title]);
 
   if (!isOpen || !newsItem) return null;
 
@@ -105,7 +173,7 @@ export const NewsDetailModal = ({ newsItem, isOpen, onClose, isSaved, onToggleSa
 
         {/* Footer actions */}
         <div className="border-t border-[color:var(--border)] px-4 py-3 sm:px-6" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 12px)' }}>
-          <div className="flex flex-col gap-2 sm:flex-row">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
             <button
               type="button"
               onClick={() => onToggleSave(newsItem)}
@@ -125,6 +193,66 @@ export const NewsDetailModal = ({ newsItem, isOpen, onClose, isSaved, onToggleSa
                 {messages.article.readFullArticle}
               </a>
             )}
+            <div ref={shareDropdownRef} className="relative">
+              <Button
+                type="button"
+                onClick={() => setIsShareMenuOpen((prev) => !prev)}
+                disabled={!canShare}
+                variant="secondary"
+                size="lg"
+                className="w-full border-[color:color-mix(in_srgb,var(--brand)_20%,var(--border)_80%)] bg-[color:color-mix(in_srgb,var(--brand)_10%,var(--surface)_90%)] text-[color:var(--brand-strong)] hover:bg-[color:color-mix(in_srgb,var(--brand)_14%,var(--surface)_86%)]"
+                aria-expanded={isShareMenuOpen}
+                aria-haspopup="menu"
+                aria-controls={shareMenuId}
+              >
+                <span>{messages.article.share}</span>
+                <span aria-hidden="true" className="text-[11px] leading-none">▾</span>
+              </Button>
+              {canShare && isShareMenuOpen && (
+                <div
+                  id={shareMenuId}
+                  role="menu"
+                  className="absolute right-0 bottom-full z-10 mb-2 w-full min-w-56 space-y-2 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-muted)] p-2 shadow-[0_16px_32px_-20px_rgba(0,0,0,0.35)]"
+                >
+                  <Button
+                    type="button"
+                    role="menuitem"
+                    variant="secondary"
+                    size="sm"
+                    className="w-full rounded-xl"
+                    onClick={() => {
+                      void handleDeviceShare();
+                      setIsShareMenuOpen(false);
+                    }}
+                  >
+                    {messages.article.shareDevice}
+                  </Button>
+                  <Button
+                    type="button"
+                    role="menuitem"
+                    variant="secondary"
+                    size="sm"
+                    className="w-full rounded-xl"
+                    onClick={() => {
+                      void handleCopyLink();
+                      setIsShareMenuOpen(false);
+                    }}
+                  >
+                    {messages.article.shareCopyLink}
+                  </Button>
+                  <Button asChild variant="secondary" size="sm" className="w-full rounded-xl">
+                    <a href={facebookShareUrl} target="_blank" rel="noopener noreferrer" role="menuitem" onClick={() => setIsShareMenuOpen(false)}>
+                      {messages.article.shareFacebook}
+                    </a>
+                  </Button>
+                  <Button asChild variant="secondary" size="sm" className="w-full rounded-xl">
+                    <a href={xShareUrl} target="_blank" rel="noopener noreferrer" role="menuitem" onClick={() => setIsShareMenuOpen(false)}>
+                      {messages.article.shareX}
+                    </a>
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -18,8 +18,9 @@ import { SettingsPage } from './pages/SettingsPage';
 import { NewsItem } from './types';
 import type { NavigationState, BreadcrumbNode, NavigationActions } from './types/navigation';
 import type { PrimaryPage } from './types/component-props';
+import { Toast } from './components/ui';
 
-const APP_VERSION = '3.1.2';
+const APP_VERSION = '3.1.3';
 
 function App() {
   const { messages, supportedLanguages, language, setLanguage } = useI18n();
@@ -66,6 +67,7 @@ function App() {
 
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [copyToastVisible, setCopyToastVisible] = useState(false);
 
   const currentPageNode = navigation.trail[navigation.trail.length - 1];
   const headerPage: PrimaryPage = currentPageNode.id === 'saved'
@@ -140,6 +142,13 @@ function App() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedNews(null);
+  };
+
+  const handleCopyLink = () => {
+    setCopyToastVisible(true);
+    window.setTimeout(() => {
+      setCopyToastVisible(false);
+    }, 2500);
   };
 
   const filteredNews = getFilteredNews();
@@ -232,6 +241,7 @@ function App() {
                 onNewsClick={handleNewsClick}
                 onToggleSave={toggleSaveNews}
                 isNewsSaved={isNewsSaved}
+                onRefresh={() => refreshNews('manual')}
                 activeFeedId={filterOptions.feedId}
                 onFeedFilterChange={(feedId) => {
                   setFilterOptions((prev) => ({
@@ -356,7 +366,10 @@ function App() {
         onClose={handleCloseModal}
         isSaved={selectedNews ? isNewsSaved(selectedNews) : false}
         onToggleSave={toggleSaveNews}
+        onCopyLink={handleCopyLink}
       />
+
+      <Toast open={copyToastVisible} message={messages.article.linkCopied} />
 
       {/* Notification Panel */}
       <NotificationPanel

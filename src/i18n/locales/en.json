@@ -31,6 +31,8 @@
     "noNewsTitle": "No news available.",
     "noNewsDescription": "Add some RSS feeds and refresh to view the news.",
     "loadingNews": "Loading news...",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing...",
     "expandAll": "Expand all",
     "collapseAll": "Collapse all",
     "openCount": "{openCount} open of {totalCount}",
@@ -103,7 +105,13 @@
     "authorBy": "by {author}",
     "save": "Save",
     "saved": "Saved",
-    "removeSaved": "Remove saved"
+    "removeSaved": "Remove saved",
+    "share": "Share",
+    "shareDevice": "Share on device",
+    "shareCopyLink": "Copy link",
+    "shareFacebook": "Facebook",
+    "shareX": "X",
+    "linkCopied": "Link copied to clipboard."
   },
   "notifications": {
     "bell": "Notifications",

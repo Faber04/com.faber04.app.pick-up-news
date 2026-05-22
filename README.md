@@ -9,9 +9,9 @@ PickUpNews allows you to easily aggregate and read all your favorite RSS feeds. 
 ## ✨ Key Features
 
 - **📡 Smart feed management**: Add/edit/reorder feeds with auto-detection (JSON Feed, RSS, Atom), validation, and duplicate protection.
-- **📰 Clean reading experience**: Chronological news list, Home search (title/source/description), saved articles, and full article modal.
+- **📰 Clean reading experience**: Chronological news list, Home search (title/source/description), Home refresh, saved articles, full article modal, and a compact sharing submenu.
 - **🔔 Notifications**: In-app notification center plus browser push notifications (when supported).
-- **📱 PWA-ready**: Installable app with offline support and mobile-first UX.
+- **📱 PWA-ready**: Installable app with offline support, cache cleanup/update handling, and mobile-first UX.
 - **💾 Import/Export**: Transfer feeds and saved articles using `.json` files.
 - **🌍 Localized UI**: Italian and English interface with persistent settings.
 
@@ -57,6 +57,9 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
 
 6. **v3.1 — iOS-native polish** ✅  
    iOS-style visual and interaction refinements across key mobile surfaces.
+
+7. **v3.1.3 — sharing, refresh, and cache updates** ✅  
+   Article sharing actions, Home refresh shortcut, and improved PWA update handling.
 
 ## Prerequisites
 
@@ -146,12 +149,17 @@ In **By Site** mode:
 - Click on any news item to open the full detail
 - In the modal, source/date/author metadata stays readable on smaller screens
 - Use the **"Read full article"** button to open the original site
+- Use **Condividi / Share** to open the share submenu, then pick device share, copy link, Facebook, or X
 
 ### Settings and Credits
 1. Open **Settings** from the header
 2. Use **Gestisci Feed** to access feed add/reorder/edit/remove
 3. Use the GitHub link to reach the Faber04 profile
 4. Use the sticky breadcrumb to move quickly between **Home**, **Settings**, and nested Settings subpages
+
+### Refreshing Home
+1. Open **Home**
+2. Use the **Refresh** button above the search field to fetch the latest articles
 
 ### Theme Switch
 1. On desktop, use the highlighted theme action in the main header menu
