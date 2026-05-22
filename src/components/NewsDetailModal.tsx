@@ -22,7 +22,7 @@ export const NewsDetailModal = ({
   const shareText = newsItem?.title?.trim() || newsItem?.feedTitle || '';
   const canShare = shareUrl.length > 0;
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
-  const [shareMenuStyle, setShareMenuStyle] = useState<React.CSSProperties | null>(null);
+  const [shareMenuStyle, setShareMenuStyle] = useState<React.CSSProperties | undefined>(undefined);
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return '';
@@ -126,7 +126,7 @@ export const NewsDetailModal = ({
 
   useLayoutEffect(() => {
     if (!isShareMenuOpen || !canShare) {
-      setShareMenuStyle(null);
+      setShareMenuStyle(undefined);
       return;
     }
 
@@ -279,10 +279,7 @@ export const NewsDetailModal = ({
                 id={shareMenuId}
                 role="menu"
                 className="w-[min(15rem,calc(100vw-24px))] space-y-2 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-muted)] p-2 shadow-[0_16px_32px_-20px_rgba(0,0,0,0.35)]"
-                style={{
-                  ...shareMenuStyle,
-                  visibility: shareMenuStyle ? 'visible' : 'hidden',
-                }}
+                style={shareMenuStyle}
               >
                 <Button
                   type="button"
