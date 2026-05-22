@@ -115,92 +115,61 @@ Notes:
 ## 📖 How to Use PickUpNews
 
 ### Navigation
-The app has two top-level sections accessible from the header:
-- **🏠 Home** — the list of news from your feeds
-- **⚙️ Settings** — app info, credits, and access to feed management
+PickUpNews currently has three primary sections:
+- **🏠 Home** — latest articles from your feeds
+- **⭐ Saved** — articles you bookmarked
+- **⚙️ Settings** — preferences, feed management, app info
 
-On smartphone/tablet, a sticky bottom icon menu is also available:
-- **🏠 Home** icon
-- **🔀 Sort** icon (toggles Chronological / By Site)
-- **⚙️ Settings** icon
+On desktop, these sections are in the header. On mobile/tablet, the same three sections are available in the sticky bottom bar.
 
-### Adding an RSS Feed
-1. Open **Settings** from the header
-2. Click **"Gestisci Feed"**
-3. Click on **"+ Add RSS Feed"**
-4. Enter the feed name (e.g., "The Guardian")
-5. Enter a website URL or feed URL (e.g., `theguardian.com` or `https://www.theguardian.com/uk/rss`)
-6. Click **"Add Feed"**
-7. PickUpNews tries automatic detection (JSON Feed first, then RSS/Atom)
-8. If no valid feed is detected, the panel stays open and an inline error appears under the URL field
-9. Correct the URL and retry without reopening the add panel
+### Add your first feed
+1. Open **Settings**
+2. Tap **Manage Feeds**
+3. Tap the **＋** action
+4. Enter feed name and URL (website URL or direct RSS/Atom/JSON Feed URL)
+5. Confirm add
 
-### Viewing News
-From the **Home** section, you can choose two viewing modes:
-- **Chronological**: all news from all feeds sorted by the most recent
-- **By Site**: news grouped by source/site
+PickUpNews tries auto-detection and validates the URL before saving.
 
-In **By Site** mode:
-- Accordions start collapsed by default
-- Use **Espandi tutti** / **Comprimi tutti** to quickly control all groups
-- Use the `X aperti su Y` counter to keep track of navigation state
+### Home: browse and filter news
+- Use the search bar to filter by **title**, **source**, or **description**
+- Tap a source badge on an article to filter Home by that feed
+- Use **Clear** to remove the active feed filter
+- Tap **☆ / ★** on a card to save or unsave an article
 
-### Reading Articles
-- Click on any news item to open the full detail
-- In the modal, source/date/author metadata stays readable on smaller screens
-- Use the **"Read full article"** button to open the original site
-- Use **Condividi / Share** to open the share submenu, then pick device share, copy link, Facebook, or X
+### Read and share articles
+1. Open an article from **Home** or **Saved**
+2. In the detail modal, use:
+   - **☆ / ★** to save or remove from saved
+   - **Read full article** to open the original page
+   - **Share** to use device share, copy link, Facebook, or X
 
-### Settings and Credits
-1. Open **Settings** from the header
-2. Use **Gestisci Feed** to access feed add/reorder/edit/remove
-3. Use the GitHub link to reach the Faber04 profile
-4. Use the sticky breadcrumb to move quickly between **Home**, **Settings**, and nested Settings subpages
+### Saved section
+- Open **Saved** from header or bottom nav
+- All bookmarked items are listed with most recently saved first
+- Remove saved status at any time from list cards or article modal
 
-### Theme Switch
-1. On desktop, use the highlighted theme action in the main header menu
-2. On mobile, open the hamburger drawer and use the dedicated theme action
+### Notifications
+1. Open **Settings**
+2. Enable **Browser notifications** (if supported)
+3. Use the bell icon in the header to open the notification panel
+4. From the panel you can mark all as read or clear all
 
-### Removing a Feed
-1. Open **Settings** from the header
-2. Click **"Gestisci Feed"**
-3. Click on the 🗑️ icon next to the feed to remove
+### Settings and feed management
+Inside **Settings** you can:
+- Change language (Italian/English)
+- Manage feeds (add, refresh, import, export, edit, reorder, remove)
+- Install the PWA when available
+- Open app info, repository link, and app version
 
-### Reordering Feeds
-1. Open **Settings** from the header
-2. Click **"Gestisci Feed"**
-3. Use **↑** or **↓** next to a feed to move it up or down
-4. Or drag a feed using the **⋮⋮** handle and drop it in the desired position
-5. The new order is saved automatically
+### Import / Export
+- **Export** creates a `.json` transfer file
+- **Import** accepts a PickUpNews `.json` file via picker or drag & drop
+- Duplicate or invalid feed entries are skipped automatically
+- Saved articles included in the transfer file are imported too
 
-### Feed Order in Home (By Site)
-1. Reorder feeds in **Settings > Gestisci Feed**
-2. Go back to **Home** and switch to **By Site**
-3. Feed groups will follow the same order configured in Feeds
-
-### Editing a Feed
-1. Open **Settings** from the header
-2. Click **"Gestisci Feed"**
-3. Click the **✏️** icon next to the feed
-4. Update name and/or URL
-5. Verify the URL status in real time
-6. Click **Salva** and confirm
-7. The feed is reloaded automatically and "Last updated" is refreshed
-
-### Exporting Feeds
-1. Open **Settings** from the header
-2. Click **"Gestisci Feed"**
-3. Click **"💾 Esporta"**
-4. PickUpNews downloads a `.json` file with all configured feeds
-
-### Importing Feeds
-1. Open **Settings** from the header
-2. Click **"Gestisci Feed"**
-3. Import using one of these methods:
-4. Click **"📂 Carica"** and select a `.json` file
-5. Drag and drop a `.json` file into the import area
-6. Imported feeds are appended to the end of the current list
-7. Duplicate or invalid entries are skipped automatically
+### Theme
+Use the theme toggle (☀️/🌙) in the header to switch between light and dark mode.
 
 ## 📁 Project Structure
 
