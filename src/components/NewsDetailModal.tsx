@@ -251,44 +251,57 @@ export const NewsDetailModal = ({
               <div
                 id={shareMenuId}
                 role="menu"
-                className="absolute bottom-full right-0 mb-2 w-full min-w-56 space-y-2 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-muted)] p-2 shadow-[0_16px_32px_-20px_rgba(0,0,0,0.35)]"
+                className="absolute bottom-full right-0 mb-3 w-full rounded-2xl overflow-hidden shadow-lg"
+                style={{
+                  backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(0, 0, 0, 0.1)',
+                }}
               >
-                <Button
-                  type="button"
-                  role="menuitem"
-                  variant="secondary"
-                  size="sm"
-                  className="w-full rounded-xl"
-                  onClick={() => {
-                    void handleDeviceShare();
-                    setIsShareMenuOpen(false);
-                  }}
-                >
-                  {messages.article.shareDevice}
-                </Button>
-                <Button
-                  type="button"
-                  role="menuitem"
-                  variant="secondary"
-                  size="sm"
-                  className="w-full rounded-xl"
-                  onClick={() => {
-                    void handleCopyLink();
-                    setIsShareMenuOpen(false);
-                  }}
-                >
-                  {messages.article.shareCopyLink}
-                </Button>
-                <Button asChild variant="secondary" size="sm" className="w-full rounded-xl">
-                  <a href={facebookShareUrl} target="_blank" rel="noopener noreferrer" role="menuitem" onClick={() => setIsShareMenuOpen(false)}>
-                    {messages.article.shareFacebook}
-                  </a>
-                </Button>
-                <Button asChild variant="secondary" size="sm" className="w-full rounded-xl">
-                  <a href={xShareUrl} target="_blank" rel="noopener noreferrer" role="menuitem" onClick={() => setIsShareMenuOpen(false)}>
-                    {messages.article.shareX}
-                  </a>
-                </Button>
+                {/* Primary actions */}
+                <div className="divide-y divide-[rgba(0,0,0,0.08)]">
+                  <Button
+                    type="button"
+                    role="menuitem"
+                    variant="ghost"
+                    className="w-full rounded-none py-4 text-[15px] font-medium text-[color:var(--brand)]"
+                    onClick={() => {
+                      void handleDeviceShare();
+                      setIsShareMenuOpen(false);
+                    }}
+                  >
+                    {messages.article.shareDevice}
+                  </Button>
+                  <Button
+                    type="button"
+                    role="menuitem"
+                    variant="ghost"
+                    className="w-full rounded-none py-4 text-[15px] font-medium text-[color:var(--brand)]"
+                    onClick={() => {
+                      void handleCopyLink();
+                      setIsShareMenuOpen(false);
+                    }}
+                  >
+                    {messages.article.shareCopyLink}
+                  </Button>
+                </div>
+
+                {/* Social divider */}
+                <div className="h-2 bg-[rgba(0,0,0,0.04)]" />
+
+                {/* Social actions */}
+                <div className="divide-y divide-[rgba(0,0,0,0.08)]">
+                  <Button asChild variant="ghost" className="w-full rounded-none py-4 text-[15px] font-medium text-[color:var(--text-primary)]">
+                    <a href={facebookShareUrl} target="_blank" rel="noopener noreferrer" role="menuitem" onClick={() => setIsShareMenuOpen(false)}>
+                      {messages.article.shareFacebook}
+                    </a>
+                  </Button>
+                  <Button asChild variant="ghost" className="w-full rounded-none py-4 text-[15px] font-medium text-[color:var(--text-primary)]">
+                    <a href={xShareUrl} target="_blank" rel="noopener noreferrer" role="menuitem" onClick={() => setIsShareMenuOpen(false)}>
+                      {messages.article.shareX}
+                    </a>
+                  </Button>
+                </div>
               </div>
               )}
             </div>
