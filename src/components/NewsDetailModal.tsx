@@ -226,10 +226,9 @@ export const NewsDetailModal = ({
                 href={newsItem.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl py-3 text-[15px] font-semibold text-white transition-opacity active:opacity-70 sm:gap-1.5"
-                style={{ background: 'var(--brand)' }}
+                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-[color:var(--surface-muted)] py-3 text-[15px] font-medium text-primary transition-opacity active:opacity-60 sm:gap-1.5"
               >
-                <span>🔗</span>
+                <span>→</span>
                 <span className="hidden sm:inline">{messages.article.readFullArticle}</span>
               </a>
             )}
