@@ -5,6 +5,19 @@ import App from './App.tsx'
 import { I18nProvider } from './i18n/provider.tsx'
 import './index.css'
 
+const hideBootSplash = () => {
+  const splash = document.getElementById('boot-splash')
+  if (!splash) return
+
+  const removeSplash = () => {
+    splash.remove()
+  }
+
+  splash.classList.add('is-hidden')
+  splash.addEventListener('transitionend', removeSplash, { once: true })
+  window.setTimeout(removeSplash, 450)
+}
+
 if ('serviceWorker' in navigator) {
   let hasReloaded = false
   registerSW({
@@ -39,3 +52,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </I18nProvider>
   </React.StrictMode>,
 )
+
+window.requestAnimationFrame(() => {
+  window.requestAnimationFrame(hideBootSplash)
+})
