@@ -106,6 +106,21 @@ export const NewsDetailModal = ({
     setIsShareMenuOpen(false);
   }, [newsItem?.link, newsItem?.title]);
 
+  useEffect(() => {
+    if (!isShareMenuOpen) return;
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (!shareDropdownRef.current?.contains(event.target as Node)) {
+        setIsShareMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handlePointerDown);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+    };
+  }, [isShareMenuOpen]);
+
   if (!isOpen || !newsItem) return null;
 
   return (

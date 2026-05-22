@@ -9,7 +9,6 @@ export const NewsList = ({
   onNewsClick,
   onToggleSave,
   isNewsSaved,
-  onRefresh,
   activeFeedId,
   onFeedFilterChange,
   searchQuery = '',
@@ -59,26 +58,6 @@ export const NewsList = ({
 
   return (
     <div className="space-y-4">
-      {onRefresh && (
-        <div className="flex justify-end">
-          <Button
-            type="button"
-            onClick={onRefresh}
-            disabled={loading}
-            variant="secondary"
-            size="sm"
-            className="h-9 w-9 rounded-full border-[color:color-mix(in_srgb,var(--brand)_18%,var(--border)_82%)] bg-[color:color-mix(in_srgb,var(--brand)_8%,var(--surface)_92%)] px-0 text-[13px] font-semibold text-[color:var(--brand-strong)] shadow-none hover:bg-[color:color-mix(in_srgb,var(--brand)_12%,var(--surface)_88%)] sm:w-auto sm:px-4"
-            aria-label={loading ? messages.home.refreshing : messages.home.refresh}
-            title={loading ? messages.home.refreshing : messages.home.refresh}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0 1 12.75-5.34L19 9.41M19.5 12a7.5 7.5 0 0 1-12.75 5.34L5 14.59" />
-            </svg>
-            <span className="hidden sm:inline">{loading ? messages.home.refreshing : messages.home.refresh}</span>
-          </Button>
-        </div>
-      )}
-
       {/* iOS search bar */}
       {onSearchChange && (
         <div className="relative">

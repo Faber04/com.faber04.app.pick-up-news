@@ -9,7 +9,7 @@ PickUpNews allows you to easily aggregate and read all your favorite RSS feeds. 
 ## ✨ Key Features
 
 - **📡 Smart feed management**: Add/edit/reorder feeds with auto-detection (JSON Feed, RSS, Atom), validation, and duplicate protection.
-- **📰 Clean reading experience**: Chronological news list, Home search (title/source/description), Home refresh, saved articles, full article modal, and a compact sharing submenu.
+- **📰 Clean reading experience**: Chronological news list, Home search (title/source/description), pull-down Home refresh, saved articles, full article modal, and a compact sharing submenu.
 - **🔔 Notifications**: In-app notification center plus browser push notifications (when supported).
 - **📱 PWA-ready**: Installable app with offline support, cache cleanup/update handling, and mobile-first UX.
 - **💾 Import/Export**: Transfer feeds and saved articles using `.json` files.
@@ -159,7 +159,7 @@ In **By Site** mode:
 
 ### Refreshing Home
 1. Open **Home**
-2. Use the **Refresh** button above the search field to fetch the latest articles
+2. Pull down on the news list to refresh the latest articles
 
 ### Theme Switch
 1. On desktop, use the highlighted theme action in the main header menu

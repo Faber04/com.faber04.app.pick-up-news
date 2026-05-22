@@ -68,6 +68,9 @@ function App() {
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [copyToastVisible, setCopyToastVisible] = useState(false);
+  const [homePullState, setHomePullState] = useState<'idle' | 'pulling' | 'ready' | 'refreshing'>('idle');
+  const pullStartYRef = useRef<number | null>(null);
+  const pullRefreshRequestedRef = useRef(false);
 
   const currentPageNode = navigation.trail[navigation.trail.length - 1];
   const headerPage: PrimaryPage = currentPageNode.id === 'saved'
@@ -151,6 +154,67 @@ function App() {
     }, 2500);
   };
 
+  const resetHomePull = () => {
+    pullStartYRef.current = null;
+    pullRefreshRequestedRef.current = false;
+    setHomePullState('idle');
+  };
+
+  const handleHomeTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (currentPageNode.id !== 'home' || state.loading) return;
+    if (window.scrollY > 0) return;
+
+    pullStartYRef.current = event.touches[0]?.clientY ?? null;
+    pullRefreshRequestedRef.current = false;
+    setHomePullState('pulling');
+  };
+
+  const handleHomeTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (currentPageNode.id !== 'home' || state.loading || pullStartYRef.current === null) return;
+
+    const currentY = event.touches[0]?.clientY ?? pullStartYRef.current;
+    const delta = currentY - pullStartYRef.current;
+
+    if (delta <= 0) {
+      setHomePullState('idle');
+      return;
+    }
+
+    if (delta > 72) {
+      setHomePullState('ready');
+      return;
+    }
+
+    setHomePullState('pulling');
+  };
+
+  const handleHomeTouchEnd = () => {
+    if (currentPageNode.id !== 'home' || state.loading || pullStartYRef.current === null) {
+      resetHomePull();
+      return;
+    }
+
+    const shouldRefresh = homePullState === 'ready' && !pullRefreshRequestedRef.current;
+    resetHomePull();
+
+    if (shouldRefresh) {
+      pullRefreshRequestedRef.current = true;
+      setHomePullState('refreshing');
+      void (async () => {
+        try {
+          await refreshNews('manual');
+        } finally {
+          setHomePullState('idle');
+          pullRefreshRequestedRef.current = false;
+        }
+      })();
+    }
+  };
+
+  const handleHomeTouchCancel = () => {
+    resetHomePull();
+  };
+
   const filteredNews = getFilteredNews();
 
   const handleNavigate = (page: PrimaryPage) => {
@@ -205,7 +269,31 @@ function App() {
 
       {/* Page Routing */}
       {currentPageNode.id === 'home' ? (
-        <div className="app-container py-8 stagger-in">
+        <div
+          className="app-container py-8 stagger-in"
+          onTouchStart={handleHomeTouchStart}
+          onTouchMove={handleHomeTouchMove}
+          onTouchEnd={handleHomeTouchEnd}
+          onTouchCancel={handleHomeTouchCancel}
+        >
+          {(homePullState !== 'idle' || state.loading) && (
+            <div className="sticky top-2 z-10 mb-4">
+              <div className="rounded-2xl border border-[color:color-mix(in_srgb,var(--brand)_18%,var(--border)_82%)] bg-[color:color-mix(in_srgb,var(--brand)_10%,var(--surface)_90%)] px-4 py-3 shadow-[0_18px_36px_-26px_rgba(2,8,23,0.55)]">
+                <div className="flex items-center justify-center gap-2 text-center text-[14px] font-semibold text-[color:var(--brand-strong)]">
+                  {homePullState === 'refreshing' || state.loading ? (
+                    <>
+                      <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-[color:var(--brand-strong)] border-t-transparent" />
+                      <span>{messages.home.refreshing}</span>
+                    </>
+                  ) : homePullState === 'ready' ? (
+                    <span>{messages.home.releaseToRefresh}</span>
+                  ) : (
+                    <span>{messages.home.pullToRefresh}</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
           {state.feeds.length === 0 ? (
             <Card className="overflow-hidden">
               <CardHeader className="items-center text-center py-10">
@@ -241,7 +329,6 @@ function App() {
                 onNewsClick={handleNewsClick}
                 onToggleSave={toggleSaveNews}
                 isNewsSaved={isNewsSaved}
-                onRefresh={() => refreshNews('manual')}
                 activeFeedId={filterOptions.feedId}
                 onFeedFilterChange={(feedId) => {
                   setFilterOptions((prev) => ({
