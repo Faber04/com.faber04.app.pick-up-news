@@ -1,5 +1,4 @@
-import { createPortal } from 'react-dom';
-import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import type { NewsDetailModalProps } from '../types/component-props';
 import { useI18n } from '../i18n/useI18n';
 import { Button } from './ui';
@@ -17,12 +16,10 @@ export const NewsDetailModal = ({
   const descriptionId = useId();
   const shareMenuId = useId();
   const shareDropdownRef = useRef<HTMLDivElement | null>(null);
-  const shareMenuRef = useRef<HTMLDivElement | null>(null);
   const shareUrl = newsItem?.link?.trim() ?? '';
   const shareText = newsItem?.title?.trim() || newsItem?.feedTitle || '';
   const canShare = shareUrl.length > 0;
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
-  const [shareMenuStyle, setShareMenuStyle] = useState<React.CSSProperties | undefined>(undefined);
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return '';
@@ -69,20 +66,24 @@ export const NewsDetailModal = ({
     }
   };
 
-  const handleCopyLink = async () => {
+  const handleCopyLink = () => {
     if (!canShare) return;
 
-    try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(shareUrl);
+    // Try modern Clipboard API
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(shareUrl).then(() => {
         onCopyLink();
-        return;
-      }
-    } catch (err) {
-      console.error('Clipboard copy failed:', err);
+      }).catch(() => {
+        fallbackCopy();
+      });
+      return;
     }
 
-    // Fallback: use textarea trick for browsers without clipboard API
+    // Fallback immediately if no Clipboard API
+    fallbackCopy();
+  };
+
+  const fallbackCopy = () => {
     const textarea = document.createElement('textarea');
     textarea.value = shareUrl;
     textarea.style.position = 'fixed';
@@ -90,10 +91,9 @@ export const NewsDetailModal = ({
     document.body.appendChild(textarea);
     try {
       textarea.select();
-      document.execCommand('copy');
-      onCopyLink();
-    } catch (err) {
-      console.error('Fallback copy failed:', err);
+      if (document.execCommand('copy')) {
+        onCopyLink();
+      }
     } finally {
       document.body.removeChild(textarea);
     }
@@ -144,53 +144,6 @@ export const NewsDetailModal = ({
       document.removeEventListener('mousedown', handlePointerDown);
     };
   }, [isShareMenuOpen]);
-
-  useLayoutEffect(() => {
-    if (!isShareMenuOpen || !canShare) {
-      setShareMenuStyle(undefined);
-      return;
-    }
-
-    const updateShareMenuPosition = () => {
-      const dropdown = shareDropdownRef.current;
-      const menu = shareMenuRef.current;
-
-      if (!dropdown || !menu) return;
-
-      const buttonRect = dropdown.getBoundingClientRect();
-      const menuRect = menu.getBoundingClientRect();
-      const viewportPadding = 12;
-      const gap = 8;
-
-      const preferredTop = buttonRect.top - menuRect.height - gap;
-      const fallbackTop = buttonRect.bottom + gap;
-      const top = preferredTop >= viewportPadding
-        ? preferredTop
-        : Math.min(fallbackTop, window.innerHeight - menuRect.height - viewportPadding);
-
-      const left = Math.min(
-        Math.max(viewportPadding, buttonRect.right - menuRect.width),
-        window.innerWidth - menuRect.width - viewportPadding,
-      );
-
-      setShareMenuStyle({
-        position: 'fixed',
-        top,
-        left,
-        zIndex: 70,
-      });
-    };
-
-    const frame = window.requestAnimationFrame(updateShareMenuPosition);
-    window.addEventListener('resize', updateShareMenuPosition);
-    document.addEventListener('scroll', updateShareMenuPosition, true);
-
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.removeEventListener('resize', updateShareMenuPosition);
-      document.removeEventListener('scroll', updateShareMenuPosition, true);
-    };
-  }, [canShare, isShareMenuOpen]);
 
   if (!isOpen || !newsItem) return null;
 
@@ -258,7 +211,7 @@ export const NewsDetailModal = ({
         </div>
 
         {/* Footer actions */}
-        <div className="border-t border-[color:var(--border)] px-4 py-3 sm:px-6" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 12px)' }}>
+        <div className="border-t border-[color:var(--border)] px-4 py-3 sm:px-6 overflow-visible" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 12px)' }}>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
             <button
               type="button"
@@ -281,26 +234,24 @@ export const NewsDetailModal = ({
             )}
             <div ref={shareDropdownRef} className="relative">
               <Button
-                type="button"
-                onClick={() => setIsShareMenuOpen((prev) => !prev)}
-                disabled={!canShare}
-                variant="secondary"
-                size="lg"
-                className="w-full border-[color:color-mix(in_srgb,var(--brand)_20%,var(--border)_80%)] bg-[color:color-mix(in_srgb,var(--brand)_10%,var(--surface)_90%)] text-[color:var(--brand-strong)] hover:bg-[color:color-mix(in_srgb,var(--brand)_14%,var(--surface)_86%)]"
-                aria-expanded={isShareMenuOpen}
-                aria-haspopup="menu"
-                aria-controls={shareMenuId}
+              type="button"
+              onClick={() => setIsShareMenuOpen((prev) => !prev)}
+              disabled={!canShare}
+              variant="secondary"
+              size="lg"
+              className="w-full border-[color:color-mix(in_srgb,var(--brand)_20%,var(--border)_80%)] bg-[color:color-mix(in_srgb,var(--brand)_10%,var(--surface)_90%)] text-[color:var(--brand-strong)] hover:bg-[color:color-mix(in_srgb,var(--brand)_14%,var(--surface)_86%)]"
+              aria-expanded={isShareMenuOpen}
+              aria-haspopup="menu"
+              aria-controls={shareMenuId}
               >
-                <span>{messages.article.share}</span>
-                <span aria-hidden="true" className="text-[11px] leading-none">▾</span>
+              <span>{messages.article.share}</span>
+              <span aria-hidden="true" className="text-[11px] leading-none">▾</span>
               </Button>
-              {canShare && isShareMenuOpen && createPortal(
-                <div
-                ref={shareMenuRef}
+              {canShare && isShareMenuOpen && (
+              <div
                 id={shareMenuId}
                 role="menu"
-                className="w-[min(15rem,calc(100vw-24px))] space-y-2 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-muted)] p-2 shadow-[0_16px_32px_-20px_rgba(0,0,0,0.35)]"
-                style={shareMenuStyle}
+                className="absolute bottom-full right-0 mb-2 w-full min-w-56 space-y-2 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-muted)] p-2 shadow-[0_16px_32px_-20px_rgba(0,0,0,0.35)]"
               >
                 <Button
                   type="button"
@@ -327,19 +278,18 @@ export const NewsDetailModal = ({
                   }}
                 >
                   {messages.article.shareCopyLink}
-                  </Button>
-                  <Button asChild variant="secondary" size="sm" className="w-full rounded-xl">
+                </Button>
+                <Button asChild variant="secondary" size="sm" className="w-full rounded-xl">
                   <a href={facebookShareUrl} target="_blank" rel="noopener noreferrer" role="menuitem" onClick={() => setIsShareMenuOpen(false)}>
                     {messages.article.shareFacebook}
-                    </a>
-                  </Button>
+                  </a>
+                </Button>
                 <Button asChild variant="secondary" size="sm" className="w-full rounded-xl">
                   <a href={xShareUrl} target="_blank" rel="noopener noreferrer" role="menuitem" onClick={() => setIsShareMenuOpen(false)}>
                     {messages.article.shareX}
                   </a>
                 </Button>
-              </div>,
-              document.body,
+              </div>
               )}
             </div>
           </div>
