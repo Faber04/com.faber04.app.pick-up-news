@@ -39,6 +39,15 @@ const normalizeArticleLink = (link?: string): string => (
   link?.trim().toLowerCase().split('#')[0].split('?')[0] || ''
 );
 
+const clearAppStoredData = () => {
+  for (let index = localStorage.length - 1; index >= 0; index -= 1) {
+    const key = localStorage.key(index);
+    if (key?.startsWith('pickUpNews_')) {
+      localStorage.removeItem(key);
+    }
+  }
+};
+
 function App() {
   const { messages, supportedLanguages, language, setLanguage } = useI18n();
   const {
@@ -217,6 +226,12 @@ function App() {
     localStorage.setItem(STORAGE_NOTICE_ACCEPTED_KEY, 'true');
     setStorageNoticeAccepted(true);
   }, []);
+
+  const handleClearStoredData = useCallback(() => {
+    if (!window.confirm(messages.legal.clearStoredDataConfirm)) return;
+    clearAppStoredData();
+    window.location.assign(`${window.location.origin}${import.meta.env.BASE_URL}`);
+  }, [messages.legal.clearStoredDataConfirm]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -517,6 +532,13 @@ function App() {
                 <p className="text-sm text-secondary">{messages.legal.privacyPurposeBody}</p>
                 <h3 className="text-sm font-semibold text-primary">{messages.legal.privacyRetentionTitle}</h3>
                 <p className="text-sm text-secondary">{messages.legal.privacyRetentionBody}</p>
+                <button
+                  type="button"
+                  onClick={handleClearStoredData}
+                  className="text-sm font-medium underline underline-offset-2 text-[color:var(--brand)] hover:opacity-80"
+                >
+                  {messages.legal.clearStoredDataAction}
+                </button>
               </CardContent>
             </Card>
           </div>
@@ -537,6 +559,13 @@ function App() {
                 <p className="text-sm text-secondary">{messages.legal.cookiesAnalyticsBody}</p>
                 <h3 className="text-sm font-semibold text-primary">{messages.legal.cookiesHowToManageTitle}</h3>
                 <p className="text-sm text-secondary">{messages.legal.cookiesHowToManageBody}</p>
+                <button
+                  type="button"
+                  onClick={handleClearStoredData}
+                  className="text-sm font-medium underline underline-offset-2 text-[color:var(--brand)] hover:opacity-80"
+                >
+                  {messages.legal.clearStoredDataAction}
+                </button>
               </CardContent>
             </Card>
           </div>

@@ -154,14 +154,16 @@
     "privacyPurposeTitle": "Finalità e base giuridica",
     "privacyPurposeBody": "I dati salvati servono solo a fornire le funzionalità principali dell'app e mantenere le preferenze tra le sessioni.",
     "privacyRetentionTitle": "Conservazione e controllo utente",
-    "privacyRetentionBody": "Puoi cancellare i dati locali in qualsiasi momento dalle impostazioni del browser. Per richieste GDPR contatta il proprietario dell'app.",
+    "privacyRetentionBody": "Puoi cancellare i dati locali in qualsiasi momento dalle impostazioni del browser.",
     "cookiesIntro": "PickUpNews usa tecnologie di storage del browser per funzioni essenziali dell'app.",
     "cookiesEssentialTitle": "Storage essenziale (sempre attivo)",
     "cookiesEssentialBody": "Usato per lista feed, articoli salvati, lingua, tema e preferenze necessarie all'erogazione del servizio.",
     "cookiesAnalyticsTitle": "Storage non essenziale",
     "cookiesAnalyticsBody": "Al momento l'app non usa storage analytics non essenziale.",
     "cookiesHowToManageTitle": "Come gestire",
-    "cookiesHowToManageBody": "Usa le scelte del banner di consenso o cancella i dati del sito dalle impostazioni del browser per rimuovere i dati salvati."
+    "cookiesHowToManageBody": "Usa le scelte del banner di consenso o cancella i dati del sito dalle impostazioni del browser per rimuovere i dati salvati.",
+    "clearStoredDataAction": "Cancella tutti i dati salvati dell'app",
+    "clearStoredDataConfirm": "Questa azione rimuoverà tutti i dati PickUpNews salvati nel browser e ricaricherà l'app. Continuare?"
   },
   "errors": {
     "invalidFeedUrl": "URL feed RSS non valido",
