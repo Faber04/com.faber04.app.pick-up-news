@@ -212,41 +212,43 @@ export const NewsDetailModal = ({
 
         {/* Footer actions */}
         <div className="border-t border-[color:var(--border)] px-4 py-3 sm:px-6 overflow-visible" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 12px)' }}>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+          <div className="flex items-center justify-center gap-4">
             <button
               type="button"
               onClick={() => onToggleSave(newsItem)}
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-[color:var(--surface-muted)] py-3 text-[15px] font-medium text-primary transition-opacity active:opacity-60"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-[color:var(--surface-muted)] text-lg transition-opacity active:opacity-60"
+              title={isSaved ? messages.article.saved : messages.article.save}
+              aria-label={isSaved ? messages.article.saved : messages.article.save}
             >
               <span>{isSaved ? '★' : '☆'}</span>
-              <span>{isSaved ? messages.article.saved : messages.article.save}</span>
             </button>
             {newsItem.link && (
               <a
                 href={newsItem.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl py-3 text-[15px] font-semibold text-white transition-opacity active:opacity-70"
+                className="flex h-11 w-11 items-center justify-center rounded-full text-lg font-semibold text-white transition-opacity active:opacity-70"
                 style={{ background: 'var(--brand)' }}
+                title={messages.article.readFullArticle}
+                aria-label={messages.article.readFullArticle}
               >
-                {messages.article.readFullArticle}
+                🔗
               </a>
             )}
             <div ref={shareDropdownRef} className="relative">
-              <Button
+              <button
               type="button"
               onClick={() => setIsShareMenuOpen((prev) => !prev)}
               disabled={!canShare}
-              variant="secondary"
-              size="lg"
-              className="w-full border-[color:color-mix(in_srgb,var(--brand)_20%,var(--border)_80%)] bg-[color:color-mix(in_srgb,var(--brand)_10%,var(--surface)_90%)] text-[color:var(--brand-strong)] hover:bg-[color:color-mix(in_srgb,var(--brand)_14%,var(--surface)_86%)]"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-[color:var(--surface-muted)] text-lg transition-opacity active:opacity-60 disabled:opacity-40"
               aria-expanded={isShareMenuOpen}
               aria-haspopup="menu"
               aria-controls={shareMenuId}
+              title={messages.article.share}
+              aria-label={messages.article.share}
               >
-              <span>{messages.article.share}</span>
-              <span aria-hidden="true" className="text-[11px] leading-none">▾</span>
-              </Button>
+              <span>↗️</span>
+              </button>
               {canShare && isShareMenuOpen && (
               <div
                 id={shareMenuId}
