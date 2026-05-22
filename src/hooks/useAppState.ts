@@ -500,27 +500,48 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
           if (notificationsEnabled && 'Notification' in window && Notification.permission === 'granted') {
             newArticles.slice(0, 3).forEach((article) => {
               const articleTitle = article.title?.trim() || 'New article';
-              const notification = new Notification(articleTitle, {
-                body: article.feedTitle || 'PickUpNews',
-                icon: '/app/pick-up-news/pickupnews-mark.svg',
-              });
-
-              notification.onclick = () => {
-                const target = {
-                  feedId: article.feedId,
-                  articleLink: article.link,
-                  articleTitle: article.title ?? '',
-                };
-                localStorage.setItem(STORAGE_KEYS.PENDING_NOTIFICATION_TARGET, JSON.stringify(target));
-                const targetUrl = buildNotificationOpenUrl(
-                  article.feedId,
-                  article.title ?? '',
-                  article.link,
-                );
-                window.location.assign(targetUrl);
-                window.focus();
-                notification.close();
+              const targetUrl = buildNotificationOpenUrl(
+                article.feedId,
+                article.title ?? '',
+                article.link,
+              );
+              const target = {
+                feedId: article.feedId,
+                articleLink: article.link,
+                articleTitle: article.title ?? '',
               };
+              localStorage.setItem(STORAGE_KEYS.PENDING_NOTIFICATION_TARGET, JSON.stringify(target));
+
+              const notifyFallback = () => {
+                const notification = new Notification(articleTitle, {
+                  body: article.feedTitle || 'PickUpNews',
+                  icon: '/app/pick-up-news/pickupnews-mark.svg',
+                });
+
+                notification.onclick = () => {
+                  window.location.assign(targetUrl);
+                  window.focus();
+                  notification.close();
+                };
+              };
+
+              if ('serviceWorker' in navigator) {
+                void navigator.serviceWorker.getRegistration().then((registration) => {
+                  if (!registration?.showNotification) {
+                    notifyFallback();
+                    return;
+                  }
+
+                  void registration.showNotification(articleTitle, {
+                    body: article.feedTitle || 'PickUpNews',
+                    icon: '/app/pick-up-news/pickupnews-mark.svg',
+                    data: { url: targetUrl },
+                  });
+                });
+                return;
+              }
+
+              notifyFallback();
             });
           }
         }

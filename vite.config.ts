@@ -37,6 +37,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        importScripts: ['sw-notifications.js'],
         clientsClaim: true,
         cleanupOutdatedCaches: true,
         skipWaiting: true,
