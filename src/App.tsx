@@ -278,13 +278,41 @@ function App() {
       )
     ));
 
-    if (!matchedNews) return;
+    const fallbackNotification = notifications.find((notification) => {
+      if (notification.feedId !== pendingTarget!.feedId) return false;
+      const notificationIdentifier = getNotificationArticleIdentifier(
+        notification.articleLink,
+        notification.articleTitle,
+      );
+      return (
+        notificationIdentifier === targetIdentifier
+        || (targetLink !== '' && normalizeArticleLink(notification.articleLink) === targetLink)
+      );
+    });
+
+    const fallbackFeedTitle = state.feeds.find((feed) => feed.id === pendingTarget.feedId)?.title;
+
+    const fallbackNews: NewsItem = {
+      feedId: pendingTarget.feedId,
+      feedTitle: fallbackNotification?.feedTitle || fallbackFeedTitle || 'PickUpNews',
+      title: pendingTarget.articleTitle || fallbackNotification?.articleTitle || '',
+      link: pendingTarget.articleLink || fallbackNotification?.articleLink,
+      truncatedDescription: '',
+      isoDate: fallbackNotification?.timestamp,
+      pubDate: fallbackNotification?.timestamp,
+    };
+
+    const newsToOpen = matchedNews ?? fallbackNews;
+    if (!newsToOpen.link && !newsToOpen.title) {
+      localStorage.removeItem(PENDING_NOTIFICATION_TARGET_KEY);
+      return;
+    }
 
     localStorage.removeItem(PENDING_NOTIFICATION_TARGET_KEY);
     navigationActions.reset();
     setIsNotificationPanelOpen(false);
-    handleNewsClick(matchedNews);
-  }, [state.news, handleNewsClick, navigationActions]);
+    handleNewsClick(newsToOpen);
+  }, [state.news, state.feeds, notifications, handleNewsClick, navigationActions]);
 
   return (
     <div className="app-shell pb-28 lg:pb-6">
