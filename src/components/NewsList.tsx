@@ -9,6 +9,7 @@ export const NewsList = ({
   onNewsClick,
   onToggleSave,
   isNewsSaved,
+  isLatestNews,
   activeFeedId,
   onFeedFilterChange,
   searchQuery = '',
@@ -113,6 +114,7 @@ export const NewsList = ({
               onClick={onNewsClick}
               onToggleSave={onToggleSave}
               isSaved={isNewsSaved(item)}
+              isLatestLoaded={isLatestNews?.(item) ?? false}
               locale={locale}
               onFeedFilterChange={onFeedFilterChange}
               isLast={index === news.length - 1}
@@ -129,10 +131,11 @@ const NewsCard = ({
   onClick,
   onToggleSave,
   isSaved,
+  isLatestLoaded,
   locale,
   onFeedFilterChange,
   isLast,
-}: NewsCardProps & { onFeedFilterChange?: (feedId?: string) => void; isLast: boolean }) => {
+}: NewsCardProps & { isLatestLoaded: boolean; onFeedFilterChange?: (feedId?: string) => void; isLast: boolean }) => {
   const { messages } = useI18n();
 
   const formatDate = (dateString?: string) => {
@@ -161,7 +164,11 @@ const NewsCard = ({
             onClick(newsItem);
           }
         }}
-        className="ios-list-row group w-full cursor-pointer px-4 py-3.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)] focus-visible:ring-inset"
+        className={`ios-list-row group w-full cursor-pointer px-4 py-3.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)] focus-visible:ring-inset ${
+          isLatestLoaded
+            ? 'border-l-2 border-[color:var(--brand)] bg-[color:color-mix(in_srgb,var(--brand)_10%,var(--surface)_90%)]'
+            : ''
+        }`}
         aria-label={newsItem.title || newsItem.feedTitle}
       >
         <div className="flex w-full min-w-0 items-stretch gap-3">
@@ -179,6 +186,11 @@ const NewsCard = ({
               >
                 {newsItem.feedTitle}
               </button>
+              {isLatestLoaded && (
+                <span className="rounded-full border border-[color:color-mix(in_srgb,var(--brand)_40%,var(--border)_60%)] bg-[color:color-mix(in_srgb,var(--brand)_14%,var(--surface)_86%)] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[color:var(--brand-strong)]">
+                  {messages.notifications.newBadge}
+                </span>
+              )}
               <span className="text-[10px] text-muted">·</span>
               <span className="text-[11px] text-muted">
                 {formatDate(newsItem.isoDate || newsItem.pubDate)}

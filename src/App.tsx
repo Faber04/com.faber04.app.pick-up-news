@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useAppState } from './hooks/useAppState';
 import { usePWAInstall } from './hooks/usePWAInstall';
 import { getNavigationLabel } from './i18n';
@@ -152,6 +152,22 @@ function App() {
   };
 
   const filteredNews = getFilteredNews();
+  const unreadNotificationKeys = useMemo(() => {
+    const keys = new Set<string>();
+    notifications.forEach((notification) => {
+      if (notification.read) return;
+      const identifier = (notification.articleLink?.trim() || notification.articleTitle.trim()).toLowerCase();
+      if (!identifier) return;
+      keys.add(`${notification.feedId}::${identifier}`);
+    });
+    return keys;
+  }, [notifications]);
+
+  const isLatestNews = useCallback((newsItem: NewsItem) => {
+    const identifier = (newsItem.link?.trim() || newsItem.title?.trim() || '').toLowerCase();
+    if (!identifier) return false;
+    return unreadNotificationKeys.has(`${newsItem.feedId}::${identifier}`);
+  }, [unreadNotificationKeys]);
 
   const handleNavigate = (page: PrimaryPage) => {
     if (page === 'home') {
@@ -241,6 +257,7 @@ function App() {
                 onNewsClick={handleNewsClick}
                 onToggleSave={toggleSaveNews}
                 isNewsSaved={isNewsSaved}
+                isLatestNews={isLatestNews}
                 activeFeedId={filterOptions.feedId}
                 onFeedFilterChange={(feedId) => {
                   setFilterOptions((prev) => ({
@@ -275,6 +292,7 @@ function App() {
               onNewsClick={handleNewsClick}
               onToggleSave={toggleSaveNews}
               isNewsSaved={isNewsSaved}
+              isLatestNews={isLatestNews}
             />
           )}
         </div>

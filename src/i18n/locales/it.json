@@ -125,7 +125,8 @@
     "disable": "Disattiva notifiche",
     "permissionDenied": "Permesso notifiche negato dal browser.",
     "notSupported": "Le notifiche browser non sono supportate su questo dispositivo.",
-    "unreadCount": "{count} non lette"
+    "unreadCount": "{count} non lette",
+    "newBadge": "Nuova"
   },
   "pwa": {
     "installTitle": "Installa PickUpNews",

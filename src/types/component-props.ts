@@ -69,6 +69,7 @@ export interface NewsListProps {
   onNewsClick: (newsItem: NewsItem) => void;
   onToggleSave: (newsItem: NewsItem) => void;
   isNewsSaved: (newsItem: NewsItem) => boolean;
+  isLatestNews?: (newsItem: NewsItem) => boolean;
   activeFeedId?: string;
   onFeedFilterChange?: (feedId?: string) => void;
   searchQuery?: string;

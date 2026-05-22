@@ -108,16 +108,27 @@ export const NotificationPanel = ({
               {notifications.map(notif => (
                 <li
                   key={notif.id}
-                  className={`px-5 py-4 transition-colors ${notif.read ? 'opacity-60' : 'bg-[color:var(--surface)]'}`}
+                  className={`px-5 py-4 transition-colors ${
+                    notif.read
+                      ? 'opacity-60'
+                      : 'border-l-2 border-[color:var(--brand)] bg-[color:color-mix(in_srgb,var(--brand)_10%,var(--surface)_90%)]'
+                  }`}
                 >
                   <div className="flex items-start gap-2">
                     {!notif.read && (
                       <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[color:var(--brand)]" aria-hidden="true" />
                     )}
                     <div className={`min-w-0 ${notif.read ? 'pl-4' : ''}`}>
-                      <p className="text-[11px] font-semibold uppercase tracking-wide text-muted">
-                        {notif.feedTitle}
-                      </p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-[11px] font-semibold uppercase tracking-wide text-muted">
+                          {notif.feedTitle}
+                        </p>
+                        {!notif.read && (
+                          <span className="rounded-full border border-[color:color-mix(in_srgb,var(--brand)_40%,var(--border)_60%)] bg-[color:color-mix(in_srgb,var(--brand)_14%,var(--surface)_86%)] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[color:var(--brand-strong)]">
+                            {messages.notifications.newBadge}
+                          </span>
+                        )}
+                      </div>
                       {notif.articleLink ? (
                         <a
                           href={notif.articleLink}

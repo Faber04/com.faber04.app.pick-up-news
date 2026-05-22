@@ -125,7 +125,8 @@
     "disable": "Disable notifications",
     "permissionDenied": "Notification permission denied by the browser.",
     "notSupported": "Browser notifications are not supported on this device.",
-    "unreadCount": "{count} unread"
+    "unreadCount": "{count} unread",
+    "newBadge": "New"
   },
   "pwa": {
     "installTitle": "Install PickUpNews",
