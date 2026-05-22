@@ -11,6 +11,8 @@
     "settings": "Settings",
     "manageFeeds": "Manage Feeds",
     "language": "Language",
+    "privacy": "Privacy Policy",
+    "cookies": "Cookie Policy",
     "navigation": "Navigation",
     "closeMenu": "Close menu",
     "toggleMenu": "Open menu",
@@ -53,6 +55,8 @@
     "copyright": "Copyright",
     "repository": "Repository",
     "version": "Version",
+    "privacyAction": "🔒 Privacy Policy",
+    "cookiesAction": "🍪 Cookie Policy",
     "currentLanguage": "Current language",
     "languageDescription": "Choose the interface language.",
     "languageHelp": "The structure remains ready for future variants such as English (UK) and English (US)."
@@ -132,6 +136,32 @@
     "installTitle": "Install PickUpNews",
     "installDescription": "Add the app to your home screen for quick access.",
     "installButton": "Install app"
+  },
+  "consent": {
+    "title": "PickUpNews uses essential local storage",
+    "description": "We store feeds, saved articles, language, theme, and app preferences in your browser so the app works correctly.",
+    "accept": "I understand",
+    "readPrivacy": "Read Privacy",
+    "readCookies": "Read Cookies"
+  },
+  "legal": {
+    "lastUpdated": "Last updated: 22 May 2026",
+    "privacyTitle": "Privacy Policy",
+    "cookiesTitle": "Cookie Policy",
+    "privacyIntro": "PickUpNews stores feeds, saved articles, theme, and preferences in your browser localStorage so the app works between sessions.",
+    "privacyDataTitle": "Data we process",
+    "privacyDataBody": "The app stores feed list, saved articles, language, theme, notification preferences, and technical app preferences in local browser storage.",
+    "privacyPurposeTitle": "Purpose and legal basis",
+    "privacyPurposeBody": "Stored data is used only to provide core app functionality and preserve your preferences between sessions.",
+    "privacyRetentionTitle": "Retention and user control",
+    "privacyRetentionBody": "You can clear local data from browser storage at any time. Contact the app owner for GDPR-related requests.",
+    "cookiesIntro": "PickUpNews uses browser storage technologies for essential app features.",
+    "cookiesEssentialTitle": "Essential storage (always active)",
+    "cookiesEssentialBody": "Used for feeds list, saved items, language, theme, and app preferences required to provide the service.",
+    "cookiesAnalyticsTitle": "Non-essential storage",
+    "cookiesAnalyticsBody": "No non-essential analytics storage is currently active in the app.",
+    "cookiesHowToManageTitle": "How to manage",
+    "cookiesHowToManageBody": "Use the consent banner choices or clear site data in your browser settings to remove stored data."
   },
   "errors": {
     "invalidFeedUrl": "Invalid RSS feed URL",

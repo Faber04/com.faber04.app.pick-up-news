@@ -12,6 +12,7 @@ const STORAGE_KEYS = {
   SEEN_GUIDS: 'pickUpNews_seenGuids',
   NOTIFICATIONS_ENABLED: 'pickUpNews_notificationsEnabled',
   DEFAULT_FEEDS_VERSION: 'pickUpNews_defaultFeedsVersion',
+  DEFAULT_FEEDS_OPT_OUT: 'pickUpNews_defaultFeedsOptOut',
   PENDING_NOTIFICATION_TARGET: 'pickUpNews_pendingNotificationTarget',
 };
 
@@ -120,6 +121,7 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
     let loadedFeedsCount = 0;
     const savedFeeds = localStorage.getItem(STORAGE_KEYS.FEEDS);
     const savedDefaultFeedsVersion = Number(localStorage.getItem(STORAGE_KEYS.DEFAULT_FEEDS_VERSION) || '0');
+    const defaultFeedsOptOut = localStorage.getItem(STORAGE_KEYS.DEFAULT_FEEDS_OPT_OUT) === 'true';
     const savedViewMode = localStorage.getItem(STORAGE_KEYS.VIEW_MODE);
     const savedThemeMode = localStorage.getItem(STORAGE_KEYS.THEME) as ThemeMode | null;
     const savedNotifications = localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS);
@@ -134,7 +136,8 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
         if (Array.isArray(feeds)) {
           loadedFeedsCount = feeds.length;
           setState(prev => ({ ...prev, feeds }));
-          shouldSeedDefaultFeeds = feeds.length === 0 && savedDefaultFeedsVersion < CURRENT_DEFAULT_FEEDS_VERSION;
+          shouldSeedDefaultFeeds = feeds.length === 0
+            && (!defaultFeedsOptOut || savedDefaultFeedsVersion < CURRENT_DEFAULT_FEEDS_VERSION);
         }
       } catch (error) {
         console.error('Error loading feeds from localStorage:', error);
@@ -154,6 +157,7 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
       loadedFeedsCount = seededFeeds.length;
       setState(prev => ({ ...prev, feeds: seededFeeds }));
       localStorage.setItem(STORAGE_KEYS.DEFAULT_FEEDS_VERSION, String(CURRENT_DEFAULT_FEEDS_VERSION));
+      localStorage.setItem(STORAGE_KEYS.DEFAULT_FEEDS_OPT_OUT, 'false');
     }
 
     if (savedViewMode) {
@@ -295,6 +299,7 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
           error: null
         };
       });
+      localStorage.setItem(STORAGE_KEYS.DEFAULT_FEEDS_OPT_OUT, 'false');
 
       return true;
     } finally {
@@ -304,11 +309,17 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
   }, [messages, state.feeds]);
 
   const removeFeed = useCallback((feedId: string) => {
-    setState(prev => ({
-      ...prev,
-      feeds: prev.feeds.filter(feed => feed.id !== feedId),
-      news: prev.news.filter(news => news.feedId !== feedId)
-    }));
+    setState(prev => {
+      const updatedFeeds = prev.feeds.filter(feed => feed.id !== feedId);
+      if (updatedFeeds.length === 0) {
+        localStorage.setItem(STORAGE_KEYS.DEFAULT_FEEDS_OPT_OUT, 'true');
+      }
+      return {
+        ...prev,
+        feeds: updatedFeeds,
+        news: prev.news.filter(news => news.feedId !== feedId)
+      };
+    });
     setFilterOptions(prev => (
       prev.feedId === feedId
         ? { ...prev, feedId: undefined }
@@ -705,6 +716,7 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
         feeds: [...prev.feeds, ...newFeeds],
         error: null,
       }));
+      localStorage.setItem(STORAGE_KEYS.DEFAULT_FEEDS_OPT_OUT, 'false');
     }
 
     // Import saved news (skip duplicates by storage ID)

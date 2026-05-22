@@ -12,6 +12,7 @@ PickUpNews allows you to easily aggregate and read all your favorite RSS feeds. 
 - **📰 Clean reading experience**: Chronological news list, Home search (title/source/description), saved articles, full article modal, and a compact sharing submenu.
 - **🔔 Notifications**: In-app notification center plus browser push notifications (when supported).
 - **📱 PWA-ready**: Installable app with offline support, cache cleanup/update handling, and iOS foreground update checks.
+- **🔐 Privacy & consent**: Built-in Privacy Policy, Cookie Policy, and first-launch storage notice banner.
 - **💾 Import/Export**: Transfer feeds and saved articles using `.json` files.
 - **🌍 Localized UI**: Italian and English interface with persistent settings.
 
@@ -159,8 +160,13 @@ PickUpNews tries auto-detection and validates the URL before saving.
 Inside **Settings** you can:
 - Change language (Italian/English)
 - Manage feeds (add, refresh, import, export, edit, reorder, remove)
+- Open Privacy Policy and Cookie Policy pages
 - Install the PWA when available
 - Open app info, repository link, and app version
+
+### Privacy and storage notice
+- On first launch, a banner explains the use of essential browser storage
+- Privacy Policy and Cookie Policy are available in Settings
 
 ### Import / Export
 - **Export** creates a `.json` transfer file

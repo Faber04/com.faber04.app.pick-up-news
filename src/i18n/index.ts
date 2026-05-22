@@ -45,6 +45,10 @@ export const getNavigationLabel = (nodeId: string, dictionary: LocaleDictionary)
       return dictionary.common.manageFeeds;
     case 'language':
       return dictionary.common.language;
+    case 'privacy':
+      return dictionary.common.privacy;
+    case 'cookies':
+      return dictionary.common.cookies;
     default:
       return nodeId;
   }

@@ -12,6 +12,7 @@ import {
   FeedsContent,
   MobileBottomNav,
   NotificationPanel,
+  CookieConsentBanner,
 } from './components';
 import { Alert, AlertDescription, Badge, Button, Card, CardContent, CardHeader, CardTitle } from './components/ui';
 import { SettingsPage } from './pages/SettingsPage';
@@ -20,9 +21,10 @@ import type { NavigationState, BreadcrumbNode, NavigationActions } from './types
 import type { PrimaryPage } from './types/component-props';
 import { Toast } from './components/ui';
 
-const APP_VERSION = '3.1.4';
+const APP_VERSION = '3.2.0';
 const BOOT_READY_EVENT = 'pickupnews:boot-ready';
 const PENDING_NOTIFICATION_TARGET_KEY = 'pickUpNews_pendingNotificationTarget';
+const STORAGE_NOTICE_ACCEPTED_KEY = 'pickUpNews_storageNoticeAccepted';
 
 type PendingNotificationTarget = {
   feedId: string;
@@ -65,6 +67,9 @@ function App() {
 
   const { canInstall, install } = usePWAInstall();
   const [isNotificationPanelOpen, setIsNotificationPanelOpen] = useState(false);
+  const [storageNoticeAccepted, setStorageNoticeAccepted] = useState<boolean>(() => (
+    localStorage.getItem(STORAGE_NOTICE_ACCEPTED_KEY) === 'true'
+  ));
   const previousFeedIdsRef = useRef<string[]>([]);
   const unreadCount = notifications.filter(n => !n.read).length;
 
@@ -203,6 +208,11 @@ function App() {
     navigationActions.reset();
     navigationActions.push(createNode('settings'));
   };
+
+  const handleAcceptStorageNotice = useCallback(() => {
+    localStorage.setItem(STORAGE_NOTICE_ACCEPTED_KEY, 'true');
+    setStorageNoticeAccepted(true);
+  }, []);
 
   useEffect(() => {
     const pendingRaw = localStorage.getItem(PENDING_NOTIFICATION_TARGET_KEY);
@@ -368,6 +378,12 @@ function App() {
           onOpenFeeds={() => {
             navigationActions.push(createNode('feeds'));
           }}
+          onOpenPrivacy={() => {
+            navigationActions.push(createNode('privacy'));
+          }}
+          onOpenCookies={() => {
+            navigationActions.push(createNode('cookies'));
+          }}
           notificationsEnabled={notificationsEnabled}
           onToggleNotifications={toggleNotifications}
           canInstallPWA={canInstall}
@@ -429,6 +445,46 @@ function App() {
             onRefresh={() => refreshNews('manual')}
           />
         </SubpageContainer>
+      ) : currentPageNode.id === 'privacy' ? (
+        <SubpageContainer
+          title={messages.legal.privacyTitle}
+          onBack={() => navigationActions.pop()}
+        >
+          <div className="space-y-4">
+            <p className="text-xs text-secondary">{messages.legal.lastUpdated}</p>
+            <Card>
+              <CardContent className="space-y-3 py-4">
+                <p className="text-sm text-primary">{messages.legal.privacyIntro}</p>
+                <h3 className="text-sm font-semibold text-primary">{messages.legal.privacyDataTitle}</h3>
+                <p className="text-sm text-secondary">{messages.legal.privacyDataBody}</p>
+                <h3 className="text-sm font-semibold text-primary">{messages.legal.privacyPurposeTitle}</h3>
+                <p className="text-sm text-secondary">{messages.legal.privacyPurposeBody}</p>
+                <h3 className="text-sm font-semibold text-primary">{messages.legal.privacyRetentionTitle}</h3>
+                <p className="text-sm text-secondary">{messages.legal.privacyRetentionBody}</p>
+              </CardContent>
+            </Card>
+          </div>
+        </SubpageContainer>
+      ) : currentPageNode.id === 'cookies' ? (
+        <SubpageContainer
+          title={messages.legal.cookiesTitle}
+          onBack={() => navigationActions.pop()}
+        >
+          <div className="space-y-4">
+            <p className="text-xs text-secondary">{messages.legal.lastUpdated}</p>
+            <Card>
+              <CardContent className="space-y-3 py-4">
+                <p className="text-sm text-primary">{messages.legal.cookiesIntro}</p>
+                <h3 className="text-sm font-semibold text-primary">{messages.legal.cookiesEssentialTitle}</h3>
+                <p className="text-sm text-secondary">{messages.legal.cookiesEssentialBody}</p>
+                <h3 className="text-sm font-semibold text-primary">{messages.legal.cookiesAnalyticsTitle}</h3>
+                <p className="text-sm text-secondary">{messages.legal.cookiesAnalyticsBody}</p>
+                <h3 className="text-sm font-semibold text-primary">{messages.legal.cookiesHowToManageTitle}</h3>
+                <p className="text-sm text-secondary">{messages.legal.cookiesHowToManageBody}</p>
+              </CardContent>
+            </Card>
+          </div>
+        </SubpageContainer>
       ) : (
         <div className="app-container py-8 stagger-in">
           <Card>
@@ -465,6 +521,21 @@ function App() {
       <MobileBottomNav
         currentPage={headerPage}
         onNavigate={handleNavigate}
+      />
+
+      <CookieConsentBanner
+        isVisible={!storageNoticeAccepted}
+        onAccept={handleAcceptStorageNotice}
+        onOpenPrivacy={() => {
+          navigationActions.reset();
+          navigationActions.push(createNode('settings'));
+          navigationActions.push(createNode('privacy'));
+        }}
+        onOpenCookies={() => {
+          navigationActions.reset();
+          navigationActions.push(createNode('settings'));
+          navigationActions.push(createNode('cookies'));
+        }}
       />
     </div>
   );

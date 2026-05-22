@@ -8,6 +8,8 @@ export const SettingsPage = ({
   version,
   onOpenFeeds,
   onOpenLanguage,
+  onOpenPrivacy,
+  onOpenCookies,
   notificationsEnabled,
   onToggleNotifications,
   canInstallPWA,
@@ -61,6 +63,28 @@ export const SettingsPage = ({
             className="ios-list-row flex w-full items-center justify-between px-4 py-3 transition-opacity active:opacity-60"
           >
             <span className="text-[15px] text-primary">{messages.settings.manageFeedsAction}</span>
+            <span className="text-secondary">›</span>
+          </button>
+
+          <div className="ios-list-separator ml-4" />
+
+          <button
+            type="button"
+            onClick={onOpenPrivacy}
+            className="ios-list-row flex w-full items-center justify-between px-4 py-3 transition-opacity active:opacity-60"
+          >
+            <span className="text-[15px] text-primary">{messages.settings.privacyAction}</span>
+            <span className="text-secondary">›</span>
+          </button>
+
+          <div className="ios-list-separator ml-4" />
+
+          <button
+            type="button"
+            onClick={onOpenCookies}
+            className="ios-list-row flex w-full items-center justify-between px-4 py-3 transition-opacity active:opacity-60"
+          >
+            <span className="text-[15px] text-primary">{messages.settings.cookiesAction}</span>
             <span className="text-secondary">›</span>
           </button>
 
@@ -153,4 +177,3 @@ export const SettingsPage = ({
     </div>
   );
 };
-
