@@ -39,6 +39,10 @@ const normalizeArticleLink = (link?: string): string => (
   link?.trim().toLowerCase().split('#')[0].split('?')[0] || ''
 );
 
+const normalizeArticleTitle = (title?: string): string => (
+  title?.trim().toLowerCase().replace(/\s+/g, ' ') || ''
+);
+
 const clearAppStoredData = () => {
   for (let index = localStorage.length - 1; index >= 0; index -= 1) {
     const key = localStorage.key(index);
@@ -281,20 +285,28 @@ function App() {
       pendingTarget.articleTitle,
     );
     const targetLink = normalizeArticleLink(pendingTarget.articleLink);
-    if (!targetIdentifier && !targetLink) {
+    const targetTitle = normalizeArticleTitle(pendingTarget.articleTitle);
+    if (!targetIdentifier && !targetLink && !targetTitle) {
       localStorage.removeItem(PENDING_NOTIFICATION_TARGET_KEY);
       return;
     }
 
-    const matchedNews = state.news.find((newsItem) => (
-      newsItem.feedId === pendingTarget.feedId && (
+    const isSameArticle = (newsItem: NewsItem) => (
+      (
         getNotificationArticleIdentifier(newsItem.link, newsItem.title) === targetIdentifier
         || (targetLink !== '' && normalizeArticleLink(newsItem.link) === targetLink)
+        || (targetTitle !== '' && normalizeArticleTitle(newsItem.title) === targetTitle)
       )
+    );
+
+    const matchedNewsInFeed = state.news.find((newsItem) => (
+      newsItem.feedId === pendingTarget.feedId && isSameArticle(newsItem)
     ));
 
+    const matchedNewsAnyFeed = state.news.find((newsItem) => isSameArticle(newsItem));
+    const matchedNews = matchedNewsInFeed ?? matchedNewsAnyFeed;
+
     const fallbackNotification = notifications.find((notification) => {
-      if (notification.feedId !== pendingTarget!.feedId) return false;
       const notificationIdentifier = getNotificationArticleIdentifier(
         notification.articleLink,
         notification.articleTitle,
@@ -302,6 +314,7 @@ function App() {
       return (
         notificationIdentifier === targetIdentifier
         || (targetLink !== '' && normalizeArticleLink(notification.articleLink) === targetLink)
+        || (targetTitle !== '' && normalizeArticleTitle(notification.articleTitle) === targetTitle)
       );
     });
 
