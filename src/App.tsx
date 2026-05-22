@@ -403,7 +403,6 @@ function App() {
         isOpen={isNotificationPanelOpen}
         onClose={() => {
           setIsNotificationPanelOpen(false);
-          if (unreadCount > 0) markAllNotificationsRead();
         }}
         onMarkAllRead={markAllNotificationsRead}
         onClearAll={clearAllNotifications}
