@@ -35,6 +35,10 @@ type PendingNotificationTarget = {
 const getNotificationArticleIdentifier = (articleLink?: string, articleTitle?: string): string =>
   (articleLink?.trim() || articleTitle?.trim() || '').toLowerCase();
 
+const normalizeArticleLink = (link?: string): string => (
+  link?.trim().toLowerCase().split('#')[0].split('?')[0] || ''
+);
+
 function App() {
   const { messages, supportedLanguages, language, setLanguage } = useI18n();
   const {
@@ -215,6 +219,27 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('notificationOpen') !== '1') return;
+
+    const feedId = params.get('feedId');
+    const articleTitle = params.get('articleTitle');
+    if (!feedId || !articleTitle) return;
+
+    const articleLink = params.get('articleLink') ?? undefined;
+    const pendingTarget: PendingNotificationTarget = { feedId, articleTitle, articleLink };
+    localStorage.setItem(PENDING_NOTIFICATION_TARGET_KEY, JSON.stringify(pendingTarget));
+
+    params.delete('notificationOpen');
+    params.delete('feedId');
+    params.delete('articleTitle');
+    params.delete('articleLink');
+    const nextQuery = params.toString();
+    const nextUrl = `${window.location.pathname}${nextQuery ? `?${nextQuery}` : ''}${window.location.hash}`;
+    window.history.replaceState({}, document.title, nextUrl);
+  }, []);
+
+  useEffect(() => {
     const pendingRaw = localStorage.getItem(PENDING_NOTIFICATION_TARGET_KEY);
     if (!pendingRaw) return;
 
@@ -240,14 +265,17 @@ function App() {
       pendingTarget.articleLink,
       pendingTarget.articleTitle,
     );
-    if (!targetIdentifier) {
+    const targetLink = normalizeArticleLink(pendingTarget.articleLink);
+    if (!targetIdentifier && !targetLink) {
       localStorage.removeItem(PENDING_NOTIFICATION_TARGET_KEY);
       return;
     }
 
     const matchedNews = state.news.find((newsItem) => (
-      newsItem.feedId === pendingTarget.feedId
-      && getNotificationArticleIdentifier(newsItem.link, newsItem.title) === targetIdentifier
+      newsItem.feedId === pendingTarget.feedId && (
+        getNotificationArticleIdentifier(newsItem.link, newsItem.title) === targetIdentifier
+        || (targetLink !== '' && normalizeArticleLink(newsItem.link) === targetLink)
+      )
     ));
 
     if (!matchedNews) return;

@@ -96,6 +96,17 @@ const getNewsStorageId = (item: NewsItem): string => {
 const getNotificationArticleIdentifier = (articleLink?: string, articleTitle?: string): string =>
   (articleLink?.trim() || articleTitle?.trim() || '').toLowerCase();
 
+const buildNotificationOpenUrl = (feedId: string, articleTitle: string, articleLink?: string): string => {
+  const appUrl = new URL(import.meta.env.BASE_URL, window.location.origin);
+  appUrl.searchParams.set('notificationOpen', '1');
+  appUrl.searchParams.set('feedId', feedId);
+  appUrl.searchParams.set('articleTitle', articleTitle);
+  if (articleLink) {
+    appUrl.searchParams.set('articleLink', articleLink);
+  }
+  return appUrl.toString();
+};
+
 export const useAppState = (messages: LocaleDictionary['errors']) => {
   const pendingAddUrlsRef = useRef<Set<string>>(new Set());
   const seenGuidsRef = useRef<Set<string>>(new Set());
@@ -501,10 +512,12 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
                   articleTitle: article.title ?? '',
                 };
                 localStorage.setItem(STORAGE_KEYS.PENDING_NOTIFICATION_TARGET, JSON.stringify(target));
-                const appUrl = `${window.location.origin}${import.meta.env.BASE_URL}`;
-                if (window.location.pathname !== import.meta.env.BASE_URL) {
-                  window.location.assign(appUrl);
-                }
+                const targetUrl = buildNotificationOpenUrl(
+                  article.feedId,
+                  article.title ?? '',
+                  article.link,
+                );
+                window.location.assign(targetUrl);
                 window.focus();
                 notification.close();
               };
