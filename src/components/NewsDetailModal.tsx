@@ -72,9 +72,30 @@ export const NewsDetailModal = ({
   const handleCopyLink = async () => {
     if (!canShare) return;
 
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(shareUrl);
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shareUrl);
+        onCopyLink();
+        return;
+      }
+    } catch (err) {
+      console.error('Clipboard copy failed:', err);
+    }
+
+    // Fallback: use textarea trick for browsers without clipboard API
+    const textarea = document.createElement('textarea');
+    textarea.value = shareUrl;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    try {
+      textarea.select();
+      document.execCommand('copy');
       onCopyLink();
+    } catch (err) {
+      console.error('Fallback copy failed:', err);
+    } finally {
+      document.body.removeChild(textarea);
     }
   };
 
