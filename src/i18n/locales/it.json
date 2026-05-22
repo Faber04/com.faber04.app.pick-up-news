@@ -33,8 +33,6 @@
     "loadingNews": "Caricamento news...",
     "refresh": "Aggiorna",
     "refreshing": "Aggiornando...",
-    "pullToRefresh": "Trascina verso il basso per aggiornare",
-    "releaseToRefresh": "Rilascia per aggiornare",
     "expandAll": "Espandi tutti",
     "collapseAll": "Comprimi tutti",
     "openCount": "{openCount} aperti su {totalCount}",

@@ -9,9 +9,9 @@ PickUpNews allows you to easily aggregate and read all your favorite RSS feeds. 
 ## ✨ Key Features
 
 - **📡 Smart feed management**: Add/edit/reorder feeds with auto-detection (JSON Feed, RSS, Atom), validation, and duplicate protection.
-- **📰 Clean reading experience**: Chronological news list, Home search (title/source/description), pull-down Home refresh, saved articles, full article modal, and a compact sharing submenu.
+- **📰 Clean reading experience**: Chronological news list, Home search (title/source/description), saved articles, full article modal, and a compact sharing submenu.
 - **🔔 Notifications**: In-app notification center plus browser push notifications (when supported).
-- **📱 PWA-ready**: Installable app with offline support, cache cleanup/update handling, and mobile-first UX.
+- **📱 PWA-ready**: Installable app with offline support, cache cleanup/update handling, and iOS foreground update checks.
 - **💾 Import/Export**: Transfer feeds and saved articles using `.json` files.
 - **🌍 Localized UI**: Italian and English interface with persistent settings.
 
@@ -156,10 +156,6 @@ In **By Site** mode:
 2. Use **Gestisci Feed** to access feed add/reorder/edit/remove
 3. Use the GitHub link to reach the Faber04 profile
 4. Use the sticky breadcrumb to move quickly between **Home**, **Settings**, and nested Settings subpages
-
-### Refreshing Home
-1. Open **Home**
-2. Pull down on the news list to refresh the latest articles
 
 ### Theme Switch
 1. On desktop, use the highlighted theme action in the main header menu

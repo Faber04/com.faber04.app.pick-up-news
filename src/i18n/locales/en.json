@@ -33,8 +33,6 @@
     "loadingNews": "Loading news...",
     "refresh": "Refresh",
     "refreshing": "Refreshing...",
-    "pullToRefresh": "Pull down to refresh",
-    "releaseToRefresh": "Release to refresh",
     "expandAll": "Expand all",
     "collapseAll": "Collapse all",
     "openCount": "{openCount} open of {totalCount}",
