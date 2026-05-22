@@ -5,9 +5,13 @@ import App from './App.tsx'
 import { I18nProvider } from './i18n/provider.tsx'
 import './index.css'
 
+const BOOT_READY_EVENT = 'pickupnews:boot-ready'
+
 const hideBootSplash = () => {
   const splash = document.getElementById('boot-splash')
   if (!splash) return
+
+  if (splash.classList.contains('is-hidden')) return
 
   const removeSplash = () => {
     splash.remove()
@@ -17,6 +21,8 @@ const hideBootSplash = () => {
   splash.addEventListener('transitionend', removeSplash, { once: true })
   window.setTimeout(removeSplash, 450)
 }
+
+window.addEventListener(BOOT_READY_EVENT, hideBootSplash, { once: true })
 
 if ('serviceWorker' in navigator) {
   let hasReloaded = false
@@ -52,7 +58,3 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </I18nProvider>
   </React.StrictMode>,
 )
-
-window.requestAnimationFrame(() => {
-  window.requestAnimationFrame(hideBootSplash)
-})

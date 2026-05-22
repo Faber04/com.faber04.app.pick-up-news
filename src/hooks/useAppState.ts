@@ -86,6 +86,9 @@ const getNewsStorageId = (item: NewsItem): string => {
   ].join('|');
 };
 
+const getNotificationArticleIdentifier = (articleLink?: string, articleTitle?: string): string =>
+  (articleLink?.trim() || articleTitle?.trim() || '').toLowerCase();
+
 export const useAppState = (messages: LocaleDictionary['errors']) => {
   const pendingAddUrlsRef = useRef<Set<string>>(new Set());
   const seenGuidsRef = useRef<Set<string>>(new Set());
@@ -104,9 +107,11 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [savedNews, setSavedNews] = useState<SavedNewsItem[]>([]);
+  const [isInitialNewsLoadComplete, setIsInitialNewsLoadComplete] = useState(false);
 
   // Load data from localStorage on mount
   useEffect(() => {
+    let loadedFeedsCount = 0;
     const savedFeeds = localStorage.getItem(STORAGE_KEYS.FEEDS);
     const savedViewMode = localStorage.getItem(STORAGE_KEYS.VIEW_MODE);
     const savedThemeMode = localStorage.getItem(STORAGE_KEYS.THEME) as ThemeMode | null;
@@ -118,7 +123,10 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
     if (savedFeeds) {
       try {
         const feeds = JSON.parse(savedFeeds);
-        setState(prev => ({ ...prev, feeds }));
+        if (Array.isArray(feeds)) {
+          loadedFeedsCount = feeds.length;
+          setState(prev => ({ ...prev, feeds }));
+        }
       } catch (error) {
         console.error('Error loading feeds from localStorage:', error);
       }
@@ -163,6 +171,8 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
         }
       } catch { /* keep empty set */ }
     }
+
+    setIsInitialNewsLoadComplete(loadedFeedsCount === 0);
   }, []);
 
   // Save feeds to localStorage when changed
@@ -467,6 +477,8 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
         loading: false,
         error: error instanceof Error ? error.message : messages.fetchNewsFailed
       }));
+    } finally {
+      setIsInitialNewsLoadComplete(true);
     }
   }, [messages.fetchNewsFailed, state.feeds, notificationsEnabled]);
 
@@ -477,6 +489,29 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
 
   const clearAllNotifications = useCallback(() => {
     setNotifications([]);
+  }, []);
+
+  const markNewsAsRead = useCallback((newsItem: NewsItem) => {
+    const targetIdentifier = getNotificationArticleIdentifier(newsItem.link, newsItem.title);
+    if (!targetIdentifier) return;
+
+    setNotifications((prev) => prev.map((notification) => {
+      const notificationIdentifier = getNotificationArticleIdentifier(
+        notification.articleLink,
+        notification.articleTitle,
+      );
+
+      if (notification.read) return notification;
+
+      if (
+        notification.feedId === newsItem.feedId
+        && notificationIdentifier === targetIdentifier
+      ) {
+        return { ...notification, read: true };
+      }
+
+      return notification;
+    }));
   }, []);
 
   const isNewsSaved = useCallback((newsItem: NewsItem): boolean => {
@@ -676,10 +711,12 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
     clearError,
     exportFeeds,
     importFeeds,
+    isInitialNewsLoadComplete,
     notifications,
     notificationsEnabled,
     markAllNotificationsRead,
     clearAllNotifications,
+    markNewsAsRead,
     toggleNotifications,
     savedNews: orderedSavedNews,
     isNewsSaved,

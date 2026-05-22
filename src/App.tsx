@@ -21,6 +21,7 @@ import type { PrimaryPage } from './types/component-props';
 import { Toast } from './components/ui';
 
 const APP_VERSION = '3.1.4';
+const BOOT_READY_EVENT = 'pickupnews:boot-ready';
 
 function App() {
   const { messages, supportedLanguages, language, setLanguage } = useI18n();
@@ -40,10 +41,12 @@ function App() {
     clearError,
     exportFeeds,
     importFeeds,
+    isInitialNewsLoadComplete,
     notifications,
     notificationsEnabled,
     markAllNotificationsRead,
     clearAllNotifications,
+    markNewsAsRead,
     toggleNotifications,
     savedNews,
     isNewsSaved,
@@ -134,7 +137,13 @@ function App() {
     }
   }, [currentPageNode.id, setFilterOptions]);
 
+  useEffect(() => {
+    if (!isInitialNewsLoadComplete) return;
+    window.dispatchEvent(new Event(BOOT_READY_EVENT));
+  }, [isInitialNewsLoadComplete]);
+
   const handleNewsClick = (newsItem: NewsItem) => {
+    markNewsAsRead(newsItem);
     setSelectedNews(newsItem);
     setIsModalOpen(true);
   };
