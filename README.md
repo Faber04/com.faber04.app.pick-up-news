@@ -62,6 +62,9 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
 7. **v3.1.3 — sharing, refresh, and cache updates** ✅  
    Article sharing actions, Home refresh shortcut, and improved PWA update handling.
 
+8. **v3.2.0 — Home refresh button** ✅  
+   Added dedicated manual refresh button in Home page next to search bar for on-demand news updates.
+
 ## Prerequisites
 
 - **Node.js**: Version 18.0.0 or higher
