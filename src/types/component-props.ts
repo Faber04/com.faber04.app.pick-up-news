@@ -74,6 +74,7 @@ export interface NewsListProps {
   onFeedFilterChange?: (feedId?: string) => void;
   searchQuery?: string;
   onSearchChange?: (query: string) => void;
+  onRefresh?: () => void;
 }
 
 export interface FeedAccordionProps {

@@ -429,6 +429,7 @@ function App() {
                     searchTerm: query || undefined,
                   }));
                 }}
+                onRefresh={() => refreshNews('manual')}
               />
             </>
           )}

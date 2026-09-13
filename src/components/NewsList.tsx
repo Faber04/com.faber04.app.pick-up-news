@@ -14,6 +14,7 @@ export const NewsList = ({
   onFeedFilterChange,
   searchQuery = '',
   onSearchChange,
+  onRefresh,
 }: NewsListProps) => {
   const { messages, locale } = useI18n();
   const selectedFeedTitle = activeFeedId
@@ -59,30 +60,53 @@ export const NewsList = ({
 
   return (
     <div className="space-y-4">
-      {/* iOS search bar */}
+      {/* iOS search bar + refresh */}
       {onSearchChange && (
-        <div className="relative">
-          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 select-none text-muted">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
-            </svg>
-          </span>
-          <input
-            type="search"
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            placeholder={messages.home.searchPlaceholder}
-            aria-label={messages.home.searchPlaceholder}
-            className="w-full rounded-[10px] border-0 bg-[color:var(--surface-muted)] py-2 pl-8 pr-9 text-base text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-[color:var(--ring)]"
-          />
-          {hasSearch && (
+        <div className="flex items-center gap-2">
+          <div className="relative flex-1">
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 select-none text-muted">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+              </svg>
+            </span>
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              placeholder={messages.home.searchPlaceholder}
+              aria-label={messages.home.searchPlaceholder}
+              className="w-full rounded-[10px] border-0 bg-[color:var(--surface-muted)] py-2 pl-8 pr-9 text-base text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-[color:var(--ring)]"
+            />
+            {hasSearch && (
+              <button
+                type="button"
+                onClick={() => onSearchChange('')}
+                aria-label={messages.home.clearSearch}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-[color:var(--text-muted)] text-[color:var(--surface)] text-xs"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+          {onRefresh && (
             <button
               type="button"
-              onClick={() => onSearchChange('')}
-              aria-label={messages.home.clearSearch}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-[color:var(--text-muted)] text-[color:var(--surface)] text-xs"
+              onClick={onRefresh}
+              disabled={loading}
+              aria-label={loading ? messages.home.refreshing : messages.home.refresh}
+              title={loading ? messages.home.refreshing : messages.home.refresh}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[color:color-mix(in_srgb,var(--brand)_18%,var(--border)_82%)] bg-[color:color-mix(in_srgb,var(--brand)_8%,var(--surface)_92%)] text-[color:var(--brand-strong)] shadow-none transition hover:bg-[color:color-mix(in_srgb,var(--brand)_12%,var(--surface)_88%)] disabled:cursor-not-allowed disabled:opacity-50"
             >
-              ✕
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0 1 12.75-5.34L19 9.41M19.5 12a7.5 7.5 0 0 1-12.75 5.34L5 14.59" />
+              </svg>
             </button>
           )}
         </div>
