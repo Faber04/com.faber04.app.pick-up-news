@@ -24,7 +24,8 @@
   },
   "viewModes": {
     "chronological": "Chronological",
-    "byFeed": "By Site"
+    "byFeed": "By Site",
+    "byCategory": "By Category"
   },
   "home": {
     "emptyTitle": "No RSS feeds added",
@@ -83,6 +84,12 @@
     "feedNamePlaceholder": "e.g. The Guardian",
     "feedUrl": "Site or Feed URL",
     "feedUrlShort": "Feed URL",
+    "feedCategory": "Category",
+    "feedCategoryShort": "Category",
+    "feedCategoryPlaceholder": "e.g. Technology",
+    "feedCategoryHint": "Optional. Feeds with the same category are grouped together.",
+    "uncategorizedCategory": "Uncategorized",
+    "categoryCount": "{count} feeds",
     "feedUrlPlaceholder": "e.g. example.com or example.com/rss",
     "detectionHint": "Automatic detection: JSON Feed first, then RSS/Atom. If none is found, the typed URL is used.",
     "emptyTitle": "No RSS feeds added yet.",

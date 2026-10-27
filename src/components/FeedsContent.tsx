@@ -208,6 +208,7 @@ export const FeedsContent = ({
           onAddFeed={onAddFeed}
           loading={loading}
           error={addFeedError}
+          categories={Array.from(new Set(feeds.map((feed) => feed.category?.trim()).filter((category): category is string => Boolean(category))))}
           onClearError={onClearError}
           onClose={() => setShowForm(false)}
         />

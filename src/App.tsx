@@ -13,6 +13,7 @@ import {
   MobileBottomNav,
   NotificationPanel,
   CookieConsentBanner,
+  ViewControls,
 } from './components';
 import { Alert, AlertDescription, Badge, Button, Card, CardContent, CardHeader, CardTitle } from './components/ui';
 import { SettingsPage } from './pages/SettingsPage';
@@ -21,7 +22,7 @@ import type { NavigationState, BreadcrumbNode, NavigationActions } from './types
 import type { PrimaryPage } from './types/component-props';
 import { Toast } from './components/ui';
 
-const APP_VERSION = '3.2.0';
+const APP_VERSION = '3.3.0';
 const BOOT_READY_EVENT = 'pickupnews:boot-ready';
 const PENDING_NOTIFICATION_TARGET_KEY = 'pickUpNews_pendingNotificationTarget';
 const STORAGE_NOTICE_ACCEPTED_KEY = 'pickUpNews_storageNoticeAccepted';
@@ -56,6 +57,8 @@ function App() {
   const { messages, supportedLanguages, language, setLanguage } = useI18n();
   const {
     state,
+    viewMode,
+    setViewMode,
     filterOptions,
     setFilterOptions,
     themeMode,
@@ -408,9 +411,15 @@ function App() {
             </Card>
           ) : (
             <>
+              <ViewControls
+                viewMode={viewMode}
+                onViewModeChange={setViewMode}
+              />
               <NewsList
                 news={filteredNews}
                 loading={state.loading}
+                viewMode={viewMode}
+                feeds={state.feeds}
                 onNewsClick={handleNewsClick}
                 onToggleSave={toggleSaveNews}
                 isNewsSaved={isNewsSaved}

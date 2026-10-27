@@ -3,10 +3,11 @@ import type { AddFeedFormProps } from '../types/component-props';
 import { useI18n } from '../i18n/useI18n';
 import { Alert, AlertDescription, Button, Card, CardContent, CardHeader, CardTitle, Input } from './ui';
 
-export const AddFeedForm = ({ onAddFeed, loading, error, onClearError, onClose }: AddFeedFormProps) => {
+export const AddFeedForm = ({ onAddFeed, loading, error, categories, onClearError, onClose }: AddFeedFormProps) => {
   const { messages } = useI18n();
   const [url, setUrl] = useState('');
   const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -15,10 +16,11 @@ export const AddFeedForm = ({ onAddFeed, loading, error, onClearError, onClose }
 
     try {
       setIsSubmitting(true);
-      const added = await onAddFeed(url.trim(), title.trim());
+      const added = await onAddFeed(url.trim(), title.trim(), category.trim() || undefined);
       if (added) {
         setUrl('');
         setTitle('');
+        setCategory('');
         onClose?.();
       }
     } catch (error) {
@@ -86,6 +88,28 @@ export const AddFeedForm = ({ onAddFeed, loading, error, onClearError, onClose }
           )}
           <p className="text-xs text-muted mt-1">
             {messages.feeds.detectionHint}
+          </p>
+        </div>
+
+        <div>
+          <label htmlFor="feed-category" className="block text-sm font-medium text-secondary mb-1">
+            {messages.feeds.feedCategory}
+          </label>
+          <Input
+            id="feed-category"
+            type="text"
+            list="feed-category-options"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            placeholder={messages.feeds.feedCategoryPlaceholder}
+          />
+          <datalist id="feed-category-options">
+            {(categories ?? []).map((existingCategory) => (
+              <option key={existingCategory} value={existingCategory} />
+            ))}
+          </datalist>
+          <p className="text-xs text-muted mt-1">
+            {messages.feeds.feedCategoryHint}
           </p>
         </div>
 

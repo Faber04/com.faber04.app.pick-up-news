@@ -4,6 +4,7 @@ export interface RSSFeed {
   url: string;
   title: string;
   description?: string;
+  category?: string;
   lastFetched?: Date;
   error?: string;
 }
@@ -47,7 +48,7 @@ export interface AppState {
 }
 
 // View modes
-export type ViewMode = 'chronological' | 'by-feed';
+export type ViewMode = 'chronological' | 'by-feed' | 'by-category';
 
 // Theme mode
 export type ThemeMode = 'light' | 'dark';

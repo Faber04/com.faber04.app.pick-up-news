@@ -18,7 +18,7 @@ const STORAGE_KEYS = {
 
 const MAX_NOTIFICATIONS = 50;
 const TRANSFER_FILE_FORMAT = 'pickupnews-feeds';
-const TRANSFER_FILE_VERSION = 2;
+const TRANSFER_FILE_VERSION = 3;
 const CURRENT_DEFAULT_FEEDS_VERSION = 2;
 const DEFAULT_FEEDS: Array<{ title: string; url: string }> = [
   { title: 'BBC World', url: 'https://feeds.bbci.co.uk/news/world/rss.xml' },
@@ -26,11 +26,12 @@ const DEFAULT_FEEDS: Array<{ title: string; url: string }> = [
 
 type FeedTransferFile = {
   format: typeof TRANSFER_FILE_FORMAT;
-  version: 1 | 2;
+  version: 1 | 2 | 3;
   exportedAt: string;
   feeds: Array<{
     title: string;
     url: string;
+    category?: string;
   }>;
   savedNews?: SavedNewsItem[];
 };
@@ -46,7 +47,7 @@ const isFeedTransferFile = (value: unknown): value is FeedTransferFile => {
     return false;
   }
 
-  if (parsed.version !== 1 && parsed.version !== 2) {
+  if (parsed.version !== 1 && parsed.version !== 2 && parsed.version !== 3) {
     return false;
   }
 
@@ -59,6 +60,7 @@ const isFeedTransferFile = (value: unknown): value is FeedTransferFile => {
     && typeof feed === 'object'
     && typeof feed.title === 'string'
     && typeof feed.url === 'string'
+    && (feed.category === undefined || typeof feed.category === 'string')
   ))) {
     return false;
   }
@@ -238,7 +240,7 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
     localStorage.setItem(STORAGE_KEYS.SAVED_NEWS, JSON.stringify(savedNews));
   }, [savedNews]);
 
-  const addFeed = useCallback(async (url: string, title: string): Promise<boolean> => {
+  const addFeed = useCallback(async (url: string, title: string, category?: string): Promise<boolean> => {
     if (!RSSService.validateFeedUrl(url)) {
       setState(prev => ({ ...prev, error: messages.invalidFeedUrl }));
       return false;
@@ -285,10 +287,12 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
         }
       }
 
+      const trimmedCategory = category?.trim();
       const newFeed: RSSFeed = {
         id: Date.now().toString(),
         url: finalFeedUrl,
         title,
+        category: trimmedCategory ? trimmedCategory : undefined,
         lastFetched: new Date()
       };
 
@@ -379,13 +383,14 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
     });
   }, []);
 
-  const updateFeed = useCallback(async (feedId: string, updates: { title: string; url: string }) => {
+  const updateFeed = useCallback(async (feedId: string, updates: { title: string; url: string; category?: string }) => {
     if (!RSSService.validateFeedUrl(updates.url)) {
       setState(prev => ({ ...prev, error: messages.invalidFeedUrl }));
       return false;
     }
 
     const updatedTitle = updates.title.trim();
+    const updatedCategory = updates.category?.trim();
     const normalizedUrl = RSSService.normalizeUrl(updates.url);
     setState(prev => ({ ...prev, loading: true, error: null }));
 
@@ -418,6 +423,7 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
             return {
               ...feed,
               title: updatedTitle,
+              category: updatedCategory ? updatedCategory : undefined,
               url: normalizedUrl,
               lastFetched: now,
               error: undefined
@@ -443,6 +449,7 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
           return {
             ...feed,
             title: updatedTitle,
+            category: updatedCategory ? updatedCategory : undefined,
             url: normalizedUrl,
             error: errorMessage
           };
@@ -684,6 +691,7 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
       feeds: state.feeds.map(feed => ({
         title: feed.title,
         url: feed.url,
+        ...(feed.category ? { category: feed.category } : {}),
       })),
       savedNews: savedNews.length > 0 ? [...savedNews] : undefined,
     };
@@ -723,6 +731,7 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
     importedFile.feeds.forEach((entry, index) => {
       const normalizedUrl = RSSService.normalizeUrl(entry.url.trim());
       const normalizedTitle = entry.title.trim();
+      const normalizedCategory = entry.category?.trim();
       const lookupUrl = normalizedUrl.toLowerCase();
 
       if (!normalizedTitle || !RSSService.validateFeedUrl(normalizedUrl)) {
@@ -739,6 +748,7 @@ export const useAppState = (messages: LocaleDictionary['errors']) => {
       newFeeds.push({
         id: `${Date.now()}-${index}-${Math.random().toString(36).slice(2, 8)}`,
         title: normalizedTitle,
+        category: normalizedCategory ? normalizedCategory : undefined,
         url: normalizedUrl,
         lastFetched: new Date(),
       });

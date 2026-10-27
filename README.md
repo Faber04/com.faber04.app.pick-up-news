@@ -65,6 +65,9 @@ Each call is protected by a **10-second timeout** using `AbortController`: if a 
 8. **v3.2.0 — Home refresh button** ✅  
    Added dedicated manual refresh button in Home page next to search bar for on-demand news updates.
 
+9. **v3.3.0 — Feed categories** ✅  
+   Feeds can be assigned an optional category; the feed management page groups feeds by category, and the Home view adds a "By Category" grouping mode. Export/import transfer files carry categories (format version 3, backward compatible).
+
 ## Prerequisites
 
 - **Node.js**: Version 18.0.0 or higher

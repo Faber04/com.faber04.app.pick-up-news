@@ -30,6 +30,15 @@ export const ViewControls = ({ viewMode, onViewModeChange }: ViewControlsProps) 
         >
           {messages.viewModes.byFeed}
         </Button>
+        <Button
+          type="button"
+          onClick={() => onViewModeChange('by-category')}
+          variant={viewMode === 'by-category' ? 'outline' : 'ghost'}
+          size="sm"
+          className={viewMode === 'by-category' ? 'shadow-sm' : ''}
+        >
+          {messages.viewModes.byCategory}
+        </Button>
       </div>
     </div>
   );

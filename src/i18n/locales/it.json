@@ -24,7 +24,8 @@
   },
   "viewModes": {
     "chronological": "Cronologico",
-    "byFeed": "Per Sito"
+    "byFeed": "Per Sito",
+    "byCategory": "Per Categoria"
   },
   "home": {
     "emptyTitle": "Nessun feed RSS aggiunto",
@@ -83,6 +84,12 @@
     "feedNamePlaceholder": "es. Corriere della Sera",
     "feedUrl": "URL Sito o Feed",
     "feedUrlShort": "URL feed",
+    "feedCategory": "Categoria",
+    "feedCategoryShort": "Categoria",
+    "feedCategoryPlaceholder": "es. Tecnologia",
+    "feedCategoryHint": "Facoltativa. I feed con la stessa categoria vengono raggruppati insieme.",
+    "uncategorizedCategory": "Senza categoria",
+    "categoryCount": "{count} feed",
     "feedUrlPlaceholder": "es. example.com oppure example.com/rss",
     "detectionHint": "Rilevamento automatico: prima JSON Feed, poi RSS/Atom. Se non trovato, usa l'URL inserito.",
     "emptyTitle": "Nessun feed RSS aggiunto ancora.",

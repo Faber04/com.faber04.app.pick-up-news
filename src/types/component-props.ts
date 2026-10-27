@@ -5,9 +5,10 @@ import type { BreadcrumbNode, NavigationActions } from './navigation';
 export type PrimaryPage = 'home' | 'saved' | 'settings';
 
 export interface AddFeedFormProps {
-  onAddFeed: (url: string, title: string) => Promise<boolean>;
+  onAddFeed: (url: string, title: string, category?: string) => Promise<boolean>;
   loading: boolean;
   error?: string | null;
+  categories?: string[];
   onClearError?: () => void;
   onClose?: () => void;
 }
@@ -22,21 +23,21 @@ export interface FeedListProps {
   onRemoveFeed: (feedId: string) => void;
   onMoveFeed: (feedId: string, direction: 'up' | 'down') => void;
   onMoveFeedToIndex: (feedId: string, targetIndex: number) => void;
-  onEditFeed: (feedId: string, updates: { title: string; url: string }) => Promise<boolean>;
+  onEditFeed: (feedId: string, updates: { title: string; url: string; category?: string }) => Promise<boolean>;
 }
 
 export interface FeedsContentProps {
   feeds: RSSFeed[];
   loading: boolean;
   addFeedError: string | null;
-  onAddFeed: (url: string, title: string) => Promise<boolean>;
+  onAddFeed: (url: string, title: string, category?: string) => Promise<boolean>;
   onExportFeeds: () => boolean;
   onImportFeeds: (file: File) => Promise<{ added: number; skipped: number; savedAdded: number }>;
   onClearError: () => void;
   onRemoveFeed: (feedId: string) => void;
   onMoveFeed: (feedId: string, direction: 'up' | 'down') => void;
   onMoveFeedToIndex: (feedId: string, targetIndex: number) => void;
-  onEditFeed: (feedId: string, updates: { title: string; url: string }) => Promise<boolean>;
+  onEditFeed: (feedId: string, updates: { title: string; url: string; category?: string }) => Promise<boolean>;
   onRefresh: () => Promise<void>;
 }
 
@@ -75,6 +76,8 @@ export interface NewsListProps {
   searchQuery?: string;
   onSearchChange?: (query: string) => void;
   onRefresh?: () => void;
+  viewMode?: ViewMode;
+  feeds?: RSSFeed[];
 }
 
 export interface FeedAccordionProps {
