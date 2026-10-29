@@ -127,126 +127,142 @@ export const NewsList = ({
     return feeds?.find((f) => f.id === feedId)?.title ?? feedId;
   };
 
-  const renderByCategory = () => (
-    <div className="space-y-2">
-      {groupNewsByCategory(news, feeds || [], messages.feeds?.uncategorizedCategory ?? 'Uncategorized').map((group) => {
-        const isExpanded = expandedCategories.has(group.category);
-        return (
-          <div key={group.category ?? 'uncategorized'} className="mb-2">
-            <button
-              type="button"
-              onClick={() => toggleCategory(group.category ?? 'uncategorized')}
-              className="w-full flex items-center justify-between px-1 py-2 rounded-lg hover:bg-[color:var(--surface-muted)] transition"
-              aria-expanded={isExpanded}
-              aria-controls={`category-${group.category}`}
-            >
-              <div className="flex items-center gap-2">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted">
-                  {group.category ?? 'Uncategorized'}
-                </h3>
-                <span className="rounded-full bg-[color:var(--surface-muted)] px-2 py-0.5 text-[11px] font-medium text-secondary">
-                  {group.items.length}
-                </span>
-              </div>
-              <span className="text-sm text-[color:var(--text-muted)]" aria-hidden="true">
-                {isExpanded ? '−' : '+'}
-              </span>
-            </button>
-            {isExpanded && (
-              <div id={`category-${group.category}`} className="ios-list-group mt-1">
-                {group.items.map((item) => (
-                  <NewsCard
-                    key={`${item.feedId}-${item.guid || item.link || item.title}`}
-                    newsItem={item}
-                    onClick={onNewsClick}
-                    onToggleSave={onToggleSave}
-                    isSaved={isNewsSaved(item)}
-                    isLatestLoaded={isLatestNews?.(item) ?? false}
-                    locale={locale}
-                    onFeedFilterChange={onFeedFilterChange}
-                    isLast={false}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
+  const renderByCategory = () => {
+    const grouped = groupNewsByCategory(news, feeds || [], messages.feeds?.uncategorizedCategory ?? 'Uncategorized');
+    const sortedGrouped = [...grouped].sort((a, b) => a.category.localeCompare(b.category, locale));
 
-  const renderByFeed = () => (
-    <div className="space-y-2">
-      {groupNewsByFeed(news).map(([feedId, items]) => {
-        const isExpanded = expandedFeeds.has(feedId);
-        const feedTitle = getFeedTitle(feedId);
-        return (
-          <div key={feedId} className="mb-2">
-            <button
-              type="button"
-              onClick={() => toggleFeed(feedId)}
-              className="w-full flex items-center justify-between px-1 py-2 rounded-lg hover:bg-[color:var(--surface-muted)] transition"
-              aria-expanded={isExpanded}
-              aria-controls={`feed-${feedId}`}
-            >
-              <div className="flex items-center gap-2">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted">
-                  {feedTitle}
-                </h3>
-                <span className="rounded-full bg-[color:var(--surface-muted)] px-2 py-0.5 text-[11px] font-medium text-secondary">
-                  {items.length}
+    return (
+      <div className="space-y-2">
+        {sortedGrouped.map((group) => {
+          const isExpanded = expandedCategories.has(group.category);
+          return (
+            <div key={group.category ?? 'uncategorized'} className="mb-2">
+              <button
+                type="button"
+                onClick={() => toggleCategory(group.category ?? 'uncategorized')}
+                className="w-full flex items-center justify-between px-1 py-2 rounded-lg hover:bg-[color:var(--surface-muted)] transition"
+                aria-expanded={isExpanded}
+                aria-controls={`category-${group.category}`}
+              >
+                <div className="flex items-center gap-2">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-muted">
+                    {group.category ?? 'Uncategorized'}
+                  </h3>
+                  <span className="rounded-full bg-[color:var(--surface-muted)] px-2 py-0.5 text-[11px] font-medium text-secondary">
+                    {group.items.length}
+                  </span>
+                </div>
+                <span className="text-sm text-[color:var(--text-muted)]" aria-hidden="true">
+                  {isExpanded ? '−' : '+'}
                 </span>
-              </div>
-              <span className="text-sm text-[color:var(--text-muted)]" aria-hidden="true">
-                {isExpanded ? '−' : '+'}
-              </span>
-            </button>
-            {isExpanded && (
-              <div id={`feed-${feedId}`} className="ios-list-group mt-1">
-                {items.map((item, index) => (
-                  <NewsCard
-                    key={`${item.feedId}-${index}`}
-                    newsItem={item}
-                    onClick={onNewsClick}
-                    onToggleSave={onToggleSave}
-                    isSaved={isNewsSaved(item)}
-                    isLatestLoaded={isLatestNews?.(item) ?? false}
-                    locale={locale}
-                    onFeedFilterChange={onFeedFilterChange}
-                    isLast={index === items.length - 1}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
+              </button>
+              {isExpanded && (
+                <div id={`category-${group.category}`} className="ios-list-group mt-1">
+                  {group.items.map((item) => (
+                    <NewsCard
+                      key={`${item.feedId}-${item.guid || item.link || item.title}`}
+                      newsItem={item}
+                      onClick={onNewsClick}
+                      onToggleSave={onToggleSave}
+                      isSaved={isNewsSaved(item)}
+                      isLatestLoaded={isLatestNews?.(item) ?? false}
+                      locale={locale}
+                      onFeedFilterChange={onFeedFilterChange}
+                      isLast={false}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
 
-  const renderNormal = () => (
-    <div className="ios-list-group">
-      {news.map((item, index) => (
-        <NewsCard
-          key={`${item.feedId}-${index}`}
-          newsItem={item}
-          onClick={onNewsClick}
-          onToggleSave={onToggleSave}
-          isSaved={isNewsSaved(item)}
-          isLatestLoaded={isLatestNews?.(item) ?? false}
-          locale={locale}
-          onFeedFilterChange={onFeedFilterChange}
-          isLast={index === news.length - 1}
-        />
-      ))}
-    </div>
-  );
+  const renderByFeed = () => {
+    const grouped = groupNewsByFeed(news);
+    const sortedGrouped = [...grouped].sort(([a], [b]) => {
+      const titleA = getFeedTitle(a);
+      const titleB = getFeedTitle(b);
+      return titleA.localeCompare(titleB, locale);
+    });
+
+    return (
+      <div className="space-y-2">
+        {sortedGrouped.map(([feedId, items]) => {
+          const isExpanded = expandedFeeds.has(feedId);
+          const feedTitle = getFeedTitle(feedId);
+          return (
+            <div key={feedId} className="mb-2">
+              <button
+                type="button"
+                onClick={() => toggleFeed(feedId)}
+                className="w-full flex items-center justify-between px-1 py-2 rounded-lg hover:bg-[color:var(--surface-muted)] transition"
+                aria-expanded={isExpanded}
+                aria-controls={`feed-${feedId}`}
+              >
+                <div className="flex items-center gap-2">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-muted">
+                    {feedTitle}
+                  </h3>
+                  <span className="rounded-full bg-[color:var(--surface-muted)] px-2 py-0.5 text-[11px] font-medium text-secondary">
+                    {items.length}
+                  </span>
+                </div>
+                <span className="text-sm text-[color:var(--text-muted)]" aria-hidden="true">
+                  {isExpanded ? '−' : '+'}
+                </span>
+              </button>
+              {isExpanded && (
+                <div id={`feed-${feedId}`} className="ios-list-group mt-1">
+                  {items.map((item, index) => (
+                    <NewsCard
+                      key={`${item.feedId}-${index}`}
+                      newsItem={item}
+                      onClick={onNewsClick}
+                      onToggleSave={onToggleSave}
+                      isSaved={isNewsSaved(item)}
+                      isLatestLoaded={isLatestNews?.(item) ?? false}
+                      locale={locale}
+                      onFeedFilterChange={onFeedFilterChange}
+                      isLast={index === items.length - 1}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const renderNormal = () => {
+    return (
+      <div className="ios-list-group">
+        {news.map((item, index) => (
+          <NewsCard
+            key={`${item.feedId}-${index}`}
+            newsItem={item}
+            onClick={onNewsClick}
+            onToggleSave={onToggleSave}
+            isSaved={isNewsSaved(item)}
+            isLatestLoaded={isLatestNews?.(item) ?? false}
+            locale={locale}
+            onFeedFilterChange={onFeedFilterChange}
+            isLast={index === news.length - 1}
+          />
+        ))}
+      </div>
+    );
+  };
 
   const renderContent = () => {
     if (news.length === 0) return noNewsContent;
-    
+
     const safeViewMode = viewMode ?? 'chronological';
-    
+
     switch (safeViewMode) {
       case 'by-category':
         return renderByCategory();
@@ -259,7 +275,6 @@ export const NewsList = ({
 
   return (
     <div className="space-y-4">
-      {/* iOS search bar + refresh */}
       {onSearchChange && (
         <div className="flex items-center gap-2">
           <div className="relative flex-1">
@@ -311,10 +326,8 @@ export const NewsList = ({
         </div>
       )}
 
-      {/* View Controls - moved below search */}
       {setViewMode && viewMode && <ViewControls viewMode={viewMode} onViewModeChange={setViewMode} />}
 
-      {/* Active feed badge */}
       {activeFeedId && onFeedFilterChange && selectedFeedTitle && (
         <div className="flex items-center gap-2">
           <span className="rounded-full bg-[color:var(--brand)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-white">
@@ -330,7 +343,6 @@ export const NewsList = ({
         </div>
       )}
 
-      {/* List */}
       {renderContent()}
     </div>
   );
@@ -382,9 +394,7 @@ const NewsCard = ({
         aria-label={newsItem.title || newsItem.feedTitle}
       >
         <div className="flex w-full min-w-0 items-stretch gap-3">
-          {/* Left: all text content */}
           <div className="min-w-0 flex-1">
-            {/* Source + date */}
             <div className="mb-1 flex items-center gap-1.5">
               <button
                 type="button"
@@ -405,19 +415,16 @@ const NewsCard = ({
               </span>
             </div>
 
-            {/* Headline */}
             <h4 className="line-clamp-2 text-[15px] font-semibold leading-snug text-primary">
               {newsItem.title}
             </h4>
 
-            {/* Excerpt */}
             <div
               className="mt-1 line-clamp-2 text-[13px] leading-relaxed text-secondary"
               dangerouslySetInnerHTML={{ __html: newsItem.truncatedDescription }}
             />
           </div>
 
-          {/* Right: save + chevron stacked */}
           <div className="flex shrink-0 flex-col items-center justify-between py-0.5">
             <button
               type="button"
