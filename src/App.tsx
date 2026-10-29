@@ -13,7 +13,6 @@ import {
   MobileBottomNav,
   NotificationPanel,
   CookieConsentBanner,
-  ViewControls,
 } from './components';
 import { Alert, AlertDescription, Badge, Button, Card, CardContent, CardHeader, CardTitle } from './components/ui';
 import { SettingsPage } from './pages/SettingsPage';
@@ -411,14 +410,11 @@ function App() {
             </Card>
           ) : (
             <>
-              <ViewControls
-                viewMode={viewMode}
-                onViewModeChange={setViewMode}
-              />
               <NewsList
                 news={filteredNews}
                 loading={state.loading}
                 viewMode={viewMode}
+                setViewMode={setViewMode}
                 feeds={state.feeds}
                 onNewsClick={handleNewsClick}
                 onToggleSave={toggleSaveNews}
