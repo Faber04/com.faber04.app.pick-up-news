@@ -6,9 +6,9 @@ export const ViewControls = ({ viewMode, onViewModeChange }: ViewControlsProps) 
   const { messages } = useI18n();
 
   return (
-    <div className="mb-6 hidden justify-end min-[1025px]:flex">
+    <div className="mb-4 w-full overflow-x-auto">
       <div
-        className="flex rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-muted)] p-1 shadow-[var(--shadow-soft)]"
+        className="flex w-max min-w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-muted)] p-1 shadow-[var(--shadow-soft)]"
         role="group"
         aria-label={messages.common.navigation}
       >

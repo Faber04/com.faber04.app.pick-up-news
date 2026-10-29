@@ -4,6 +4,25 @@ import { useI18n } from '../i18n/useI18n';
 import { formatMessage } from '../i18n';
 import { Button } from './ui';
 
+const groupNewsByCategory = (news: NewsItem[], feeds: RSSFeed[], uncategorizedLabel: string) => {
+  const feedCategoryById = new Map(
+    feeds.map((feed) => [feed.id, feed.category?.trim() || uncategorizedLabel])
+  );
+
+  const groups = new Map<string, NewsItem[]>();
+  news.forEach((item) => {
+    const category = feedCategoryById.get(item.feedId) ?? uncategorizedLabel;
+    const group = groups.get(category);
+    if (group) {
+      group.push(item);
+    } else {
+      groups.set(category, [item]);
+    }
+  });
+
+  return Array.from(groups.entries()).map(([category, items]) => ({ category, items }));
+};
+
 export const NewsList = ({
   news,
   loading,
@@ -58,6 +77,54 @@ export const NewsList = ({
           {messages.home.clearSearch}
         </Button>
       )}
+    </div>
+  );
+
+  const renderByCategory = () => (
+    <div className="space-y-6">
+      {groupNewsByCategory(news, feeds || [], messages.feeds?.uncategorizedCategory ?? 'Uncategorized').map((group) => (
+        <section key={group.category ?? 'uncategorized'} aria-label={group.category ?? 'Uncategorized'}>
+          <div className="mb-2 px-1 flex items-center gap-2">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-muted">{group.category ?? 'Uncategorized'}</h3>
+            <span className="rounded-full bg-[color:var(--surface-muted)] px-2 py-0.5 text-[11px] font-medium text-secondary">
+              {group.items.length}
+            </span>
+          </div>
+          <div className="ios-list-group">
+            {group.items.map((item) => (
+              <NewsCard
+                key={`${item.feedId}-${item.guid || item.link || item.title}`}
+                newsItem={item}
+                onClick={onNewsClick}
+                onToggleSave={onToggleSave}
+                isSaved={isNewsSaved(item)}
+                isLatestLoaded={isLatestNews?.(item) ?? false}
+                locale={locale}
+                onFeedFilterChange={onFeedFilterChange}
+                isLast={false}
+              />
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  );
+
+  const renderNormal = () => (
+    <div className="ios-list-group">
+      {news.map((item, index) => (
+        <NewsCard
+          key={`${item.feedId}-${index}`}
+          newsItem={item}
+          onClick={onNewsClick}
+          onToggleSave={onToggleSave}
+          isSaved={isNewsSaved(item)}
+          isLatestLoaded={isLatestNews?.(item) ?? false}
+          locale={locale}
+          onFeedFilterChange={onFeedFilterChange}
+          isLast={index === news.length - 1}
+        />
+      ))}
     </div>
   );
 
@@ -132,72 +199,15 @@ export const NewsList = ({
       )}
 
       {/* List */}
-      {news.length === 0 ? noNewsContent : viewMode === 'by-category' && feeds ? (
-        <div className="space-y-6">
-          {groupNewsByCategory(news, feeds, messages.feeds.uncategorizedCategory).map((group) => (
-            <section key={group.category} aria-label={group.category}>
-              <div className="mb-2 px-1 flex items-center gap-2">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted">{group.category}</h3>
-                <span className="rounded-full bg-[color:var(--surface-muted)] px-2 py-0.5 text-[11px] font-medium text-secondary">
-                  {group.items.length}
-                </span>
-              </div>
-              <div className="ios-list-group">
-                {group.items.map((item) => (
-                  <NewsCard
-                    key={`${item.feedId}-${item.guid || item.link || item.title}`}
-                    newsItem={item}
-                    onClick={onNewsClick}
-                    onToggleSave={onToggleSave}
-                    isSaved={isNewsSaved(item)}
-                    isLatestLoaded={isLatestNews?.(item) ?? false}
-                    locale={locale}
-                    onFeedFilterChange={onFeedFilterChange}
-                    isLast={false}
-                  />
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
+      {news.length === 0 ? (
+        noNewsContent
+      ) : viewMode === 'by-category' && feeds ? (
+        renderByCategory()
       ) : (
-        <div className="ios-list-group">
-          {news.map((item, index) => (
-            <NewsCard
-              key={`${item.feedId}-${index}`}
-              newsItem={item}
-              onClick={onNewsClick}
-              onToggleSave={onToggleSave}
-              isSaved={isNewsSaved(item)}
-              isLatestLoaded={isLatestNews?.(item) ?? false}
-              locale={locale}
-              onFeedFilterChange={onFeedFilterChange}
-              isLast={index === news.length - 1}
-            />
-          ))}
-        </div>
+        renderNormal()
       )}
     </div>
   );
-};
-
-const groupNewsByCategory = (news: NewsItem[], feeds: RSSFeed[], uncategorizedLabel: string) => {
-  const feedCategoryById = new Map(
-    feeds.map((feed) => [feed.id, feed.category?.trim() || uncategorizedLabel])
-  );
-
-  const groups = new Map<string, NewsItem[]>();
-  news.forEach((item) => {
-    const category = feedCategoryById.get(item.feedId) ?? uncategorizedLabel;
-    const group = groups.get(category);
-    if (group) {
-      group.push(item);
-    } else {
-      groups.set(category, [item]);
-    }
-  });
-
-  return Array.from(groups.entries()).map(([category, items]) => ({ category, items }));
 };
 
 const NewsCard = ({
