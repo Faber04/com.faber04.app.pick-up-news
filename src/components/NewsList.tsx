@@ -4,7 +4,7 @@ import type { NewsItem, RSSFeed } from '../types';
 import { useI18n } from '../i18n/useI18n';
 import { formatMessage } from '../i18n';
 import { Button } from './ui';
-import { ViewControls } from './ViewControls';
+import { ViewModeDropdown } from './ViewModeDropdown';
 
 const groupNewsByCategory = (news: NewsItem[], feeds: RSSFeed[], uncategorizedLabel: string) => {
   const feedCategoryById = new Map(
@@ -302,31 +302,35 @@ export const NewsList = ({
               </button>
             )}
           </div>
-          {onRefresh && (
-            <button
-              type="button"
-              onClick={onRefresh}
-              disabled={loading}
-              aria-label={loading ? messages.home.refreshing : messages.home.refresh}
-              title={loading ? messages.home.refreshing : messages.home.refresh}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[color:color-mix(in_srgb,var(--brand)_18%,var(--border)_82%)] bg-[color:color-mix(in_srgb,var(--brand)_8%,var(--surface)_92%)] text-[color:var(--brand-strong)] shadow-none transition hover:bg-[color:color-mix(in_srgb,var(--brand)_12%,var(--surface)_88%)] disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
+          
+          <div className="flex gap-1">
+            {onRefresh && (
+              <button
+                type="button"
+                onClick={onRefresh}
+                disabled={loading}
+                aria-label={loading ? messages.home.refreshing : messages.home.refresh}
+                title={loading ? messages.home.refreshing : messages.home.refresh}
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[color:color-mix(in_srgb,var(--brand)_18%,var(--border)_82%)] bg-[color:color-mix(in_srgb,var(--brand)_8%,var(--surface)_92%)] text-[color:var(--brand-strong)] shadow-none transition hover:bg-[color:color-mix(in_srgb,var(--brand)_12%,var(--surface)_88%)] disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0 1 12.75-5.34L19 9.41M19.5 12a7.5 7.5 0 0 1-12.75 5.34L5 14.59" />
-              </svg>
-            </button>
-          )}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0 1 12.75-5.34L19 9.41M19.5 12a7.5 7.5 0 0 1-12.75 5.34L5 14.59" />
+                </svg>
+              </button>
+            )}
+            {setViewMode && viewMode && (
+              <ViewModeDropdown viewMode={viewMode} onViewModeChange={setViewMode} />
+            )}
+          </div>
         </div>
       )}
-
-      {setViewMode && viewMode && <ViewControls viewMode={viewMode} onViewModeChange={setViewMode} />}
 
       {activeFeedId && onFeedFilterChange && selectedFeedTitle && (
         <div className="flex items-center gap-2">
